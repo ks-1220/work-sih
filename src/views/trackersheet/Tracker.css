@@ -1,0 +1,16 @@
+.tracker-title {
+    margin-left: 150px;
+    font-size: 4rem;
+    color: #44BDBC;
+    font-family: Impact;
+    margin-top: 40px;
+  }
+  @media screen and (max-width: 768px){
+    .tracker-title {
+        margin-left: 60px;
+        font-size: 2rem;
+        color: #44BDBC;
+        font-family: Impact;
+        margin-top: 40px;
+      }
+  }

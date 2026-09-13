@@ -1,0 +1,268 @@
+.main-menu {
+  position: -webkit-sticky; 
+  position: sticky;
+  top: 0; 
+  height: 100vh; 
+  background: rgb(73, 57, 113);
+  padding-top: 10px;
+  border-radius: 0 15px 0 0;
+  font-family: "Roboto", sans-serif;
+  width:100px;
+}
+
+.main-menu h1 {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 500;
+  text-align: center;
+  margin: 20px 0 30px;
+  color: #fff;
+  font-family: "Nunito", sans-serif;
+}
+
+.logo {
+  display: none;
+}
+
+.nav-item {
+  position: relative;
+  display: block;
+}
+
+.nav-item a {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 1rem;
+  padding: 15px 0;
+  margin-left: 10px;
+  border-top-left-radius: 20px;
+  border-bottom-left-radius: 20px;
+}
+
+.nav-item b:nth-child(1) {
+  position: absolute;
+  top: -15px;
+  height: 15px;
+  width: 100%;
+  background: #fff;
+  display: none;
+}
+
+.nav-item b:nth-child(1)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-bottom-right-radius: 20px;
+  background: rgb(73, 57, 113);
+}
+
+.nav-item b:nth-child(2) {
+  position: absolute;
+  bottom: -15px;
+  height: 15px;
+  width: 100%;
+  background: #fff;
+  display: none;
+}
+
+.nav-item b:nth-child(2)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-top-right-radius: 20px;
+  background: rgb(73, 57, 113);
+}
+
+.nav-item.active b:nth-child(1),
+.nav-item.active b:nth-child(2) {
+  display: block;
+}
+
+.nav-item.active a {
+  text-decoration: none;
+  color: #000;
+  background: rgb(254, 254, 254);
+}
+
+.nav-icon {
+  width: 60px;
+  height: 20px;
+  font-size: 20px;
+  text-align: center;
+}
+
+.nav-text {
+  display: block;
+  width: 120px;
+  height: 20px;
+}
+
+
+@media (max-width: 1500px) {
+  /* main {
+    grid-template-columns: 7% 93%;
+  } */
+
+  /* .main-menu h1 {
+    display: none;
+  } */
+
+  .logo {
+    display: block;
+    width: 30px;
+    margin: 20px auto;
+  }
+
+  
+
+}
+
+@media (max-width: 1310px) {
+  /* main {
+    grid-template-columns: 8% 92%;
+  } */
+
+ 
+}
+
+@media (max-width: 1150px) {
+  .content {
+    grid-template-columns: 60% 40%;
+  }
+
+  
+}
+
+@media (max-width: 910px) {
+  /* main {
+    grid-template-columns: 10% 90%;
+  } */
+  .nav-text {
+    display: none;
+  }
+  
+}
+
+@media (max-width: 700px) {
+  /* main {
+    grid-template-columns: 15% 85%;
+  } */
+
+  .nav-text {
+    display: none;
+  }
+  .main-menu{
+    width: 80px;
+    font-size: 1px;
+  }
+  .main-menu h1{
+    font-size: 1rem;
+  }
+  .best-item.box-two p{
+    font-size: 0.8rem;
+  }
+  .overlay h3{
+    font-size: 0.8rem;
+  }
+  .content{
+    margin-left: 30px;
+  }
+  .right-content{
+    width: 270px;
+  }
+  .left-content{
+    width: 270px;
+  }
+  .dropdown-menu-nav a{
+    font-size: 0.7rem;
+  }
+  
+}
+
+@media (max-width: 380px) {
+  /* main {
+    grid-template-columns: 15% 85%;
+  } */
+
+  .nav-text {
+    display: none;
+  }
+  .main-menu{
+    width: 70px;
+    font-size: 1px;
+    margin-right: 10px;
+  }
+  .main-menu h1{
+    font-size: 1rem;
+  }
+  .best-item.box-two p{
+    font-size: 0.8rem;
+  }
+  .overlay h3{
+    font-size: 0.8rem;
+  }
+  
+}
+
+
+/* Circle for User Icon */
+.user-menu {
+  position: relative;
+  margin-left: 35px; /* Push it to the right */
+}
+
+.user-icon-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #f1f1f1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.user-icon-circle i {
+  font-size: 18px;
+  color: #333;
+}
+
+/* Dropdown Menu */
+.dropdown-menu-nav {
+  position: absolute;
+  top: 45px;
+  right:0;
+  margin-right: 5px;
+  /* background-color: #fff; */
+  /* border: 1px solid #ddd; */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 5px;
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.dropdown-menu-nav a {
+  display: block;
+  border: 0.01rem solid rgb(120, 120, 120);
+  background-color: #ffffff;
+  border-radius: 10px;
+  margin-top: 1px;
+  padding: 10px 10px;
+  color: #333;
+  text-decoration: none;
+}
+
+.dropdown-menu-nav a:hover {
+  background-color: #7b4499;
+}

@@ -1,0 +1,97 @@
+.recipe-section {
+  padding: 20px;
+}
+
+.region-selector {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 15px;
+}
+
+.region-selector button {
+  padding: 15px 22px;
+  border: 1px solid #ddd;
+  background-color: #c353c9;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 5px;
+}
+@media (max-width: 700px) {
+  .region-selector button{
+    padding: 3px 1px;
+  }
+}
+
+.region-selector button:hover {
+  background-color: #59185c;
+}
+
+.region-selector button.active {
+  background-color: #59185c;
+  color: white;
+  border-color: #59185c;
+}
+
+.recipe-thumbnails {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.recipe-thumbnail {
+  text-align: center;
+  cursor: pointer;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 8px;
+  transition: transform 0.3s;
+}
+
+.recipe-thumbnail:hover {
+  transform: scale(1.05);
+}
+
+.recipe-thumbnail img {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Rest of the previous CSS remains the same */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  max-width: 80%;
+  max-height: 80%;
+  overflow: auto;
+}
+
+.video-info {
+  margin-top: 10px;
+}
+
+.video-info ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.video-info li {
+  margin: 5px 0;
+}
+

@@ -1,0 +1,215 @@
+
+  h2{
+    text-align:center;
+    color: #d0c3f2;
+    font-size:  50px;
+  }
+  /* General container styles */
+  .tracker-section{
+    margin-left: 100px;
+  }
+  .tracker-container {
+      font-family: Arial, sans-serif;
+      max-width: 700px;
+      height: 500 !important;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+      background-color: #d0c3f2; /* Light blue background */
+      border: 5px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      margin-top: 20%;
+  }
+  
+  /* Title */
+  .tracker-container h1 {
+      color: #333;
+      margin-bottom: 20px;
+  }
+  
+  /* Input section */
+  .input-section {
+      margin-bottom: 20px;
+      text-align: left;
+  }
+  
+  .input-section label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: bold;
+      color: #555;
+  }
+  
+  .input-section input {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+  }
+  
+  /* Calendar header */
+  .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 20px 0;
+  }
+  
+  .calendar-header h2 {
+      font-size: 1.2em;
+      color: #333;
+  }
+  
+  .calendar-header button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  }
+  
+  .calendar-header button:hover {
+      background-color: #b300ff;
+  }
+  
+  /* Center align the calendar */
+  .calendarshe {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 5px;
+      justify-content: center; /* Center align */
+  }
+  
+  /* Day header */
+  .day-header {
+      font-weight: bold;
+      color: #555;
+      text-align: center;
+      padding: 5px;
+  }
+  
+  /* Day styles */
+  .day {
+      text-align: center;
+      padding: 10px;
+      border: 1px solid #df8fff;
+      border-radius: 4px;
+      background-color: #fff;
+      position: relative;
+  }
+  
+  .day.other-month {
+      background-color: #f0f0f0;
+      color: #aaa;
+  }
+  
+  .day.today {
+      background-color: #ffaeef;
+      font-weight: bold;
+      border: 2px solid #d086ff;
+  }
+  
+  .day.period {
+      background-color: #ffccd5;
+      color: #b30000;
+      font-weight: bold;
+      border: 2px solid #ff0000;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 480px) {
+      .tracker-container {
+          padding: 10px;
+      }
+  
+      .calendar-header h2 {
+          font-size: 1em;
+      }
+  
+      .day {
+          padding: 8px;
+          font-size: 0.9em;
+      }
+  }
+  /* Myth vs Fact Grid with Images */
+  .myth-fact-section{
+    margin-left: 200px;
+  }
+  .myth-fact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      padding: 10px;
+      justify-items: center;
+  }
+  
+  .card {
+      background: #ffffff;
+      border: 5px solid #ddd;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      width: 100%;
+      height: auto;
+      max-width: 500px;
+      overflow: hidden;
+  }
+  
+  .card:hover {
+      transform: scale(1.1); /* Zoom effect */
+      box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .card img {
+      width: 100%;
+      height: 100%;
+      border-bottom: 1px solid #ddd;
+  }
+  
+  .card p {
+      color: #555;
+      font-size: 0.95em;
+      line-height: 1.4;
+      padding: 10px;
+  }
+
+  @media screen and (max-width: 500px) {
+    .shepage{
+        flex-direction: column;
+    }
+    .tracker-section{
+        margin-left: 0px;
+    }
+    .myth-fact-section{
+        margin-left: 0px;
+    }
+    .tracker-container{
+        width:300px;
+    }
+    .card:hover {
+        transform: scale(1.001); /* Zoom effect */
+        box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+    }
+    .card{
+        width:300px;
+    }
+   }
+   @media screen and (max-width: 390px){
+    .tracker-container{
+        width:250px;
+    }
+    .day{
+        padding: 2px;
+        font-size: 0.5rem;
+    }
+    .day-header{
+        padding: 5px;
+        font-size:0.5rem;
+    }
+   }

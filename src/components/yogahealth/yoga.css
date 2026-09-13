@@ -1,0 +1,72 @@
+.App {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 5px;
+}
+
+.dropdown-container {
+  margin-bottom: 20px;
+}
+
+.fetch-button {
+  background-color: #e600ff;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 16px;
+}
+
+.fetch-button:hover {
+  background-color: #0056b3;
+}
+
+.suggestions {
+  margin-top: 20px;
+}
+
+.yoga-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.yoga-pose {
+  margin: 10px;
+  text-align: center;
+}
+
+.yoga-pose img {
+  max-width: 150px;
+  height: auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.yoga-pose p {
+  margin-top: 5px;
+  font-size: 14px;
+}
+
+@media (max-width: 500px) {
+  .App h1{
+    font-size:1.5rem;
+    margin-left: 30px;
+  }
+  .App h2{
+    font-size: 1.2rem;
+    margin-left: 20px;
+  }
+  .css-b62m3t-container{
+    width: 250px;
+    margin-left: 80px;
+  }
+  .fetch-button{
+    margin-left:20px;
+  }
+  .suggestions p{
+    width: 200px;
+    margin-left: 100px;
+  }
+}

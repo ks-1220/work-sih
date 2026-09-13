@@ -1,0 +1,78 @@
+.progressBarContainer {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 70px;
+  }
+  
+  .inner-progress {
+    margin-top: 100px;
+    margin-right: 100px;
+  }
+  
+  .progressInfo {
+    font-size: 1.5rem;
+    font-family: Cambria Math;
+    font-weight: bolder;
+    margin-bottom: 20px;
+  }
+  
+  .progressInfo span {
+    color: #FAB53D;
+    font-size: 1.8rem;
+  }
+  
+  .progressValue1{
+    margin-left: 128px;
+  }
+  .progressValue2{
+    margin-left: 40px;
+  }
+  .progressValue3{
+    margin-left: 20px;
+  }
+  .progressValue4{
+    margin-left: 20px;
+  }
+  
+  .progressImage {
+    height: 450px;
+    margin-left: 100px;
+  }
+  @media screen and (max-width: 768px){
+    .progressImage {
+        height: 300px;
+        margin-left: 0px;
+      }
+      .progressBarContainer{
+        display: flex;
+        flex-direction: column;
+      }
+      .progressInfo {
+        font-size: 1rem;
+        font-family: Cambria Math;
+        font-weight: bolder;
+        margin-bottom: 10px;
+        margin-left: 20px;
+      }
+      .progressInfo span {
+        color: #FAB53D;
+        font-size: 1rem;
+      }
+      .progressValue1{
+        margin-left: 80px;
+      }
+      .progressValue2{
+        margin-left: 22px;
+      }
+      .progressValue3{
+        margin-left: 10px;
+      }
+      .progressValue4{
+        margin-left: 10px;
+      }
+      .inner-progress {
+        margin-top: 60px;
+        margin-right: 10px;
+      }
+      
+  }

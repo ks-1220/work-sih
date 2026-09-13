@@ -1,0 +1,26 @@
+#Layer_1 { 
+    height: 50%;
+    width: 50%;
+    margin-top: 10%;
+}
+body { 
+    background-color: #FFF; 				
+    text-align: center; 
+}			
+svg { 
+     display: inline-block;				 
+}
+@media (max-width: 1170px){
+    #Layer_1 { 
+        height: 50%;
+        width: 50%;
+        margin-top: 10%;
+    }
+}
+@media (max-width: 550px){
+    #Layer_1 { 
+        height: 80%;
+        width: 80%;
+        margin-top: 70%;
+    }
+}
