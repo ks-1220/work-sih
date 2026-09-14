@@ -28,6 +28,21 @@
       margin-bottom: 20px;
   }
   
+  /* Honest state messages: what was logged, and what this does not do. */
+  .tracker-note {
+      text-align: left;
+      font-size: 0.85rem;
+      line-height: 1.45;
+      color: #555;
+      margin: 0 0 10px;
+  }
+
+  .tracker-note-muted {
+      color: #777;
+      font-style: italic;
+      margin-bottom: 20px;
+  }
+
   /* Input section */
   .input-section {
       margin-bottom: 20px;

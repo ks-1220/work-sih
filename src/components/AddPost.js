@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import axios from 'axios';
 import './AddPost.css';
 import creative from "../assets/images/creative.png"
@@ -57,7 +58,7 @@ const AddPost = () => {
         </div>
         <button type="submit" className="btn3 btn3-primary" >Submit</button>
       </form> : (<>
-                <a href="/register">Login to add a post</a>
+                <Link href="/login">Login to add a post</Link>
               </>)}
 
       

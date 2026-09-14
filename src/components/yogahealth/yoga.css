@@ -70,3 +70,25 @@
     margin-left: 100px;
   }
 }
+
+/* Unreviewed-content notice and failure messages for the condition-based
+   suggestions panel. */
+.yoga-disclaimer {
+  max-width: 60ch;
+  margin: 0 auto 20px;
+  padding: 12px 16px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-left: 4px solid #ffd166;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
+  color: #fff;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-align: left;
+}
+
+.yoga-error {
+  color: #ffd7d7;
+  font-size: 0.85rem;
+  margin-top: 10px;
+}

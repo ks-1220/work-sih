@@ -24,6 +24,19 @@
   display: none;
 }
 
+/* The menu is pinned to 100vh, so the item list has to scroll on short
+   viewports rather than pushing entries off the bottom. */
+.main-menu ul {
+  max-height: calc(100vh - 110px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.main-menu ul::-webkit-scrollbar {
+  display: none;
+}
+
 .nav-item {
   position: relative;
   display: block;

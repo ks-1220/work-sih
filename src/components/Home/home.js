@@ -6,6 +6,8 @@ import { useAuth } from '../../store/auth';
 import Navbar from '../Navbar/navbar';
 import { useTranslation } from "react-i18next";
 import FitnessEventsMap from '../map/FitnessEventsMap';
+import SampleDataBadge from '../shared/SampleDataBadge';
+import { demoHomeStats } from '../../data/demoStats';
 import './home.css';
 
 const Homesection = () => {
@@ -26,33 +28,27 @@ const Homesection = () => {
     },
     {
       img: 'https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/c8e88356-8df5-4ac5-9e1f-5b9e99685021',
-      title: 'Running',
-      link: '/running'
+      title: 'Running'
     },
     {
       img: 'https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/69437d08-f203-4905-8cf5-05411cc28c19',
-      title: 'Cycling',
-      link: '/cycling'
+      title: 'Cycling'
     },
     {
       img: 'https://www.wfla.com/wp-content/uploads/sites/71/2023/04/GettyImages-828532530.jpg?w=2560&h=1440&crop=1',
-      title: 'Climbing',
-      link: '/climbing'
+      title: 'Climbing'
     },
     {
       img: 'https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/3bab6a71-c842-4a50-9fed-b4ce650cb478',
-      title: 'Hiking',
-      link: '/hiking'
+      title: 'Hiking'
     },
     {
       img: 'https://www.clistudios.com/wp-content/uploads/2021/06/Alyson-Stoner-the-first-step-Candids-10.10.20-2-scaled.jpg',
-      title: 'Dancing',
-      link: '/dancing'
+      title: 'Dancing'
     },
     {
       img: 'https://www.ruralheritage.com/new_rh_website/images/resources/market_gardening/landing_Pg/mktgardentop_354.jpg',
-      title: 'Gardening',
-      link: '/gardening'
+      title: 'Gardening'
     },
     {
       img: 'https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/e1a66078-1927-4828-b793-15c403d06411',
@@ -61,8 +57,7 @@ const Homesection = () => {
     },
     {
       img: 'https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/7568e0ff-edb5-43dd-bff5-aed405fc32d9',
-      title: 'Swimming',
-      link: '/swimming'
+      title: 'Swimming'
     }
   ];
   
@@ -81,21 +76,36 @@ const Homesection = () => {
         <div className="activities">
             <h1>{t('fitnessActivities')}</h1>
             <div className="activity-container">
-              {activities.map((activity, index) => (
-                <Link
-                  key={index}
-                  href={activity.link}
-                  className={`image-container img-${index + 1}`}
-                >
-                  <img 
-                    src={activity.img} 
-                    alt={t(`activities.${activity.title}`)}  // Using the translation for each activity title
-                  />
-                  <div className="overlay">
-                    <h3>{t(`activities.${activity.title}`)}</h3> {/* Translated title */}
+              {activities.map((activity, index) => {
+                const className = `image-container img-${index + 1}`;
+                const contents = (
+                  <>
+                    <img
+                      src={activity.img}
+                      alt={t(`activities.${activity.title}`)}
+                    />
+                    <div className="overlay">
+                      <h3>{t(`activities.${activity.title}`)}</h3>
+                    </div>
+                  </>
+                );
+
+                // Only some activities have a page yet. The rest render as
+                // plain tiles instead of links that would 404.
+                return activity.link ? (
+                  <Link key={activity.title} href={activity.link} className={className}>
+                    {contents}
+                  </Link>
+                ) : (
+                  <div
+                    key={activity.title}
+                    className={className}
+                    style={{ cursor: 'default' }}
+                  >
+                    {contents}
                   </div>
-                </Link>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -108,20 +118,20 @@ const Homesection = () => {
       </div>
 
       <div className="personal-bests">
-        <h1>{t('dailySustainCount')}</h1>
+        <h1>{t('dailySustainCount')}<SampleDataBadge /></h1>
         <div className="personal-bests-container">
           <a href="https://bmiappgit-t9k3jh22sjwktzyz4w7gju.streamlit.app/#health-risk-calculator"> 
           <div className="best-item box-one">
-            <p>{t('carbonFootprint', { value: '18.9' })}</p>
+            <p>{t('carbonFootprint', { value: demoHomeStats.carbonFootprint })}</p>
             <img src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/242bbd8c-aaf8-4aee-a3e4-e0df62d1ab27" alt="" />
           </div>
 </a>
           <div className="best-item box-two">
-            <p>{t('dailyStepCount', { value: '5000' })}</p>
+            <p>{t('dailyStepCount', { value: demoHomeStats.dailySteps })}</p>
             <img src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/a3b3cb3a-5127-498b-91cc-a1d39499164a" alt="" />
           </div>
           <div className="best-item box-three">
-            <p>{t('totalSustainPoints', { value: '300' })}</p>
+            <p>{t('totalSustainPoints', { value: demoHomeStats.sustainPoints })}</p>
             <img src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/e0ee8ffb-faa8-462a-b44d-0a18c1d9604c" alt="" />
           </div>
         </div>
@@ -136,50 +146,50 @@ const Homesection = () => {
               <i className="fa fa-message nav-icon"></i>
             </div>
             <h5>{user.firstName}</h5>
-            <a href='/profile'>
+            <Link href='/profile'>
             <img src="https://akm-img-a-in.tosshub.com/indiatoday/images/story/202212/afp_000_9cq7ux_shilpa_shetty_yoga-one_one.jpg?VersionId=DeAg8M98aY9OSz3Z3gVSU84uySM4f245" alt="user" />
-            </a>
+            </Link>
           </div>
 
-          <a href='/calorie'>
+          <Link href='/calorie'>
           <div className="active-calories">
-      <h1 style={{ alignSelf: 'flex-start' }}>{t('activeCalories')}</h1>
+      <h1 style={{ alignSelf: 'flex-start' }}>{t('activeCalories')}<SampleDataBadge /></h1>
       <div className="active-calories-container">
-        <div className="box" style={{ '--i': '85%' }}>
+        <div className="box" style={{ '--i': `${demoHomeStats.activeCaloriesPercent}%` }}>
           <div className="circle">
-            <h2>85<small>%</small></h2>
+            <h2>{demoHomeStats.activeCaloriesPercent}<small>%</small></h2>
           </div>
         </div>
         <div className="calories-content">
-          <p><span>{t('today')}:</span> 400</p>
-          <p><span>{t('thisWeek')}:</span> 3500</p>
-          <p><span>{t('thisMonth')}:</span> 14000</p>
+          <p><span>{t('today')}:</span> {demoHomeStats.caloriesToday}</p>
+          <p><span>{t('thisWeek')}:</span> {demoHomeStats.caloriesThisWeek}</p>
+          <p><span>{t('thisMonth')}:</span> {demoHomeStats.caloriesThisMonth}</p>
         </div>
       </div>
     </div>
-    </a>
+    </Link>
 
           
 
           <div className="mobile-personal-bests">
-      <h1>{t('personalBests')}</h1>
+      <h1>{t('personalBests')}<SampleDataBadge /></h1>
       <div className="personal-bests-container">
         <div className="best-item box-one">
-          <p>{t('fastest5KRun', { time: '22min' })}</p>
+          <p>{t('fastest5KRun', { time: demoHomeStats.fastest5KRun })}</p>
           <img
             src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/05dfc444-9ed3-44cc-96af-a9cf195f5820"
             alt={t('fastest5KRunAlt')}
           />
         </div>
         <div className="best-item box-two">
-          <p>{t('longestDistanceCycling', { distance: '4 miles' })}</p>
+          <p>{t('longestDistanceCycling', { distance: demoHomeStats.longestCyclingDistance })}</p>
           <img
             src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/9ca170e9-1252-4fa6-8677-36493540c1f2"
             alt={t('longestDistanceCyclingAlt')}
           />
         </div>
         <div className="best-item box-three">
-          <p>{t('longestRollerSkating', { duration: '2 hours' })}</p>
+          <p>{t('longestRollerSkating', { duration: demoHomeStats.longestRollerSkating })}</p>
           <img
             src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/2a7e787c-c12b-49d2-b7fd-72d2c8a3a434"
             alt={t('longestRollerSkatingAlt')}
@@ -190,7 +200,7 @@ const Homesection = () => {
     <div className="friends-activity">
       <h1>{t('dailyFitnessBlogs')}</h1>
       <div className="card1-container">
-        <a href='/blog1'>
+        <Link href='/blog1'>
           <div className="card1">
             <div className="card1-user-info">
               <img 
@@ -206,9 +216,9 @@ const Homesection = () => {
             />
             <p>{t('completedRunningChallenge')}</p>
           </div>
-        </a>
+        </Link>
 
-        <a href='/blog2'>
+        <Link href='/blog2'>
           <div className="card1 card1-two">
             <div className="card1-user-info">
               <img 
@@ -224,7 +234,7 @@ const Homesection = () => {
             />
             <p>{t('setCyclingRecord')}</p>
           </div>
-        </a>
+        </Link>
       </div>
     </div>
         </div>

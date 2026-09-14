@@ -38,20 +38,19 @@ const MenstrualCycleTracker = () => {
 
     for (let i = 1; i <= daysInMonth; i++) {
       const currentDay = new Date(date.getFullYear(), date.getMonth(), i);
-      let isPeriod = false;
 
-      if (lastPeriod) {
-        const nextPeriodDate = new Date(lastPeriod);
-        nextPeriodDate.setDate(nextPeriodDate.getDate() + 28);
-        if (currentDay.toDateString() === nextPeriodDate.toDateString()) {
-          isPeriod = true;
-        }
-      }
+      // The calendar used to mark a single day at lastPeriod + 28 and call it
+      // a prediction. A fixed constant is not a forecast: cycle length varies
+      // between people and between months, and one recorded date is not enough
+      // information to estimate anything. Only the date the user actually
+      // entered is marked now.
+      const isLoggedPeriod =
+        !!lastPeriod && currentDay.toDateString() === lastPeriod.toDateString();
 
       days.push({
         day: i,
         today: currentDay.toDateString() === new Date().toDateString(),
-        period: isPeriod,
+        period: isLoggedPeriod,
       });
     }
 
@@ -107,6 +106,20 @@ const MenstrualCycleTracker = () => {
                   onChange={handleLastPeriodChange}
                 />
               </div>
+
+              <p className="tracker-note">
+                {lastPeriodDate
+                  ? `Logged: ${lastPeriodDate.toLocaleDateString("en-GB", {
+                      day: "2-digit",
+                      month: "short",
+                      year: "numeric",
+                    })}. One date is not enough to estimate a future period, so no prediction is shown.`
+                  : "Enter your last period date to mark it on the calendar."}
+              </p>
+              <p className="tracker-note tracker-note-muted">
+                This tracker does not predict periods, fertile windows or safe days,
+                and entries are not saved when you leave the page.
+              </p>
               <div className="calendar-header">
                 <button onClick={handlePrevMonth}>
                   &#8592;
