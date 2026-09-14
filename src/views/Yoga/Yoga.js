@@ -286,7 +286,11 @@ function Yogacv() {
             }}
           ></canvas>
           <div>
-            <img src={poseImages[currentPose]} className="pose-img" />
+            <img
+              src={poseImages[currentPose]}
+              alt={`Reference photograph of the ${currentPose} pose`}
+              className="pose-img"
+            />
           </div>
         </div>
         <button onClick={stopPose} className="secondary-btn">

@@ -7,8 +7,36 @@
    margin-left:40px;
    border-radius:15px;
 }
+/* The virtual forest link on the Sustain page. These were inline styles on a
+   <button> that drove window.location; the element is now an anchor, so the
+   base styling lives here alongside the hover and breakpoint rules that were
+   already in this file. */
+.playbtn{
+  display: inline-block;
+  margin-left: 100px;
+  padding: 10px 22px;
+  border-radius: 15px;
+  background: blueviolet;
+  color: #fff;
+  font-size: 0.95rem;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
 .playbtn:hover{
   background-color: rgb(174, 0, 255) !important;
+}
+
+.playbtn:focus-visible{
+  outline: 3px solid blueviolet;
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .playbtn{
+    transition: none;
+  }
 }
 
 @media(max-width: 1200px){

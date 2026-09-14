@@ -1,18 +1,34 @@
-button {
-  padding: 10px 10px;
-  font-size: 10px;
-  color: white;
+/*
+ * Scoped to .streak-nav.
+ *
+ * These three rules were written as a bare `button` selector, which styled
+ * every button in the application at 10px once this stylesheet had loaded.
+ * Global CSS is not unloaded on navigation in the App Router, so visiting the
+ * profile shrank the buttons on every page visited afterwards.
+ */
+
+.streak-nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.streak-nav button {
+  padding: 8px 16px;
+  font-size: 0.85rem;
+  color: #fff;
   background-color: rgb(73, 57, 113);
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
-button:hover {
+.streak-nav button:hover {
   background-color: #a0459d;
 }
 
-button:disabled {
+.streak-nav button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
 }

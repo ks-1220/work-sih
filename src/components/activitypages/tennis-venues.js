@@ -312,7 +312,7 @@ const TennisWorld = () => {
         <div style={styles.cta}>
           <h2 style={styles.ctaTitle}>Ready to Improve Your Tennis?</h2>
           <p style={styles.ctaText}>
-            Whether you're a beginner or an advanced player, we've got resources to help you ace your game!
+            Whether you&rsquo;re a beginner or an advanced player, we&rsquo;ve got resources to help you.
           </p>
           <button style={styles.ctaButton}>Get Started</button>
         </div>

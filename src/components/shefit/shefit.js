@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import one from "../../assets/one.jpg";
 import two from "../../assets/two.jpg";
@@ -15,58 +15,53 @@ const MenstrualCycleTracker = () => {
   const { t } = useTranslation();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [lastPeriodDate, setLastPeriodDate] = useState(null);
-  const [calendarDays, setCalendarDays] = useState([]);
 
-  const generateCalendar = (date, lastPeriod) => {
+  /**
+   * The month grid is derived from the selected month and the logged date, so
+   * it is computed during render rather than pushed into state by an effect.
+   * The previous version called setCalendarDays inside useEffect, which meant
+   * every month change painted an empty grid first and filled it in on the
+   * following render.
+   */
+  const calendarDays = useMemo(() => {
     const days = [];
-    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
-    const firstDayOfWeek = firstDay.getDay();
-    const daysInMonth = lastDay.getDate();
-    const prevMonthLastDay = new Date(
-      date.getFullYear(),
-      date.getMonth(),
-      0
-    ).getDate();
+    const year = currentDate.getFullYear();
+    const month = currentDate.getMonth();
+
+    const firstDayOfWeek = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    const prevMonthLastDay = new Date(year, month, 0).getDate();
 
     for (let i = firstDayOfWeek; i > 0; i--) {
-      days.push({
-        day: prevMonthLastDay - i + 1,
-        otherMonth: true,
-      });
+      days.push({ day: prevMonthLastDay - i + 1, otherMonth: true });
     }
 
-    for (let i = 1; i <= daysInMonth; i++) {
-      const currentDay = new Date(date.getFullYear(), date.getMonth(), i);
+    const today = new Date().toDateString();
 
-      // The calendar used to mark a single day at lastPeriod + 28 and call it
-      // a prediction. A fixed constant is not a forecast: cycle length varies
-      // between people and between months, and one recorded date is not enough
-      // information to estimate anything. Only the date the user actually
-      // entered is marked now.
+    for (let i = 1; i <= daysInMonth; i++) {
+      const thisDay = new Date(year, month, i);
+
+      // Only the date the user actually entered is marked. The calendar used
+      // to mark a single day at lastPeriod + 28 and call it a prediction; a
+      // fixed constant is not a forecast, and one recorded date is not enough
+      // information to estimate anything.
       const isLoggedPeriod =
-        !!lastPeriod && currentDay.toDateString() === lastPeriod.toDateString();
+        !!lastPeriodDate && thisDay.toDateString() === lastPeriodDate.toDateString();
 
       days.push({
         day: i,
-        today: currentDay.toDateString() === new Date().toDateString(),
+        today: thisDay.toDateString() === today,
         period: isLoggedPeriod,
       });
     }
 
-    const remainingDays = (7 - (days.length % 7)) % 7;
-    for (let i = 1; i <= remainingDays; i++) {
-      days.push({
-        day: i,
-        otherMonth: true,
-      });
+    // Pad the final row so the grid stays rectangular.
+    const trailing = (7 - (days.length % 7)) % 7;
+    for (let i = 1; i <= trailing; i++) {
+      days.push({ day: i, otherMonth: true });
     }
 
-    setCalendarDays(days);
-  };
-
-  useEffect(() => {
-    generateCalendar(currentDate, lastPeriodDate);
+    return days;
   }, [currentDate, lastPeriodDate]);
 
   const handlePrevMonth = () => {
@@ -157,7 +152,7 @@ const MenstrualCycleTracker = () => {
               <h2 className="section-title">{t("menstrualTracker.mythVsFact")}</h2>
               <div className="myth-fact-grid">
                 {[one, two, three, four, five, six].map((image, index) => (
-                  <div key={index} className="card">
+                  <div key={index} className="myth-card">
                     <img src={image.src} alt={`Myth ${index + 1}`} />
                   </div>
                 ))}

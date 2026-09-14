@@ -1,8 +1,11 @@
 
-  h2{
-    text-align:center;
+  /* Scoped to the SheFit page. As a bare `h2` rule this made every heading
+     in the app 50px and pale lilac once this page had been visited. Also
+     made fluid: 50px overflowed narrow screens. */
+  .shepage h2 {
+    text-align: center;
     color: #d0c3f2;
-    font-size:  50px;
+    font-size: clamp(1.8rem, 6vw, 3.125rem);
   }
   /* General container styles */
   .tracker-section{
@@ -11,7 +14,6 @@
   .tracker-container {
       font-family: Arial, sans-serif;
       max-width: 700px;
-      height: 500 !important;
       margin: 0 auto;
       padding: 20px;
       text-align: center;
@@ -64,19 +66,19 @@
   }
   
   /* Calendar header */
-  .calendar-header {
+  .shepage .calendar-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
       margin: 20px 0;
   }
   
-  .calendar-header h2 {
+  .shepage .calendar-header h2 {
       font-size: 1.2em;
       color: #333;
   }
   
-  .calendar-header button {
+  .shepage .calendar-header button {
       background-color: #007bff;
       color: white;
       border: none;
@@ -88,7 +90,7 @@
       transition: background-color 0.3s ease;
   }
   
-  .calendar-header button:hover {
+  .shepage .calendar-header button:hover {
       background-color: #b300ff;
   }
   
@@ -142,7 +144,7 @@
           padding: 10px;
       }
   
-      .calendar-header h2 {
+      .shepage .calendar-header h2 {
           font-size: 1em;
       }
   
@@ -163,7 +165,11 @@
       justify-items: center;
   }
   
-  .card {
+  /* Renamed from the generic `.card`, which is also defined by the art hub
+     stylesheet and used by PostList. Both are global, so whichever loaded
+     last won and the art hub post cards picked up this 5px border and
+     scale(1.1) hover. */
+  .myth-card {
       background: #ffffff;
       border: 5px solid #ddd;
       border-radius: 8px;
@@ -176,18 +182,18 @@
       overflow: hidden;
   }
   
-  .card:hover {
+  .myth-card:hover {
       transform: scale(1.1); /* Zoom effect */
       box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
   }
   
-  .card img {
+  .myth-card img {
       width: 100%;
       height: 100%;
       border-bottom: 1px solid #ddd;
   }
   
-  .card p {
+  .myth-card p {
       color: #555;
       font-size: 0.95em;
       line-height: 1.4;
@@ -207,11 +213,11 @@
     .tracker-container{
         width:300px;
     }
-    .card:hover {
+    .myth-card:hover {
         transform: scale(1.001); /* Zoom effect */
         box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
     }
-    .card{
+    .myth-card{
         width:300px;
     }
    }

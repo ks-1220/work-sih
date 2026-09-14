@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { registerUser } from "../../services/api";
 import { useAuth } from "../../store/auth";
-import "./register.css";
+import styles from "../auth/AuthForm.module.css";
 
 const Register = () => {
   const { t } = useTranslation(); // Initialize translation hook
@@ -47,13 +47,13 @@ const Register = () => {
   };
 
   return (
-    <div className="custom-container">
-      <h2 className="custom-heading">{t("register.heading")}</h2>
-      <form className="custom-form" onSubmit={handleSubmit}>
+    <div className={styles.container}>
+      <h2 className={styles.heading}>{t("register.heading")}</h2>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <input
           type="text"
           name="firstName"
-          className="custom-input"
+          className={styles.input}
           placeholder={t("register.firstNamePlaceholder")}
           value={formData.firstName}
           onChange={handleChange}
@@ -62,7 +62,7 @@ const Register = () => {
         <input
           type="text"
           name="middleName"
-          className="custom-input"
+          className={styles.input}
           placeholder={t("register.middleNamePlaceholder")}
           value={formData.middleName}
           onChange={handleChange}
@@ -70,7 +70,7 @@ const Register = () => {
         <input
           type="text"
           name="lastName"
-          className="custom-input"
+          className={styles.input}
           placeholder={t("register.lastNamePlaceholder")}
           value={formData.lastName}
           onChange={handleChange}
@@ -79,7 +79,7 @@ const Register = () => {
         <input
           type="email"
           name="email"
-          className="custom-input"
+          className={styles.input}
           placeholder={t("register.emailPlaceholder")}
           value={formData.email}
           onChange={handleChange}
@@ -88,7 +88,7 @@ const Register = () => {
         <input
           type="number"
           name="age"
-          className="custom-input"
+          className={styles.input}
           placeholder={t("register.agePlaceholder")}
           value={formData.age}
           onChange={handleChange}
@@ -97,14 +97,14 @@ const Register = () => {
         <input
           type="text"
           name="medicalComplications"
-          className="custom-input"
+          className={styles.input}
           placeholder={t("register.medicalComplicationsPlaceholder")}
           value={formData.medicalComplications}
           onChange={handleChange}
         />
         <select
           name="gender"
-          className="custom-input"
+          className={styles.input}
           value={formData.gender}
           onChange={handleChange}
           required
@@ -117,17 +117,17 @@ const Register = () => {
         <input
           type="password"
           name="password"
-          className="custom-input"
+          className={styles.input}
           placeholder={t("register.passwordPlaceholder")}
           value={formData.password}
           onChange={handleChange}
           required
         />
-        <button className="custom-button" type="submit">
+        <button className={styles.button} type="submit">
           {t("register.buttonText")}
         </button>
       </form>
-      {message && <p className="custom-message">{typeof message === "string" ? message : JSON.stringify(message)}</p>}
+      {message && <p className={styles.message}>{typeof message === "string" ? message : JSON.stringify(message)}</p>}
     </div>
   );
 };

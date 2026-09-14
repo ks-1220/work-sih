@@ -15,7 +15,9 @@
     margin-bottom: 20px;
   }
   
-  label {
+  /* Scoped: a bare `label` rule made every label in the app bold, because
+     global CSS is not unloaded on navigation in the App Router. */
+  .container3 label {
     font-weight: bold;
   }
   .form-control {

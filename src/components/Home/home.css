@@ -1,8 +1,13 @@
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;300;400;500;600;700;800;900;1000&family=Roboto:wght@300;400;500;700&display=swap");
 
-*,
-*::before,
-*::after {
+/* Scoped to the home page. As a bare `*` selector this zeroed the margin and
+   padding of every element in the app once the home page had been visited,
+   and global CSS is not unloaded on navigation in the App Router. Home itself
+   renders entirely inside <main1>, so its own layout is unchanged. */
+main1,
+main1 *,
+main1 *::before,
+main1 *::after {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
@@ -25,7 +30,9 @@ nav ul li a {
   text-decoration: none;
 }
 
-body {
+/* Scoped for the same reason: a page-level stylesheet should not decide the
+   typeface for routes it does not own. */
+main1 {
   font-family: "Nunito", sans-serif;
   /* display: flex;
   align-items: center;

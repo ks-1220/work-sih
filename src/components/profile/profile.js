@@ -160,9 +160,11 @@ const Profile = () => {
       <h3>
         Your Streak for {currentMonth < 10 ? `0${currentMonth}` : currentMonth}-{currentYear}
       </h3>
-      <div style={{ marginBottom: "20px" }}>
-        <button onClick={() => handleMonthChange("prev")}>Previous Month</button>
-        <button onClick={() => handleMonthChange("next")} style={{ marginLeft: "10px" }}>
+      <div className="streak-nav">
+        <button type="button" onClick={() => handleMonthChange("prev")}>
+          Previous Month
+        </button>
+        <button type="button" onClick={() => handleMonthChange("next")}>
           Next Month
         </button>
       </div>
@@ -313,7 +315,7 @@ Please let me know if there is any additional information you require from me be
           <div className="current-month">September</div>
           <div className="current-year">2024</div>
           </div>
-          <img src='https://png.pngtree.com/png-vector/20231017/ourmid/pngtree-fresh-apple-fruit-red-png-image_10203073.png' style={{width:'50px', height:'50px'
+          <img alt="" src='https://png.pngtree.com/png-vector/20231017/ourmid/pngtree-fresh-apple-fruit-red-png-image_10203073.png' style={{width:'50px', height:'50px'
           }}></img>
         </div>
         <div className="week-month">

@@ -11,11 +11,6 @@ const Card = () => {
   const { t } = useTranslation(); // Hook for translations
   const videoRef = useRef(null);
 
-  // Function to handle button click and redirect
-  const handleButtonClick = () => {
-    window.location.href = '/aframe-environment-component-master/index.html';
-  };
-
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div style={{ height: "100vh", top: 0, position: "sticky" }}>
@@ -37,13 +32,13 @@ const Card = () => {
             <h1 className='hstyle' style={{ marginTop: '140px', marginLeft: '80px', color: 'blueviolet' }}>
               {t('cards.videoHeader')}
             </h1>
-            <button
-              onClick={handleButtonClick}
-              className='playbtn'
-              style={{ width: '100px', height: '40px', marginLeft: '100px', borderRadius: '15px', background: 'blueviolet', color: 'white' }}
-            >
+            {/* The virtual forest is a standalone static page in public/, not
+                a Next.js route, so it is a plain anchor rather than a button
+                driving window.location. A link is also what this actually is:
+                it can be opened in a new tab and read by assistive tech. */}
+            <a className='playbtn' href='/aframe-environment-component-master/index.html'>
               {t('cards.buttonText')}
-            </button>
+            </a>
           </div>
         </div>
         {/* YourComponent below the video */}

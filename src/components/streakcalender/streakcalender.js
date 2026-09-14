@@ -1,54 +1,57 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useMemo } from "react";
 import "./streak.css";
 
-const StreakCalendar = ({ streakData, year, month }) => {
-  const [calendarDays, setCalendarDays] = useState([]);
-  const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+/**
+ * Renders a month grid, highlighting the days present in `streakData`.
+ *
+ * The grid is derived from the props rather than copied into state by an
+ * effect. The previous version stored it with setState inside useEffect, which
+ * meant the first paint of every month was an empty grid: the effect only runs
+ * after that paint. Changing month therefore flashed blank before filling in.
+ */
+const StreakCalendar = ({ streakData = [], year, month }) => {
+  const calendarDays = useMemo(() => {
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const startDay = new Date(year, month - 1, 1).getDay();
 
-  useEffect(() => {
-    // Generate the calendar grid
-    const daysInMonth = new Date(year, month, 0).getDate(); // Number of days in the selected month
-    const startDay = new Date(year, month - 1, 1).getDay(); // First weekday of the month (0 = Sunday)
+    // Leading blanks so the first of the month lands on the right weekday.
+    const leading = Array.from({ length: startDay }, () => null);
 
-    const calendar = [];
+    const days = Array.from({ length: daysInMonth }, (_, index) => {
+      const dayOfMonth = index + 1;
+      return {
+        day: dayOfMonth,
+        date: [
+          year,
+          String(month).padStart(2, "0"),
+          String(dayOfMonth).padStart(2, "0"),
+        ].join("-"),
+      };
+    });
 
-    // Add placeholders for days from the previous month
-    for (let i = 0; i < startDay; i++) {
-      calendar.push(null);
-    }
-
-    // Add actual days for the current month
-    for (let i = 1; i <= daysInMonth; i++) {
-      const formattedDate = `${year}-${month < 10 ? "0" + month : month}-${
-        i < 10 ? "0" + i : i
-      }`; // Format as YYYY-MM-DD
-      calendar.push({ day: i, date: formattedDate });
-    }
-
-    setCalendarDays(calendar);
+    return [...leading, ...days];
   }, [year, month]);
 
+  // A Set makes the lookup below O(1) per cell rather than scanning the whole
+  // streak array for each of the ~31 days.
+  const streakDates = useMemo(() => new Set(streakData), [streakData]);
+
   return (
-    <div>
-      {/* <div className="weekday-header">
-        {weekdays.map((day, index) => (
-          <div key={index}>{day}</div>
-        ))}
-      </div> */}
-      <div className="calendar-streak">
-        {calendarDays.map((item, index) => (
+    <div className="calendar-streak">
+      {calendarDays.map((item, index) =>
+        item ? (
           <div
-            key={index}
-            className={`day-box ${
-              item && streakData.includes(item.date) ? "streak-day" : ""
-            }`}
+            key={item.date}
+            className={`day-box ${streakDates.has(item.date) ? "streak-day" : ""}`}
           >
-            {item ? item.day : ""}
+            {item.day}
           </div>
-        ))}
-      </div>
+        ) : (
+          <div key={`blank-${index}`} className="day-box" aria-hidden="true" />
+        )
+      )}
     </div>
   );
 };

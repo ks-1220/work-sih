@@ -16,24 +16,34 @@
  --main-container-bg: #dbb6f7;
 }
 
-* {
- outline: none;
+/*
+ * Scoped to .container, this page's root element.
+ *
+ * These four rules were global. Since the App Router does not unload global
+ * CSS on navigation, visiting the profile restyled the typeface, background
+ * and base font size of every page visited afterwards.
+ *
+ * `outline: none` on `*` was the worst of them: it removed the focus ring
+ * from every interactive element in the application, which makes the whole app
+ * unusable by keyboard. It is deliberately not carried over. If a custom focus
+ * style is wanted, add a :focus-visible rule rather than removing the default.
+ */
+
+.container,
+.container *,
+.container *::before,
+.container *::after {
  box-sizing: border-box;
 }
 
-html {
- box-sizing: border-box;
+.container {
+ font-family: var(--body-font);
+ color: var(--body-color);
+ font-size: 15px;
  -webkit-font-smoothing: antialiased;
 }
 
-body {
- font-family: var(--body-font);
- background-color: var(--body-bg-color);
- color: var(--body-color);
- font-size: 15px;
-}
-
-img {
+.container img {
  max-width: 100%;
 }
 

@@ -1,26 +1,36 @@
-#Layer_1 { 
-    height: 50%;
-    width: 50%;
-    margin-top: 10%;
+/*
+ * Loader styles, scoped to .bike-loader.
+ *
+ * This file previously set `body { background-color: #FFF; text-align: center }`
+ * and a bare `svg { display: inline-block }`. Global CSS is not unloaded on
+ * navigation in the App Router, and this loader renders on route transitions,
+ * so those two rules ended up centring the text and repainting the background
+ * of every page visited afterwards.
+ *
+ * The centring and the dark backdrop are what the loader actually wanted, so
+ * they now live on its own wrapper instead.
+ */
+
+.bike-loader {
+  min-height: 100vh;
+  background-color: rgb(73, 57, 113);
+  text-align: center;
 }
-body { 
-    background-color: #FFF; 				
-    text-align: center; 
-}			
-svg { 
-     display: inline-block;				 
+
+.bike-loader svg {
+  display: inline-block;
 }
-@media (max-width: 1170px){
-    #Layer_1 { 
-        height: 50%;
-        width: 50%;
-        margin-top: 10%;
-    }
+
+.bike-loader #Layer_1 {
+  height: 50%;
+  width: 50%;
+  margin-top: 10%;
 }
-@media (max-width: 550px){
-    #Layer_1 { 
-        height: 80%;
-        width: 80%;
-        margin-top: 70%;
-    }
+
+@media (max-width: 550px) {
+  .bike-loader #Layer_1 {
+    height: 80%;
+    width: 80%;
+    margin-top: 70%;
+  }
 }

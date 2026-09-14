@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginAdmin } from "../../services/api";
 import { useAuth } from "../../store/auth";
+import styles from "../auth/AuthForm.module.css";
 
 const Adminlogin = () => {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
@@ -27,11 +28,11 @@ const Adminlogin = () => {
   };
 
   return (
-    <div className="custom-container">
-      <h2 className="custom-heading">Login</h2>
-      <form className="custom-form" onSubmit={handleSubmit}>
+    <div className={styles.container}>
+      <h2 className={styles.heading}>Login</h2>
+      <form className={styles.form} onSubmit={handleSubmit}>
         <input
-          className="custom-input"
+          className={styles.input}
           type="email"
           name="email"
           placeholder="Email"
@@ -39,16 +40,16 @@ const Adminlogin = () => {
           required
         />
         <input
-          className="custom-input"
+          className={styles.input}
           type="password"
           name="password"
           placeholder="Password"
           onChange={handleChange}
           required
         />
-        <button className="custom-button" type="submit">Login</button>
+        <button className={styles.button} type="submit">Login</button>
       </form>
-      {message && <p className="custom-message">{message}</p>}
+      {message && <p className={styles.message}>{message}</p>}
     </div>
   );
 };

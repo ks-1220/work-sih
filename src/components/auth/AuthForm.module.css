@@ -1,0 +1,117 @@
+/*
+ * Shared styling for the sign-in, registration and admin sign-in forms.
+ *
+ * Replaces two stylesheets that were both broken in different ways:
+ *
+ *  - login.css opened with a `*` reset that leaked to every page, since
+ *    global CSS is not unloaded on navigation in the App Router.
+ *  - register.css defined `.register-*` class names while register.js used
+ *    `.custom-*`, so none of it ever applied. The form only looked styled when
+ *    login.css happened to already be loaded. It also carried its own `*`
+ *    reset plus bare `input, select`, `h2` and `button` rules.
+ *
+ * The admin sign-in form imported no stylesheet at all and rendered as raw
+ * HTML. All three now share this module, which cannot leak.
+ */
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: var(--swasth-space-lg, 24px);
+  background-color: var(--swasth-surface, #f1ecfb);
+  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+.heading {
+  margin: 0 0 var(--swasth-space-lg, 24px);
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  font-weight: 600;
+  color: var(--swasth-violet-deep, #493971);
+  text-align: center;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--swasth-space-md, 16px);
+  width: 100%;
+  max-width: 420px;
+  padding: var(--swasth-space-xl, 40px) var(--swasth-space-lg, 24px);
+  background: #fff;
+  border: 1px solid var(--swasth-border, #e4dcf1);
+  border-radius: var(--swasth-radius-md, 14px);
+  box-shadow: 0 6px 20px rgba(73, 57, 113, 0.08);
+}
+
+/* Applies to both <input> and <select>, so the gender field on the
+   registration form matches the text fields beside it. */
+.input {
+  width: 100%;
+  padding: 12px 14px;
+  font: inherit;
+  font-size: 1rem;
+  color: var(--swasth-ink, #2c2340);
+  background: #fff;
+  border: 1px solid var(--swasth-border, #e4dcf1);
+  border-radius: var(--swasth-radius-sm, 8px);
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input::placeholder {
+  /* The old placeholder colour failed contrast against white. */
+  color: #6f6785;
+}
+
+.input:focus-visible {
+  border-color: var(--swasth-violet, #6a1b9a);
+  box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.18);
+}
+
+.button {
+  padding: 13px;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #fff;
+  background-color: var(--swasth-violet-deep, #493971);
+  border: none;
+  border-radius: var(--swasth-radius-sm, 8px);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+/* The previous hover turned a violet button blue (#0056b3), left over from a
+   Bootstrap default. */
+.button:hover {
+  background-color: var(--swasth-violet, #6a1b9a);
+}
+
+.button:focus-visible {
+  outline: 3px solid var(--swasth-violet, #6a1b9a);
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  background-color: #b9b2c9;
+  cursor: not-allowed;
+}
+
+.message {
+  max-width: 420px;
+  margin-top: var(--swasth-space-md, 16px);
+  font-size: 0.92rem;
+  line-height: 1.5;
+  color: var(--swasth-muted, #5c5470);
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .input,
+  .button {
+    transition: none;
+  }
+}
