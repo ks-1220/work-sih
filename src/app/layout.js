@@ -1,6 +1,9 @@
 // Global stylesheets are imported here rather than from inside individual
-// components so their order is deterministic. These three were each imported
-// from one or more deep components under Create React App.
+// components so their order is deterministic. These were each imported from
+// one or more deep components under Create React App.
+//
+// Tokens come first so every later stylesheet can reference the variables.
+import "../styles/tokens.css";
 import "../index.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "leaflet/dist/leaflet.css";

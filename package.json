@@ -31,7 +31,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint src",
+    "test": "node --test --disable-warning=MODULE_TYPELESS_PACKAGE_JSON \"tests/*.test.mjs\""
   },
   "browserslist": {
     "production": [
@@ -46,6 +47,8 @@
     ]
   },
   "devDependencies": {
+    "eslint": "^9.39.5",
+    "eslint-config-next": "^16.3.5",
     "sass": "^1.78.0"
   }
 }

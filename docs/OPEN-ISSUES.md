@@ -32,11 +32,20 @@ Build 2 cannot start until that checkpoint is supplied and audited.
 
 ### 3. Database ownership is undecided
 
-There is no persistence of any kind. The app is entirely client-rendered with
-no `src/app/api` and no `src/server`. Anything requiring stored state is
-blocked until a database is chosen and credentials are authorised. This
-affects, at minimum: cycle history, habit logs, the reward ledger, saved
-recipes and recommendation sessions.
+The `/api/v1` boundary now exists and reads and writes through the repository
+contract in `src/server/repositories/types.js`, but its only implementation is
+in-memory. Data is lost on restart, on redeploy, and independently per
+serverless instance. `GET /api/v1/health` reports this as
+`persistence.durable: false`.
+
+Choosing a store and authorising credentials is the remaining blocker. Until
+then the following stay unimplemented rather than being built on a store that
+forgets: cycle history, habit history beyond the current process, the reward
+ledger, saved recipes, recommendation sessions, and data export or deletion.
+
+Swapping in a durable adapter should be one new module plus one branch in
+`src/server/repositories/index.js`, with no endpoint or domain service
+changing. See `contracts/api-v1.md`.
 
 ## Known unfixed issues
 
@@ -75,7 +84,22 @@ plain tiles because no pages exist. Building them needs real venue data.
   disposes TensorFlow tensors, leaking on every visit.
 - `PostList.js` mutates state through a shallow copy.
 
-### Tooling
+### Lint findings (10 pre-existing)
 
-There is no test runner and no tests. `npm run lint` is broken: `next lint`
-was removed in Next.js 16 and the script needs to call ESLint directly.
+`npm run lint` now works. It calls ESLint directly, because `next lint` was
+removed in Next.js 16, and uses the flat config in `eslint.config.mjs`.
+
+It reports 8 errors and 2 warnings, all in code that predates this work. The
+rules were left at their default severity rather than downgraded, so the run
+exits non-zero. That is accurate: these are real findings, not noise to be
+silenced.
+
+| Rule | Count | Notes |
+|---|---|---|
+| `react-hooks/set-state-in-effect` | 7 | setState called synchronously inside an effect. The two calendars that did this were fixed by deriving with `useMemo`; the rest are in the auth context and the camera screen and need real reworking |
+| `react-hooks/globals` | 1 | `Yoga.js` reassigns the module-scope `interval` during render |
+| `react-hooks/exhaustive-deps` | 1 | `Yoga.js` effect missing `bestPerform` and `startingTime` |
+| `import/no-anonymous-default-export` | 1 | The mediapipe shim |
+
+Everything under `src/server/`, `src/app/api/`, the error boundaries and the
+rebuilt About page lints clean.

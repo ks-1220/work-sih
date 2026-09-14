@@ -1,0 +1,48 @@
+/*
+ * Design tokens.
+ *
+ * These are the colours the app already uses, collected in one place rather
+ * than invented: #493971 is the navbar, #6a1b9a runs through the venue pages,
+ * #944DA9 the blog headers, #f1ecfb the light lavender surface.
+ *
+ * Custom properties on :root only. No element or wildcard selectors belong in
+ * this file, or in any other globally imported stylesheet. A `*` reset and
+ * bare `p`, `a`, `li` and `h2` rules in the old About page stylesheet leaked
+ * into every route the user visited afterwards, because the App Router does
+ * not unload global CSS on navigation. Declaring variables is safe precisely
+ * because it styles nothing on its own.
+ */
+
+:root {
+  /* Brand */
+  --swasth-violet-deep: #493971;
+  --swasth-violet: #6a1b9a;
+  --swasth-violet-mid: #944da9;
+  --swasth-violet-light: #ce93d8;
+  --swasth-lavender: #e1bee7;
+  --swasth-surface: #f1ecfb;
+
+  /* Text */
+  --swasth-ink: #2c2340;
+  --swasth-muted: #5c5470;
+  --swasth-on-violet: #ffffff;
+
+  /* Lines and edges */
+  --swasth-border: #e4dcf1;
+  --swasth-radius-sm: 8px;
+  --swasth-radius-md: 14px;
+  --swasth-radius-pill: 999px;
+
+  /* Status. Chosen for contrast against --swasth-surface rather than
+     for saturation, since these carry warnings people need to read. */
+  --swasth-danger: #b3261e;
+  --swasth-warning: #8a5a00;
+  --swasth-success: #1b5e20;
+
+  /* Spacing */
+  --swasth-space-xs: 4px;
+  --swasth-space-sm: 8px;
+  --swasth-space-md: 16px;
+  --swasth-space-lg: 24px;
+  --swasth-space-xl: 40px;
+}
