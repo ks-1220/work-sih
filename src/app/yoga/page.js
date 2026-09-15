@@ -1,10 +1,10 @@
 import WithNavbar from "../../components/layout/WithNavbar";
-import Yoga from "../../components/yogahealth/yoga";
+import YogaDashboard from "../../components/fitness/YogaDashboard";
 
 export default function YogaPage() {
   return (
     <WithNavbar>
-      <Yoga />
+      <YogaDashboard />
     </WithNavbar>
   );
 }
