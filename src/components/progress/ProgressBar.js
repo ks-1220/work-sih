@@ -1,43 +1,60 @@
 "use client";
 
 import React from 'react';
-import track from "../../assets/images/track.jpeg";
-import './ProgressBar.css'; // Import the CSS file
+import { useTranslation } from 'react-i18next';
+import './ProgressBar.css';
 
-const ProgressBar = ({ activityCounts }) => {
-  const totalDays = 30; // Assuming a month has 30 days
+const ITEMS = [
+  { code: 'Y', labelKey: 'pillars.yoga', icon: 'fa-solid fa-person-praying' },
+  { code: 'M', labelKey: 'pillars.meditation', icon: 'fa-solid fa-brain' },
+  { code: 'E', labelKey: 'pillars.diet', icon: 'fa-solid fa-apple-whole' },
+  { code: 'C', labelKey: 'pillars.creative', icon: 'fa-solid fa-wand-magic-sparkles' },
+];
 
-  const calculateProgress = (activity) => {
-    const count = Object.values(activityCounts).reduce((acc, dayActivities) => {
-      return acc + (dayActivities[activity] ? 1 : 0);
-    }, 0);
+const TOTAL = 30;
 
-    return ((count / totalDays) * 100).toFixed(2);
+function Ring({ pct, icon, completeLabel }) {
+  const r = 54;
+  const c = 2 * Math.PI * r;
+  const dash = Math.max(0, Math.min(100, pct)) / 100 * c;
+  return (
+    <div className="prog-ring">
+      <svg viewBox="0 0 120 120" className="prog-ring-svg" aria-hidden="true">
+        <circle cx="60" cy="60" r={r} className="prog-ring-track" />
+        <circle
+          cx="60" cy="60" r={r}
+          className="prog-ring-fill"
+          strokeDasharray={`${dash} ${c}`}
+          transform="rotate(-90 60 60)"
+        />
+      </svg>
+      <div className="prog-ring-center">
+        <i className={icon}></i>
+        <strong>{pct.toFixed(2)}%</strong>
+        <span>{completeLabel}</span>
+      </div>
+    </div>
+  );
+}
+
+export default function ProgressBar({ activityCounts = {} }) {
+  const { t } = useTranslation();
+  const calc = (code) => {
+    const n = Object.values(activityCounts).filter((d) => d[code]).length;
+    return (n / TOTAL) * 100;
   };
 
   return (
-    <div className="progressBarContainer">
-      <div className='inner-progress'>
-        <div className='progressInfo'>
-          YOGA:<span>{calculateProgress('Y')}%</span>
-          <progress value={calculateProgress('Y')} max="100" className='progressValue1'></progress>
-        </div>
-        <div className='progressInfo'>
-          MEDITATION: <span>{calculateProgress('M')}%</span>
-          <progress value={calculateProgress('M')} max="100" className='progressValue2'></progress>
-        </div>
-        <div className='progressInfo'>
-          HEALTHY DIET: <span>{calculateProgress('E')}%</span>
-          <progress value={calculateProgress('E')} max="100" className='progressValue3'></progress>
-        </div>
-        <div className='progressInfo'>
-          CREATIVE HUB: <span>{calculateProgress('C')}%</span>
-          <progress value={calculateProgress('C')} max="100" className='progressValue4'></progress>
-        </div>
-      </div>
-      <img src={track.src} alt='track' className='progressImage'></img>
+    <div className="prog-gauges">
+      {ITEMS.map((it, i) => {
+        const p = calc(it.code);
+        return (
+          <div key={it.code} className="prog-gauge" style={{ animationDelay: `${i * 0.08}s` }}>
+            <div className="prog-gauge-label">{t(it.labelKey)}: {p.toFixed(2)}%</div>
+            <Ring pct={p} icon={it.icon} completeLabel={t('progress.complete')} />
+          </div>
+        );
+      })}
     </div>
   );
-};
-
-export default ProgressBar;
+}

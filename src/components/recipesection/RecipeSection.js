@@ -263,13 +263,27 @@ const RecipeSection = () => {
     setCurrentVideo('');
   };
 
+  const REGION_META = {
+    all: { icon: 'fa-solid fa-earth-asia', tint: 'Winter · Summer · Monsoon · Desert', desc: 'From Himalayan mustard fields to coastal coconut groves — 28 dishes, one India.', scene: ['fa-solid fa-leaf', 'fa-solid fa-wheat-awn', 'fa-solid fa-water', 'fa-solid fa-sun'] },
+    north: { icon: 'fa-solid fa-mountain-sun', tint: 'North · Winter hearty', desc: 'Mustard greens, ghee-kissed parathas and slow-simmered dals from the wheat belt.', scene: ['fa-solid fa-snowflake', 'fa-solid fa-mountain', 'fa-solid fa-wheat-awn', 'fa-solid fa-fire'] },
+    south: { icon: 'fa-solid fa-leaf', tint: 'South · Coastal light', desc: 'Coconut, curry leaves, millet and curd rice — cool, coastal and light.', scene: ['fa-solid fa-water', 'fa-solid fa-leaf', 'fa-solid fa-umbrella-beach', 'fa-solid fa-spa'] },
+    east: { icon: 'fa-solid fa-cloud-sun-rain', tint: 'East · Monsoon fresh', desc: 'Mustard oil, fermented sweets and river greens from Bengal to the Northeast.', scene: ['fa-solid fa-cloud-rain', 'fa-solid fa-seedling', 'fa-solid fa-fish', 'fa-solid fa-spa'] },
+    west: { icon: 'fa-solid fa-sun', tint: 'West · Sun & spice', desc: 'Millets, jaggery and Rajasthani sun fare — dry-heat nourishment.', scene: ['fa-solid fa-sun', 'fa-solid fa-pepper-hot', 'fa-solid fa-wind', 'fa-solid fa-mountain-sun'] },
+  };
+
   // Filter videos based on selected region
   const filteredVideos = selectedRegion === 'all' 
     ? videos 
     : videos.filter(video => video.region === selectedRegion);
+  const meta = REGION_META[selectedRegion] || REGION_META.all;
     return (
-      <div className="recipe-section">
-      <h2>{t('recipeSection.title')}</h2>
+      <div className={`recipe-section season-${selectedRegion}`}>
+      <div key={selectedRegion} className="season-scene" aria-hidden="true">
+        {meta.scene.map((ic, i) => (
+          <i key={i} className={`${ic} season-float season-float-${i + 1}`}></i>
+        ))}
+      </div>
+      <h2 className="recipe-title">{t('recipeSection.title', { defaultValue: 'Regional Recipes' })}</h2>
       <div className="region-selector">
         {['all', 'north', 'south', 'east', 'west'].map(region => (
           <button 
@@ -277,9 +291,17 @@ const RecipeSection = () => {
             className={selectedRegion === region ? 'active' : ''}
             onClick={() => setSelectedRegion(region)}
           >
-            {t(`recipeSection.region.${region}`)}
+            {t(`recipeSection.region.${region}`, { defaultValue: region })}
           </button>
         ))}
+      </div>
+      <div key={`${selectedRegion}-banner`} className="season-banner" aria-live="polite">
+        <span className="season-banner-icon"><i className={meta.icon}></i></span>
+        <div className="season-banner-text">
+          <strong>{meta.tint}</strong>
+          <span>{meta.desc}</span>
+        </div>
+        <span className="season-banner-count">{filteredVideos.length} recipes</span>
       </div>
       <div className="recipe-thumbnails">
           {filteredVideos.map((video, index) => (
@@ -292,8 +314,14 @@ const RecipeSection = () => {
                 video.isYouTube
               )}
             >
-              <img src={video.thumbnail} alt={video.title} />
-              <h4>{video.title}</h4>
+              <img src={video.thumbnail} alt={video.title} loading="lazy" />
+              <div className="recipe-name">
+                <h4>{video.title}</h4>
+              </div>
+              <div className="recipe-foot" aria-hidden="true">
+                <i className="fa-brands fa-youtube"></i>
+                <span>Watch recipe</span>
+              </div>
             </div>
           ))}
         </div>

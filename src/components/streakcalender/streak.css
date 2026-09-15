@@ -1,12 +1,3 @@
-/*
- * Scoped to .streak-nav.
- *
- * These three rules were written as a bare `button` selector, which styled
- * every button in the application at 10px once this stylesheet had loaded.
- * Global CSS is not unloaded on navigation in the App Router, so visiting the
- * profile shrank the buttons on every page visited afterwards.
- */
-
 .streak-nav {
   display: flex;
   justify-content: center;
@@ -18,14 +9,14 @@
   padding: 8px 16px;
   font-size: 0.85rem;
   color: #fff;
-  background-color: rgb(73, 57, 113);
+  background-color: #2646A6;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 }
 
 .streak-nav button:hover {
-  background-color: #a0459d;
+  background-color: #6382BF;
 }
 
 .streak-nav button:disabled {
@@ -68,10 +59,10 @@
 
 /* Highlight for streak days */
 .day-box.streak-day {
-  background-color: rgb(73, 57, 113);
+  background-color: #2646A6;
   color: white;
-  border: 1px solid #5a53e8;
-  box-shadow: 0px 2px 6px rgba(108, 99, 255, 0.5);
+  border: 1px solid #6382BF;
+  box-shadow: 0px 2px 6px rgba(38, 70, 166, 0.5);
   transform: scale(1.1); /* Slight zoom effect for streak days */
 }
 
@@ -108,7 +99,7 @@
 }
 
 .calendar-nav button {
-  background-color: rgb(73, 57, 113);
+  background-color: #2646A6;
   color: white;
   border: none;
   padding: 5px 15px;
@@ -119,7 +110,7 @@
 }
 
 .calendar-nav button:hover {
-  background-color: #584fd8;
+  background-color: #6382BF;
 }
 
 /* Weekday headers */
@@ -139,3 +130,4 @@
   font-size: 12px;
   text-transform: uppercase;
 }
+

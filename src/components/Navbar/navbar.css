@@ -1,33 +1,52 @@
+/* MuscleWiki-style Curvy Ends Left Navigation Sidebar in #2646A6 */
+
 .main-menu {
-  position: -webkit-sticky; 
   position: sticky;
-  top: 0; 
-  height: 100vh; 
-  background: rgb(73, 57, 113);
-  padding-top: 10px;
-  border-radius: 0 15px 0 0;
-  font-family: "Roboto", sans-serif;
-  width:100px;
+  top: 0;
+  height: 100vh;
+  background-color: #2646A6;
+  width: 90px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 14px 6px 12px 6px;
+  box-shadow: 2px 0 14px rgba(38, 70, 166, 0.2);
+  user-select: none;
+  z-index: 1000;
+  box-sizing: border-box;
+  flex-shrink: 0;
 }
 
-.main-menu h1 {
-  display: block;
-  font-size: 1.3rem;
-  font-weight: 500;
-  text-align: center;
-  margin: 20px 0 30px;
-  color: #fff;
-  font-family: "Nunito", sans-serif;
+/* Top Hamburger Menu Bar */
+.sidebar-hamburger {
+  color: #ffffff;
+  font-size: 22px;
+  cursor: pointer;
+  padding: 8px;
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.2s;
+  background: none;
+  border: none;
 }
 
-.logo {
-  display: none;
+.sidebar-hamburger:hover {
+  opacity: 0.8;
 }
 
-/* The menu is pinned to 100vh, so the item list has to scroll on short
-   viewports rather than pushing entries off the bottom. */
+/* Nav items list */
 .main-menu ul {
-  max-height: calc(100vh - 110px);
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
   overflow-y: auto;
   overflow-x: hidden;
   scrollbar-width: none;
@@ -38,244 +57,186 @@
 }
 
 .nav-item {
-  position: relative;
-  display: block;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .nav-item a {
-  position: relative;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  font-size: 1rem;
-  padding: 15px 0;
-  margin-left: 10px;
-  border-top-left-radius: 20px;
-  border-bottom-left-radius: 20px;
-}
-
-.nav-item b:nth-child(1) {
-  position: absolute;
-  top: -15px;
-  height: 15px;
-  width: 100%;
-  background: #fff;
-  display: none;
-}
-
-.nav-item b:nth-child(1)::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-bottom-right-radius: 20px;
-  background: rgb(73, 57, 113);
-}
-
-.nav-item b:nth-child(2) {
-  position: absolute;
-  bottom: -15px;
-  height: 15px;
-  width: 100%;
-  background: #fff;
-  display: none;
-}
-
-.nav-item b:nth-child(2)::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border-top-right-radius: 20px;
-  background: rgb(73, 57, 113);
-}
-
-.nav-item.active b:nth-child(1),
-.nav-item.active b:nth-child(2) {
-  display: block;
-}
-
-.nav-item.active a {
+  width: 74px;
+  height: 60px;
+  border-radius: 12px; /* Curvy ends */
+  color: #ffffff;
   text-decoration: none;
-  color: #000;
-  background: rgb(254, 254, 254);
+  transition: all 0.2s ease;
+  padding: 4px 2px;
+  box-sizing: border-box;
 }
 
-.nav-icon {
-  width: 60px;
-  height: 20px;
-  font-size: 20px;
+.nav-item i {
+  font-size: 19px;
+  margin-bottom: 3px;
+  color: #ffffff;
+  display: block;
+  transition: transform 0.2s;
+}
+
+.nav-item .nav-text {
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.2px;
   text-align: center;
+  line-height: 1.1;
+  color: #ffffff;
+  white-space: nowrap;
 }
 
-.nav-text {
-  display: block;
-  width: 120px;
-  height: 20px;
+.nav-item:hover a {
+  background-color: rgba(255, 255, 255, 0.16);
 }
 
-
-@media (max-width: 1500px) {
-  /* main {
-    grid-template-columns: 7% 93%;
-  } */
-
-  /* .main-menu h1 {
-    display: none;
-  } */
-
-  .logo {
-    display: block;
-    width: 30px;
-    margin: 20px auto;
-  }
-
-  
-
+.nav-item:hover i {
+  transform: translateY(-1px);
 }
 
-@media (max-width: 1310px) {
-  /* main {
-    grid-template-columns: 8% 92%;
-  } */
-
- 
-}
-
-@media (max-width: 1150px) {
-  .content {
-    grid-template-columns: 60% 40%;
-  }
-
-  
-}
-
-@media (max-width: 910px) {
-  /* main {
-    grid-template-columns: 10% 90%;
-  } */
-  .nav-text {
-    display: none;
-  }
-  
-}
-
-@media (max-width: 700px) {
-  /* main {
-    grid-template-columns: 15% 85%;
-  } */
-
-  .nav-text {
-    display: none;
-  }
-  .main-menu{
-    width: 80px;
-    font-size: 1px;
-  }
-  .main-menu h1{
-    font-size: 1rem;
-  }
-  .best-item.box-two p{
-    font-size: 0.8rem;
-  }
-  .overlay h3{
-    font-size: 0.8rem;
-  }
-  .content{
-    margin-left: 30px;
-  }
-  .right-content{
-    width: 270px;
-  }
-  .left-content{
-    width: 270px;
-  }
-  .dropdown-menu-nav a{
-    font-size: 0.7rem;
-  }
-  
-}
-
-@media (max-width: 380px) {
-  /* main {
-    grid-template-columns: 15% 85%;
-  } */
-
-  .nav-text {
-    display: none;
-  }
-  .main-menu{
-    width: 70px;
-    font-size: 1px;
-    margin-right: 10px;
-  }
-  .main-menu h1{
-    font-size: 1rem;
-  }
-  .best-item.box-two p{
-    font-size: 0.8rem;
-  }
-  .overlay h3{
-    font-size: 0.8rem;
-  }
-  
-}
-
-
-/* Circle for User Icon */
-.user-menu {
-  position: relative;
-  margin-left: 35px; /* Push it to the right */
-}
-
-.user-icon-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background-color: #f1f1f1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.user-icon-circle i {
-  font-size: 18px;
-  color: #333;
-}
-
-/* Dropdown Menu */
-.dropdown-menu-nav {
-  position: absolute;
-  top: 45px;
-  right:0;
-  margin-right: 5px;
-  /* background-color: #fff; */
-  /* border: 1px solid #ddd; */
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  border-radius: 5px;
-  overflow: hidden;
-  z-index: 1000;
-}
-
-.dropdown-menu-nav a {
-  display: block;
-  border: 0.01rem solid rgb(120, 120, 120);
+/* ACTIVE ITEM: Curvy Ends High-Contrast White Card (as shown in photo) */
+.nav-item.active a {
   background-color: #ffffff;
-  border-radius: 10px;
-  margin-top: 1px;
-  padding: 10px 10px;
-  color: #333;
-  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
 }
 
-.dropdown-menu-nav a:hover {
-  background-color: #7b4499;
+.nav-item.active i {
+  color: #2646A6;
+}
+
+.nav-item.active .nav-text {
+  color: #2646A6;
+  font-weight: 800;
+}
+
+/* WELLNESS CTA: gradient pill that stands out right under Fitness */
+.nav-item.nav-cta a {
+  background: linear-gradient(135deg, #ffffff 0%, #dbe7ff 100%);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
+}
+
+.nav-item.nav-cta i,
+.nav-item.nav-cta .nav-text {
+  color: #2646A6;
+}
+
+.nav-item.nav-cta .nav-text {
+  font-weight: 800;
+}
+
+.nav-item.nav-cta:hover a {
+  background: #ffffff;
+  transform: translateY(-1px);
+}
+
+.nav-item.nav-cta.active a {
+  outline: 2px solid #ffffff;
+  outline-offset: 1px;
+}
+
+/* BOTTOM CURVY ENDS ACTION BUTTON */
+.sidebar-action-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 6px;
+}
+
+.sidebar-curvy-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 74px;
+  height: 58px;
+  background-color: #e04444;
+  color: #ffffff;
+  border-radius: 14px; /* Curvy ends */
+  text-decoration: none;
+  box-shadow: 0 4px 12px rgba(224, 68, 68, 0.35);
+  transition: all 0.2s ease;
+}
+
+.sidebar-curvy-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(224, 68, 68, 0.45);
+  background-color: #d63333;
+}
+
+.sidebar-curvy-btn i {
+  font-size: 18px;
+  margin-bottom: 2px;
+}
+
+.sidebar-curvy-btn span {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.3px;
+}
+
+/* Zen audio button */
+.sidebar-zen-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  color: #ffffff;
+  width: 74px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin: 6px 0 2px 0;
+  transition: background-color 0.2s;
+}
+
+.sidebar-zen-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Footer text */
+.sidebar-bottom-legal {
+  margin-top: 8px;
+  text-align: center;
+  font-size: 0.56rem;
+  color: rgba(255, 255, 255, 0.8);
+  line-height: 1.25;
+}
+
+.sidebar-bottom-legal a {
+  color: #ffffff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.sidebar-bottom-legal a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .main-menu {
+    width: 78px;
+    padding: 10px 4px;
+  }
+  .nav-item a {
+    width: 68px;
+    height: 56px;
+  }
+  .sidebar-curvy-btn {
+    width: 68px;
+    height: 52px;
+  }
 }

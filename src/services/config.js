@@ -9,3 +9,12 @@ export const API_BASE_URL =
 
 export const AUTH_API_URL = `${API_BASE_URL}/api/auth`;
 export const ADMIN_API_URL = `${API_BASE_URL}/api/admin`;
+
+// Floating WhatsApp button (bottom-right, site-wide). Set
+// NEXT_PUBLIC_WHATSAPP_NUMBER to the real business number in country-code
+// format without "+" (e.g. 919876543210). The default is a placeholder.
+export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "910000000000";
+
+export const WHATSAPP_LINK =
+  `https://wa.me/${WHATSAPP_NUMBER}` +
+  `?text=${encodeURIComponent("Hi Swasth Infinity! I need help with my wellness journey.")}`;

@@ -1,40 +1,53 @@
 /*
  * Design tokens.
  *
- * These are the colours the app already uses, collected in one place rather
- * than invented: #493971 is the navbar, #6a1b9a runs through the venue pages,
- * #944DA9 the blog headers, #f1ecfb the light lavender surface.
- *
- * Custom properties on :root only. No element or wildcard selectors belong in
- * this file, or in any other globally imported stylesheet. A `*` reset and
- * bare `p`, `a`, `li` and `h2` rules in the old About page stylesheet leaked
- * into every route the user visited afterwards, because the App Router does
- * not unload global CSS on navigation. Declaring variables is safe precisely
- * because it styles nothing on its own.
+ * Primary palette requested:
+ * Navbar color: #2646A6
+ * Website purple/accent color: #6382BF
  */
 
 :root {
-  /* Brand */
-  --swasth-violet-deep: #493971;
-  --swasth-violet: #6a1b9a;
-  --swasth-violet-mid: #944da9;
-  --swasth-violet-light: #ce93d8;
-  --swasth-lavender: #e1bee7;
-  --swasth-surface: #f1ecfb;
+  /* Brand Primary */
+  --swasth-navbar: #2646A6;
+  --swasth-violet-deep: #2646A6;
+  --swasth-violet: #6382BF;
+  --swasth-violet-mid: #6382BF;
+  --swasth-violet-light: #8ea7d8;
+  --swasth-lavender: #dbe4f6;
+  --swasth-surface: #f3f6fc;
+
+  /* Modern Professional Athletic Palette */
+  --wiki-navy-dark: #1b3582;
+  --wiki-navy-primary: #2646A6;
+  --wiki-navy-light: #3e62c9;
+  --wiki-navy-hover: #3457bd;
+  --wiki-accent-purple: #6382BF;
+  --wiki-accent-soft: #8fa7d9;
+  --wiki-canvas: #edf2f9;
+  --wiki-canvas-soft: #f4f7fc;
+  --wiki-surface: #ffffff;
+  --wiki-border: #dbe3f3;
+  --wiki-border-focus: #2646A6;
+  --wiki-text-main: #0f172a;
+  --wiki-text-muted: #53647e;
+  --wiki-accent-red: #d32f2f;
+  --wiki-accent-coral: #ef4444;
+  --wiki-accent-blue: #2646A6;
+  --wiki-toggle-bg: #cbd5e1;
+  --wiki-toggle-active: #2646A6;
 
   /* Text */
-  --swasth-ink: #2c2340;
-  --swasth-muted: #5c5470;
+  --swasth-ink: #0f172a;
+  --swasth-muted: #53647e;
   --swasth-on-violet: #ffffff;
 
   /* Lines and edges */
-  --swasth-border: #e4dcf1;
+  --swasth-border: #dbe3f3;
   --swasth-radius-sm: 8px;
   --swasth-radius-md: 14px;
   --swasth-radius-pill: 999px;
 
-  /* Status. Chosen for contrast against --swasth-surface rather than
-     for saturation, since these carry warnings people need to read. */
+  /* Status */
   --swasth-danger: #b3261e;
   --swasth-warning: #8a5a00;
   --swasth-success: #1b5e20;

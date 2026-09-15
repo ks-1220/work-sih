@@ -3,23 +3,22 @@
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import * as tf from "@tensorflow/tfjs";
 import React, { useRef, useState, useEffect } from "react";
+import Link from "next/link";
 import Navbar from "../../components/Navbar/navbar";
-import Yoga from "../../components/yogahealth/yoga"
 import { useTranslation } from "react-i18next";
 
-// set the backend
-import backend from "@tensorflow/tfjs-backend-webgl";
+// Set WebGL backend
+import "@tensorflow/tfjs-backend-webgl";
 import Webcam from "react-webcam";
-const count = "/media/count.wav"; // served from public/media
-
-import Instructions from "../../components/Instrctions/Instructions";
+const count = "/media/count.wav";
 
 import "./Yoga.css";
 
 import DropDown from "../../components/DropDown/DropDown";
 import { poseImages } from "../../utils/pose_images";
-import { POINTS, keypointConnections } from "../../utils/data";
+import { POINTS, keypointConnections, poseInstructions } from "../../utils/data";
 import { drawPoint, drawSegment } from "../../utils/helper";
+import { evaluateMediaPipePose } from "../../utils/mediapipeYoga";
 
 let skeletonColor = "rgb(255,255,255)";
 let poseList = [
@@ -30,13 +29,10 @@ let poseList = [
   "Dog",
   "Shoulderstand",
   "Traingle",
-  "Pose"
+  "Pose",
 ];
 
 let interval;
-
-// flag variable is used to help capture the time when AI just detect
-// the pose as correct(probability more than threshold)
 let flag = false;
 
 function Yogacv() {
@@ -49,15 +45,18 @@ function Yogacv() {
   const [poseTime, setPoseTime] = useState(0);
   const [bestPerform, setBestPerform] = useState(0);
   const [currentPose, setCurrentPose] = useState("Tree");
-  const [isStartPose, setIsStartPose] = useState(false);
+  const [accuracy, setAccuracy] = useState(0);
+  const [liveFeedback, setLiveFeedback] = useState("");
+  const [isModelReady, setIsModelReady] = useState(false);
+  const [cameraError, setCameraError] = useState(false);
 
   useEffect(() => {
     const timeDiff = (currentTime - startingTime) / 1000;
     if (flag) {
-      setPoseTime(timeDiff);
+      setPoseTime(Math.round(timeDiff));
     }
     if ((currentTime - startingTime) / 1000 > bestPerform) {
-      setBestPerform(timeDiff);
+      setBestPerform(Math.round(timeDiff));
     }
   }, [currentTime]);
 
@@ -65,277 +64,298 @@ function Yogacv() {
     setCurrentTime(0);
     setPoseTime(0);
     setBestPerform(0);
+    setAccuracy(0);
+    setLiveFeedback("");
   }, [currentPose]);
 
   useEffect(() => {
-    tf.setBackend("webgl")
-      .then(() => {
-        console.log("WebGL backend initialized");
-      })
-      .catch((error) => {
-        console.error("Failed to initialize WebGL backend:", error);
-      });
+    let active = true;
+
+    async function setupVision() {
+      try {
+        await tf.ready();
+        const detectorConfig = {
+          modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
+        };
+        const detector = await poseDetection.createDetector(
+          poseDetection.SupportedModels.MoveNet,
+          detectorConfig
+        );
+        
+        let countAudio = null;
+        try {
+          countAudio = new Audio(count);
+          countAudio.loop = true;
+        } catch (e) {
+          console.warn("Audio not supported or blocked", e);
+        }
+
+        if (active) {
+          setIsModelReady(true);
+          if (interval) clearInterval(interval);
+          interval = setInterval(() => {
+            detectPose(detector, countAudio);
+          }, 100);
+        }
+      } catch (err) {
+        console.warn("MoveNet Thunder fallback to Lightning:", err);
+        try {
+          const detector = await poseDetection.createDetector(
+            poseDetection.SupportedModels.MoveNet,
+            { modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING }
+          );
+          if (active) {
+            setIsModelReady(true);
+            if (interval) clearInterval(interval);
+            interval = setInterval(() => {
+              detectPose(detector, null);
+            }, 100);
+          }
+        } catch (fallbackErr) {
+          console.error("Pose detector load error:", fallbackErr);
+        }
+      }
+    }
+
+    setupVision();
+
+    return () => {
+      active = false;
+      if (interval) clearInterval(interval);
+    };
   }, []);
 
-  const CLASS_NO = {
-    Chair: 0,
-    Cobra: 1,
-    Dog: 2,
-    No_Pose: 3,
-    Shoulderstand: 4,
-    Traingle: 5,
-    Tree: 6,
-    Warrior: 7,
-    Pose:8
-  };
-
-  function get_center_point(landmarks, left_bodypart, right_bodypart) {
-    let left = tf.gather(landmarks, left_bodypart, 1);
-    let right = tf.gather(landmarks, right_bodypart, 1);
-    const center = tf.add(tf.mul(left, 0.5), tf.mul(right, 0.5));
-    return center;
-  }
-
-  function get_pose_size(landmarks, torso_size_multiplier = 2.5) {
-    let hips_center = get_center_point(
-      landmarks,
-      POINTS.LEFT_HIP,
-      POINTS.RIGHT_HIP
-    );
-    let shoulders_center = get_center_point(
-      landmarks,
-      POINTS.LEFT_SHOULDER,
-      POINTS.RIGHT_SHOULDER
-    );
-    let torso_size = tf.norm(tf.sub(shoulders_center, hips_center));
-    let pose_center_new = get_center_point(
-      landmarks,
-      POINTS.LEFT_HIP,
-      POINTS.RIGHT_HIP
-    );
-    pose_center_new = tf.expandDims(pose_center_new, 1);
-
-    pose_center_new = tf.broadcastTo(pose_center_new, [1, 17, 2]);
-    // return: shape(17,2)
-    let d = tf.gather(tf.sub(landmarks, pose_center_new), 0, 0);
-    let max_dist = tf.max(tf.norm(d, "euclidean", 0));
-
-    // normalize scale
-    let pose_size = tf.maximum(
-      tf.mul(torso_size, torso_size_multiplier),
-      max_dist
-    );
-    return pose_size;
-  }
-
-  function normalize_pose_landmarks(landmarks) {
-    let pose_center = get_center_point(
-      landmarks,
-      POINTS.LEFT_HIP,
-      POINTS.RIGHT_HIP
-    );
-    pose_center = tf.expandDims(pose_center, 1);
-    pose_center = tf.broadcastTo(pose_center, [1, 17, 2]);
-    landmarks = tf.sub(landmarks, pose_center);
-
-    let pose_size = get_pose_size(landmarks);
-    landmarks = tf.div(landmarks, pose_size);
-    return landmarks;
-  }
-
-  function landmarks_to_embedding(landmarks) {
-    // normalize landmarks 2D
-    landmarks = normalize_pose_landmarks(tf.expandDims(landmarks, 0));
-    let embedding = tf.reshape(landmarks, [1, 34]);
-    return embedding;
-  }
-
-  const runMovenet = async () => {
-    const detectorConfig = {
-      modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
-    };
-    const detector = await poseDetection.createDetector(
-      poseDetection.SupportedModels.MoveNet,
-      detectorConfig
-    );
-    const poseClassifier = await tf.loadLayersModel(
-      "https://models.s3.jp-tok.cloud-object-storage.appdomain.cloud/model.json"
-    );
-    const countAudio = new Audio(count);
-    countAudio.loop = true;
-    interval = setInterval(() => {
-      detectPose(detector, poseClassifier, countAudio);
-    }, 100);
-  };
-
-  const detectPose = async (detector, poseClassifier, countAudio) => {
+  const detectPose = async (detector, countAudio) => {
     if (
       typeof webcamRef.current !== "undefined" &&
       webcamRef.current !== null &&
-      webcamRef.current.video.readyState === 4
+      webcamRef.current.video &&
+      webcamRef.current.video.readyState === 4 &&
+      canvasRef.current !== null
     ) {
       let notDetected = 0;
       const video = webcamRef.current.video;
       const pose = await detector.estimatePoses(video);
       const ctx = canvasRef.current.getContext("2d");
       ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+
       try {
+        if (!pose || pose.length === 0) return;
         const keypoints = pose[0].keypoints;
-        let input = keypoints.map((keypoint) => {
-          if (keypoint.score > 0.4) {
+
+        // Extract keypoint coordinate map for MediaPipe angle engine
+        let keypointMap = {};
+        keypoints.forEach((keypoint, idx) => {
+          if (keypoint.score > 0.35) {
+            keypointMap[idx] = { x: keypoint.x, y: keypoint.y };
             if (
               !(keypoint.name === "left_eye" || keypoint.name === "right_eye")
             ) {
               drawPoint(ctx, keypoint.x, keypoint.y, 8, "rgb(255,255,255)");
               let connections = keypointConnections[keypoint.name];
               try {
-                connections.forEach((connection) => {
-                  let conName = connection.toUpperCase();
-                  drawSegment(
-                    ctx,
-                    [keypoint.x, keypoint.y],
-                    [
-                      keypoints[POINTS[conName]].x,
-                      keypoints[POINTS[conName]].y,
-                    ],
-                    skeletonColor
-                  );
-                });
+                if (connections) {
+                  connections.forEach((connection) => {
+                    let conName = connection.toUpperCase();
+                    if (POINTS[conName] !== undefined && keypoints[POINTS[conName]]) {
+                      drawSegment(
+                        ctx,
+                        [keypoint.x, keypoint.y],
+                        [
+                          keypoints[POINTS[conName]].x,
+                          keypoints[POINTS[conName]].y,
+                        ],
+                        skeletonColor
+                      );
+                    }
+                  });
+                }
               } catch (err) {}
             }
           } else {
             notDetected += 1;
           }
-          return [keypoint.x, keypoint.y];
         });
-        if (notDetected > 4) {
+
+        if (notDetected > 6) {
           skeletonColor = "rgb(255,255,255)";
+          setAccuracy(Math.max(10, Math.round((1 - notDetected / 17) * 100)));
+          setLiveFeedback("Step into the camera frame so your full body is visible");
           return;
         }
-        const processedInput = landmarks_to_embedding(input);
-        const classification = poseClassifier.predict(processedInput);
 
-        classification.array().then((data) => {
-          const classNo = CLASS_NO[currentPose];
-          console.log(data[0][classNo]);
-          if (data[0][classNo] > 0.97) {
-            if (!flag) {
-              countAudio.play();
-              setStartingTime(new Date(Date()).getTime());
-              flag = true;
-            }
-            setCurrentTime(new Date(Date()).getTime());
-            skeletonColor = "rgb(0,255,0)";
-          } else {
-            flag = false;
-            skeletonColor = "rgb(255,255,255)";
+        // Run MediaPipe 8-joint angle calculation & posture evaluation
+        const evalResult = evaluateMediaPipePose(keypointMap, currentPose);
+        setAccuracy(evalResult.accuracy);
+        setLiveFeedback(evalResult.tip);
+
+        if (evalResult.isAligned) {
+          skeletonColor = "rgb(0,230,118)"; // Bright neon green for correct posture
+          if (!flag) {
+            if (countAudio) countAudio.play().catch(() => {});
+            setStartingTime(new Date().getTime());
+            flag = true;
+          }
+          setCurrentTime(new Date().getTime());
+        } else {
+          skeletonColor = "rgb(255,255,255)"; // White when adjusting
+          flag = false;
+          if (countAudio) {
             countAudio.pause();
             countAudio.currentTime = 0;
           }
-        });
+        }
       } catch (err) {
-        console.log(err);
+        console.error("Detection loop error:", err);
       }
     }
   };
 
-  function startYoga() {
-    setIsStartPose(true);
-    runMovenet();
-  }
+  const instructions = poseInstructions[currentPose] || [];
 
-  function stopPose() {
-    setIsStartPose(false);
-    clearInterval(interval);
-  }
+  return (
+    <div className="practice-page">
+      {/* Sidebar */}
+      <div className="practice-sidebar">
+        <Navbar />
+      </div>
 
-  if (isStartPose) {
-    return (
-      <div className="yoga-container">
-        <div className="performance-container">
-          <div className="pose-performance">
-            <h4>Pose Time: {poseTime} s</h4>
+      {/* Main Studio */}
+      <div className="practice-main">
+        {/* Top Control Bar */}
+        <div className="practice-topbar">
+          <div className="practice-top-left">
+            <Link href="/start/yoga" className="back-to-dash-btn">
+              ← Back to Yoga Dashboard
+            </Link>
+            <div className="practice-title-wrap">
+              <span className="practice-badge">🧘 AI Pose Coach Studio</span>
+            </div>
           </div>
-          <div className="pose-performance">
-            <h4>Best: {bestPerform} s</h4>
-          </div>
-        </div>
-        <div>
-          <Webcam
-            width="640px"
-            height="480px"
-            id="webcam"
-            ref={webcamRef}
-            style={{
-              position: "absolute",
-              left: 120,
-              top: 100,
-              padding: "0px",
-            }}
-          />
-          <canvas
-            ref={canvasRef}
-            id="my-canvas"
-            width="640px"
-            height="480px"
-            style={{
-              position: "absolute",
-              left: 120,
-              top: 100,
-              zIndex: 1,
-            }}
-          ></canvas>
-          <div>
-            <img
-              src={poseImages[currentPose]}
-              alt={`Reference photograph of the ${currentPose} pose`}
-              className="pose-img"
+
+          <div className="practice-top-right">
+            <DropDown
+              poseList={poseList}
+              currentPose={currentPose}
+              setCurrentPose={setCurrentPose}
             />
           </div>
         </div>
-        <button onClick={stopPose} className="secondary-btn">
-        {t('Stop Pose')}
-        </button>
+
+        {/* HUD Stats Row */}
+        <div className="hud-stats-row">
+          <div className="hud-stat-card">
+            <div className="hud-icon">⏱️</div>
+            <div className="hud-content">
+              <span className="hud-label">Pose Hold Time</span>
+              <span className="hud-value">{poseTime}s</span>
+            </div>
+          </div>
+
+          <div className="hud-stat-card">
+            <div className="hud-icon">🏆</div>
+            <div className="hud-content">
+              <span className="hud-label">Best Record</span>
+              <span className="hud-value">{bestPerform}s</span>
+            </div>
+          </div>
+
+          <div className="hud-stat-card">
+            <div className="hud-icon">🎯</div>
+            <div className="hud-content">
+              <span className="hud-label">Posture Accuracy</span>
+              <span
+                className="hud-value"
+                style={{ color: accuracy >= 80 ? "#2e7d32" : "#e65100" }}
+              >
+                {accuracy}%
+              </span>
+            </div>
+          </div>
+
+          <div className="hud-stat-card">
+            <div className="hud-icon">✨</div>
+            <div className="hud-content">
+              <span className="hud-label">Target Pose</span>
+              <span className="hud-value">{currentPose}</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Studio Stage */}
+        <div className="practice-stage">
+          {/* Camera Viewport */}
+          <div className="camera-card">
+            <div className="camera-header">
+              <span>Live Camera Feed</span>
+              <span className="live-indicator">
+                <span className="live-dot-pulse" />
+                {isModelReady ? "MediaPipe Active" : "Initializing AI Model..."}
+              </span>
+            </div>
+            <div className="camera-viewport">
+              {cameraError ? (
+                <div style={{ color: "#fff", textAlign: "center", padding: "2rem" }}>
+                  <p>⚠️ Camera access required for AI pose detection.</p>
+                  <p style={{ fontSize: "0.8rem", opacity: 0.7 }}>
+                    Please allow camera permissions in your browser.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  <Webcam
+                    id="webcam"
+                    ref={webcamRef}
+                    onUserMediaError={() => setCameraError(true)}
+                    videoConstraints={{
+                      facingMode: "user",
+                      width: 640,
+                      height: 480,
+                    }}
+                  />
+                  <canvas
+                    ref={canvasRef}
+                    id="my-canvas"
+                    width={640}
+                    height={480}
+                  />
+                </>
+              )}
+            </div>
+          </div>
+
+          {/* Reference Pose & Guidance Card */}
+          <div className="reference-card">
+            <div className="ref-header">
+              <h2 className="ref-title">{currentPose} Pose Reference</h2>
+            </div>
+            <div className="ref-img-wrap">
+              <img
+                src={poseImages[currentPose]}
+                alt={`Reference for ${currentPose}`}
+                className="ref-pose-img"
+              />
+            </div>
+            <div className="pose-tips-box">
+              <h4 className="pose-tips-title">
+                💡 Real-Time Feedback
+              </h4>
+              <p style={{ margin: "0 0 0.5rem", fontSize: "0.82rem", fontWeight: "700", color: accuracy >= 80 ? "#2e7d32" : "#e65100" }}>
+                {liveFeedback || "Position yourself in front of the camera"}
+              </p>
+              <h4 className="pose-tips-title" style={{ marginTop: "0.6rem" }}>
+                📋 Key Alignment Rules
+              </h4>
+              <ul className="pose-tips-list">
+                {instructions.slice(0, 3).map((inst, i) => (
+                  <li key={i}>{inst}</li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
-    );
-  }
-
-  return (
-    <div>
-    <div style={{ display: "flex" }}>
-  <div style={{ width: "8%", height:"100vh",top:0,position:"sticky"}}>
-    <Navbar />
-  </div>
-  <div style={{ width: "92%" }} className="yoga-container">
-    <div style={{backgroundColor: "rgba(255, 255, 255, 0.1)", borderRadius:"10px", marginBottom:"100px"}}>
-<Yoga/>
-</div>
-    <DropDown poseList={poseList} currentPose={currentPose} setCurrentPose={setCurrentPose} />
-    <Instructions currentPose={currentPose} />
-    <button onClick={startYoga} className="secondary-btn">
-   {t('Start Pose')}
-    </button>
-  </div>
-  
-  
-</div>
-<div className="additional-resources">
-  <h3>Additional Resources</h3>
-  <p>
-
-    Explore the{" "}
-    <a
-      href="https://drive.google.com/drive/folders/1mv9dJHSXmk1zcphX6xusfzt_X-evx9Uo?usp=sharing" // Replace with the correct URL
-      target="_blank"
-      rel="noopener noreferrer"
-      style={{ color: "blue", textDecoration: "underline" }}
-    >
-      Audio Book of Yoga Protocol by Ministry of Ayush
-    </a>
-    .
-  </p>
-</div>
-</div>
+    </div>
   );
 }
 

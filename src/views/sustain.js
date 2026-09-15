@@ -29,7 +29,7 @@ const Card = () => {
             {t('cards.videoFallback')}
           </video>
           <div>
-            <h1 className='hstyle' style={{ marginTop: '140px', marginLeft: '80px', color: 'blueviolet' }}>
+            <h1 className='hstyle' style={{ marginTop: '140px', marginLeft: '80px', color: '#2646A6' }}>
               {t('cards.videoHeader')}
             </h1>
             {/* The virtual forest is a standalone static page in public/, not

@@ -32,11 +32,8 @@ export function createMemoryRepositories() {
   const habits = new Map();
   /** @type {Map<string, object>} ownerId + '|' + key */
   const idempotency = new Map();
-  /** @type {Map<string, object[]>} ownerId -> append-only list */
-  const cycleLogs = new Map();
 
   let habitSequence = 0;
-  let cycleLogSequence = 0;
 
   const scoped = (ownerId, key) => `${ownerId}|${key}`;
 
@@ -113,28 +110,6 @@ export function createMemoryRepositories() {
           result,
           createdAt: new Date().toISOString(),
         });
-      },
-    },
-
-    cycleLogs: {
-      async append(ownerId, log) {
-        cycleLogSequence += 1;
-        const record = {
-          ...log,
-          id: `cycle_${cycleLogSequence}`,
-          ownerId,
-          createdAt: new Date().toISOString(),
-        };
-        const list = cycleLogs.get(ownerId) ?? [];
-        list.push(record);
-        cycleLogs.set(ownerId, list);
-        return record;
-      },
-
-      async listAll(ownerId) {
-        // Copy so a caller cannot mutate the stored log by accident, matching
-        // the same guarantee habits.listAll makes.
-        return [...(cycleLogs.get(ownerId) ?? [])];
       },
     },
 
