@@ -18,18 +18,29 @@
 // the authenticated backend.
 
 export const demoHomeStats = {
+  activeCaloriesPercent: 85,
   carbonFootprint: '18.9',
   dailySteps: '5000',
   sustainPoints: '300',
 
-  activeCaloriesPercent: 85,
   caloriesToday: 400,
   caloriesThisWeek: 3500,
   caloriesThisMonth: 14000,
 
-  fastest5KRun: '22min',
-  longestCyclingDistance: '4 miles',
+  fastest5KRun: '22:04',
+  longestCyclingDistance: '48.3 km',
   longestRollerSkating: '2 hours',
+
+  // Where each placeholder figure would have come from if it were synced.
+  // Device keys are from src/data/devices.js.
+  activeCaloriesGoal: 470,
+  activeCaloriesDevice: 'apple-watch',
+  activeCaloriesBreakdown: 'Move 280 kcal · Workouts 120 kcal',
+  personalBestSources: {
+    fastest5KRun: { device: 'strava', date: '2026-09-07', detail: '4:25 /km average · Lodhi Garden loop', href: '/activities/running' },
+    longestCyclingDistance: { device: 'garmin', date: '2026-08-24', detail: '1:52:40 moving · 310 m climbing', href: '/activities/cycling' },
+    longestRollerSkating: { device: 'apple-watch', date: '2026-08-15', detail: 'Outdoor skating workout · 612 kcal', href: null },
+  },
 };
 
 export const demoProfileStats = {

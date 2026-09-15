@@ -29,6 +29,21 @@
   background-color: rgb(93, 74, 140);
 }
 
+.primaryBtn:disabled {
+  background-color: rgb(150, 140, 175);
+  cursor: not-allowed;
+}
+
+.loadingText {
+  margin-top: 12px;
+  font-size: 0.9rem;
+  color: rgba(73, 57, 113, 0.85);
+}
+
+.cameraHidden {
+  display: none;
+}
+
 .secondaryBtn {
   margin-top: 16px;
   padding: 8px 20px;

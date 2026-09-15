@@ -21,7 +21,7 @@
 .topbar-menu-btn {
   background: none;
   border: none;
-  color: var(--wiki-navy-primary, #1f3b73);
+  color: var(--wiki-navy-primary, #493971);
   font-size: 20px;
   cursor: pointer;
   padding: 8px;
@@ -41,12 +41,12 @@
   align-items: center;
   gap: 8px;
   text-decoration: none;
-  color: var(--wiki-navy-primary, #1f3b73);
+  color: var(--wiki-navy-primary, #493971);
 }
 
 .topbar-brand-icon {
   font-size: 22px;
-  color: var(--wiki-navy-primary, #1f3b73);
+  color: var(--wiki-navy-primary, #493971);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -56,7 +56,7 @@
   font-size: 1.25rem;
   font-weight: 900;
   letter-spacing: 0.5px;
-  color: var(--wiki-navy-primary, #1f3b73);
+  color: var(--wiki-navy-primary, #493971);
   font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   text-transform: uppercase;
 }
@@ -171,7 +171,7 @@
 
 .topbar-lang-item:hover, .topbar-lang-item.active {
   background-color: #f1f5f9;
-  color: var(--wiki-navy-primary, #1f3b73);
+  color: var(--wiki-navy-primary, #493971);
   font-weight: 700;
 }
 
@@ -223,7 +223,7 @@
   border-radius: 50%;
   background-color: #f1f5f9;
   border: 1px solid var(--wiki-border, #e2e8f0);
-  color: var(--wiki-navy-primary, #1f3b73);
+  color: var(--wiki-navy-primary, #493971);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -271,7 +271,7 @@
 
 .topbar-profile-link:hover {
   background-color: #f8fafc;
-  color: var(--wiki-navy-primary, #1f3b73);
+  color: var(--wiki-navy-primary, #493971);
 }
 
 .topbar-profile-link i {

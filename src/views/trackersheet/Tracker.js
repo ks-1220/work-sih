@@ -7,15 +7,13 @@ import { useAuth } from '../../store/auth';
 import Link from 'next/link';
 import Calendar from "../../components/calendar/Calendar";
 import ProgressBar from "../../components/progress/ProgressBar";
-import GoogleSignInButton from "../../components/auth/GoogleSignInButton";
 import WhatsAppFloat from "../../components/shared/WhatsAppFloat";
-import { resolvePostAuthDestination } from "../../services/onboarding";
 import './Tracker.css';
 
 export default function Tracker() {
   const { t, i18n } = useTranslation();
   const [activityCounts, setActivityCounts] = useState({});
-  const { isLoggedIN, storetokenInLS } = useAuth();
+  const { isLoggedIN } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
 
@@ -35,11 +33,6 @@ export default function Tracker() {
       }
       return next;
     });
-  };
-
-  const handleGoogleSuccess = (appToken) => {
-    storetokenInLS(appToken);
-    router.push(resolvePostAuthDestination(pathname || '/tracker'));
   };
 
   const pct = (code) => {
@@ -63,11 +56,6 @@ export default function Tracker() {
         <div className="tracker-login-banner">
           <span><i className="fa-solid fa-lock"></i> {t('tracker.loginBanner')}</span>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-            <GoogleSignInButton
-              next={pathname || '/tracker'}
-              onSuccess={handleGoogleSuccess}
-              onError={() => router.push(`/login?next=${encodeURIComponent(pathname || '/tracker')}`)}
-            />
             <Link href={`/login?next=${encodeURIComponent(pathname || '/tracker')}`} className="tracker-login-link">{t('tracker.emailLogin')}</Link>
           </div>
         </div>

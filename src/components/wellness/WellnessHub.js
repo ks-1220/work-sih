@@ -1,27 +1,22 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useTranslation } from 'react-i18next';
-import SampleDataBadge from '../shared/SampleDataBadge';
+import { NEARBY_CENTRES } from './nearbyCentres';
 import './WellnessHub.css';
 
-// Sample directory entries. These are illustrative placeholders so the layout
-// can be reviewed — not real clinics. Replace with a verified directory.
-// Names, areas and hours are proper nouns and stay untranslated; focus lines
-// resolve via focusKey at render time.
-const CLINICS = [
-  { name: 'Keraleeya Ayurveda Nilayam', kind: 'ayurveda', focusKey: 'wellness.clinicFocus1', area: 'Kochi', hours: 'Mon–Sat · 9am–7pm' },
-  { name: 'Charaka Wellness Clinic', kind: 'ayurveda', focusKey: 'wellness.clinicFocus2', area: 'Bengaluru', hours: 'Mon–Sat · 10am–8pm' },
-  { name: 'Vata-Pitta Balance Centre', kind: 'ayurveda', focusKey: 'wellness.clinicFocus3', area: 'Pune', hours: 'Tue–Sun · 9am–6pm' },
-  { name: 'Swasth Community Clinic', kind: 'clinic', focusKey: 'wellness.clinicFocus4', area: 'Delhi', hours: 'Mon–Fri · 8am–4pm' },
-  { name: 'MindEase Counselling Centre', kind: 'mental', focusKey: 'wellness.clinicFocus5', area: 'Mumbai · online', hours: 'Mon–Sat · 11am–9pm' },
-  { name: 'MannSehat Therapy Studio', kind: 'mental', focusKey: 'wellness.clinicFocus6', area: 'Hyderabad · online', hours: 'Mon–Fri · 10am–7pm' },
-];
+// Leaflet touches `window` at import time — keep it out of SSR like the
+// fitness map does.
+const ClinicMap = dynamic(() => import('./ClinicMap'), {
+  ssr: false,
+  loading: () => <div className="clinic-map clinic-map-loading">Loading map…</div>,
+});
 
 const DOSHAS = [
-  { id: 'vata', icon: 'fa-solid fa-wind' },
-  { id: 'pitta', icon: 'fa-solid fa-fire' },
-  { id: 'kapha', icon: 'fa-solid fa-mountain' },
+  { id: 'vata', icon: 'fa-solid fa-wind', img: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=60' },
+  { id: 'pitta', icon: 'fa-solid fa-fire', img: 'https://images.unsplash.com/photo-1470252649378-9c29740c9fa8?auto=format&fit=crop&w=800&q=60' },
+  { id: 'kapha', icon: 'fa-solid fa-mountain', img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&w=800&q=60' },
 ];
 
 const DINACHARYA = [
@@ -99,14 +94,6 @@ function BreathWidget() {
 // so the page has a single hero (theirs) followed by these hub sections.
 export default function WellnessHub({ showHero = true }) {
   const { t } = useTranslation();
-  const [filter, setFilter] = useState('all');
-  const shown = CLINICS.filter((c) => filter === 'all' || c.kind === filter);
-  const FILTERS = [
-    ['all', t('wellness.filterAll')],
-    ['ayurveda', t('wellness.filterAyurveda')],
-    ['clinic', t('wellness.filterClinics')],
-    ['mental', t('wellness.filterMental')],
-  ];
   const TIPS = [
     { icon: 'fa-solid fa-notes-medical', titleKey: 'wellness.tip1t', textKey: 'wellness.tip1x' },
     { icon: 'fa-solid fa-person-walking', titleKey: 'wellness.tip2t', textKey: 'wellness.tip2x' },
@@ -127,28 +114,29 @@ export default function WellnessHub({ showHero = true }) {
         </header>
       )}
 
-      {/* AYURVEDA — the heart of this hub */}
-      <section className="well-section" aria-label={t('wellness.ayurveda')}>
+      {/* 1 · AYURVEDA — the hero focus, with photos */}
+      <section className="well-section ayur-section" aria-label={t('wellness.ayurveda')}>
         <h2><i className="fa-solid fa-spa"></i> {t('wellness.ayurveda')} <span className="well-tag">{t('wellness.focusTag')}</span></h2>
         <p className="well-lead">{t('wellness.ayurvedaLead')}</p>
         <div className="dosha-grid">
           {DOSHAS.map((d) => (
-            <article key={d.id} className="glass-card dosha-card">
-              <div className="dosha-head">
-                <span className="dosha-icon"><i className={d.icon}></i></span>
-                <div>
-                  <h3>{t(`wellness.dosha_${d.id}_name`)}</h3>
-                  <small>{t(`wellness.dosha_${d.id}_el`)}</small>
-                </div>
+            <article key={d.id} className="glass-card dosha-card dosha-photo-card">
+              <div className="dosha-photo">
+                <img src={d.img} alt={t(`wellness.dosha_${d.id}_name`)} loading="lazy" />
+                <span className="dosha-icon dosha-icon-float"><i className={d.icon}></i></span>
               </div>
-              <p>{t(`wellness.dosha_${d.id}_traits`)}</p>
-              <p className="dosha-balance"><strong>{t('wellness.toBalance')}</strong> {t(`wellness.dosha_${d.id}_bal`)}</p>
+              <div className="dosha-body">
+                <h3>{t(`wellness.dosha_${d.id}_name`)}</h3>
+                <small>{t(`wellness.dosha_${d.id}_el`)}</small>
+                <p>{t(`wellness.dosha_${d.id}_traits`)}</p>
+                <p className="dosha-balance"><strong>{t('wellness.toBalance')}</strong> {t(`wellness.dosha_${d.id}_bal`)}</p>
+              </div>
             </article>
           ))}
         </div>
 
         <h3 className="well-sub">{t('wellness.dinaTitle')}</h3>
-        <div className="dina-strip">
+        <div className="dina-strip dina-compact">
           {DINACHARYA.map((d) => (
             <div key={d.id} className="glass-card dina-card">
               <i className={d.icon}></i>
@@ -159,35 +147,34 @@ export default function WellnessHub({ showHero = true }) {
         </div>
       </section>
 
-      {/* CLINICS */}
-      <section className="well-section" aria-label={t('wellness.clinics')}>
-        <h2><i className="fa-solid fa-hospital"></i> {t('wellness.clinics')} <SampleDataBadge /></h2>
+      {/* 2 · FIND CLINICS — near you only: live map + nearby centres */}
+      <section className="well-section clinic-section" aria-label={t('wellness.clinics')}>
+        <h2><i className="fa-solid fa-hospital"></i> Find clinics <span className="well-tag">near you only</span></h2>
         <p className="well-lead">{t('wellness.clinicsLead')}</p>
-        <div className="clinic-filters" role="group" aria-label={t('wellness.filterLabel')}>
-          {FILTERS.map(([id, label]) => (
-            <button
-              key={id}
-              type="button"
-              onClick={() => setFilter(id)}
-              className={`filter-chip ${filter === id ? 'filter-on' : ''}`}
-              aria-pressed={filter === id}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-        <div className="clinic-grid">
-          {shown.map((c) => (
-            <article key={c.name} className="glass-card clinic-card">
-              <div className="clinic-top">
-                <h3>{c.name}</h3>
-                <SampleDataBadge />
-              </div>
-              <p className="clinic-focus">{t(c.focusKey)}</p>
-              <p className="clinic-meta"><i className="fa-solid fa-location-dot"></i> {c.area}</p>
-              <p className="clinic-meta"><i className="fa-solid fa-clock"></i> {c.hours}</p>
-            </article>
-          ))}
+        <div className="clinic-split">
+          <ClinicMap />
+          <div className="near-list">
+            <h3 className="well-sub near-title"><i className="fa-solid fa-location-crosshairs"></i> Near you</h3>
+            {NEARBY_CENTRES.map((c) => (
+              <article key={c.id} className="glass-card near-card">
+                <div className="near-top">
+                  <h4>{c.name}</h4>
+                  <span className="near-dist">{c.dist}</span>
+                </div>
+                <p className="clinic-focus">{c.kind}</p>
+                <p className="clinic-meta"><i className="fa-solid fa-location-dot"></i> {c.area}</p>
+                <p className="clinic-meta"><i className="fa-solid fa-clock"></i> {c.hours}</p>
+                <a
+                  className="near-dir"
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}`}
+                  target="_blank"
+                  rel="noreferrer"
+                >
+                  Get directions →
+                </a>
+              </article>
+            ))}
+          </div>
         </div>
       </section>
 

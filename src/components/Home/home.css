@@ -1,4 +1,4 @@
-/* Swasth Infinity Home Page with Fine Finish & #2646A6 / #6382BF Palette */
+/* Swasth Infinity Home Page with Fine Finish & #493971 / #7e57c2 Palette */
 
 @import url("https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&family=Roboto:wght@300;400;500;700&display=swap");
 
@@ -14,7 +14,7 @@ main1 {
   display: flex;
   flex-direction: row;
   min-height: 100vh;
-  background: #edf2f9;
+  background: #ede7f6;
   color: #0f172a;
   position: relative;
   width: 100%;
@@ -38,7 +38,7 @@ main1 {
   background: #ffffff;
   padding: 22px;
   border-radius: 18px;
-  border: 1px solid #dbe3f3;
+  border: 1px solid #ddd0f2;
   box-shadow: 0 4px 20px rgba(38, 70, 166, 0.04);
 }
 
@@ -46,7 +46,7 @@ main1 {
 .activities h1 {
   font-size: 1.35rem;
   font-weight: 800;
-  color: #2646A6;
+  color: #493971;
   margin: 0 0 16px 0;
   letter-spacing: -0.2px;
 }
@@ -148,7 +148,7 @@ main1 {
 .weekly-schedule h1 {
   font-size: 1.2rem;
   font-weight: 800;
-  color: #2646A6;
+  color: #493971;
   margin: 0 0 12px 0;
 }
 
@@ -157,7 +157,7 @@ main1 {
   height: 340px;
   border-radius: 14px;
   overflow: hidden;
-  border: 1px solid #dbe3f3;
+  border: 1px solid #ddd0f2;
   box-shadow: 0 2px 8px rgba(38, 70, 166, 0.05);
 }
 
@@ -170,7 +170,7 @@ main1 {
 .personal-bests h1 {
   font-size: 1.2rem;
   font-weight: 800;
-  color: #2646A6;
+  color: #493971;
   margin: 0 0 12px 0;
   display: flex;
   align-items: center;
@@ -202,17 +202,17 @@ main1 {
   box-shadow: 0 6px 16px rgba(38, 70, 166, 0.12);
 }
 
-/* Box One: Modern soft purple-blue gradient (#6382BF) */
+/* Box One: Modern soft purple-blue gradient (#7e57c2) */
 .box-one {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
   background: linear-gradient(135deg, #e5ecf9 0%, #d5e2f7 100%);
   padding: 16px 20px;
-  color: #2646A6;
+  color: #493971;
   font-size: 1rem;
   font-weight: 800;
-  border: 1.5px solid #6382BF;
+  border: 1.5px solid #7e57c2;
 }
 
 .box-one img {
@@ -270,7 +270,7 @@ main1 {
   background: #ffffff;
   padding: 20px;
   border-radius: 18px;
-  border: 1px solid #dbe3f3;
+  border: 1px solid #ddd0f2;
   box-shadow: 0 4px 20px rgba(38, 70, 166, 0.04);
 }
 
@@ -282,7 +282,7 @@ main1 {
   justify-content: space-between;
   gap: 16px;
   flex-wrap: wrap;
-  background: linear-gradient(135deg, #1e3a8a 0%, #2646A6 50%, #6382BF 100%);
+  background: linear-gradient(135deg, #493971 0%, #493971 50%, #7e57c2 100%);
   color: #fff;
   padding: 18px 20px;
   border-radius: 14px;
@@ -383,7 +383,7 @@ main1 {
   gap: 6px;
   padding: 8px 16px;
   background: transparent;
-  color: #2646A6;
+  color: #493971;
   font-size: 0.85rem;
   font-weight: 800;
   border: 1.5px solid #c9d6f0;
@@ -398,7 +398,7 @@ main1 {
 }
 
 .home-logout-btn:focus-visible {
-  outline: 3px solid #6382BF;
+  outline: 3px solid #7e57c2;
   outline-offset: 2px;
 }
 
@@ -408,7 +408,7 @@ main1 {
   align-items: center;
   justify-content: space-between;
   padding-bottom: 14px;
-  border-bottom: 1px solid #edf2f9;
+  border-bottom: 1px solid #ede7f6;
 }
 
 .icon-container {
@@ -418,13 +418,13 @@ main1 {
 
 .icon-container .nav-icon {
   font-size: 18px;
-  color: #6382BF;
+  color: #7e57c2;
   cursor: pointer;
   transition: color 0.2s;
 }
 
 .icon-container .nav-icon:hover {
-  color: #2646A6;
+  color: #493971;
 }
 
 .user-info h5 {
@@ -439,7 +439,7 @@ main1 {
   height: 44px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid #6382BF;
+  border: 2px solid #7e57c2;
   transition: transform 0.2s;
 }
 
@@ -447,7 +447,7 @@ main1 {
   transform: scale(1.06);
 }
 
-/* Active Calories Card in #6382BF / #2646A6 theme */
+/* Active Calories Card in #7e57c2 / #493971 theme */
 .active-calories {
   display: flex;
   flex-direction: column;
@@ -467,7 +467,7 @@ main1 {
   margin: 0 0 12px 0;
   font-size: 1.05rem;
   font-weight: 800;
-  color: #2646A6;
+  color: #493971;
   display: flex;
   align-items: center;
   gap: 6px;
@@ -493,8 +493,8 @@ main1 {
   height: 78px;
   background: conic-gradient(
     from 0deg,
-    #2646A6 0%,
-    #6382BF 0% var(--i),
+    #493971 0%,
+    #7e57c2 0% var(--i),
     #cbd5e1 var(--i),
     #cbd5e1 100%
   );
@@ -516,7 +516,7 @@ main1 {
 .circle h2 {
   position: relative;
   font-size: 1.15rem;
-  color: #2646A6;
+  color: #493971;
   font-weight: 800;
   margin: 0;
 }
@@ -552,7 +552,7 @@ main1 {
 .mobile-personal-bests h1 {
   font-size: 1.05rem;
   font-weight: 800;
-  color: #2646A6;
+  color: #493971;
   margin: 0 0 10px 0;
   display: flex;
   align-items: center;
@@ -578,20 +578,20 @@ main1 {
 
 .mobile-personal-bests .box-one {
   background: #f8fafc;
-  border: 1px solid #dbe3f3;
+  border: 1px solid #ddd0f2;
   color: #334155;
 }
 
 .mobile-personal-bests .box-two {
   background: #f8fafc;
-  border: 1px solid #dbe3f3;
+  border: 1px solid #ddd0f2;
   color: #334155;
   flex-direction: row;
 }
 
 .mobile-personal-bests .box-three {
   background: #f8fafc;
-  border: 1px solid #dbe3f3;
+  border: 1px solid #ddd0f2;
   color: #334155;
   flex-direction: row;
 }
@@ -611,7 +611,7 @@ main1 {
 .friends-activity h1 {
   font-size: 1.05rem;
   font-weight: 800;
-  color: #2646A6;
+  color: #493971;
   margin: 0 0 12px 0;
 }
 
@@ -623,7 +623,7 @@ main1 {
 
 .card1 {
   background: #ffffff;
-  border: 1px solid #dbe3f3;
+  border: 1px solid #ddd0f2;
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
@@ -641,7 +641,7 @@ main1 {
   gap: 10px;
   padding: 10px 12px;
   background: #f8fafc;
-  border-bottom: 1px solid #edf2f9;
+  border-bottom: 1px solid #ede7f6;
 }
 
 .card1-user-info img {

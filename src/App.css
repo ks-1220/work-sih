@@ -16,7 +16,7 @@
   margin-left: 100px;
   padding: 10px 22px;
   border-radius: 15px;
-  background: #2646A6;
+  background: #493971;
   color: #fff;
   font-size: 0.95rem;
   text-align: center;
@@ -25,11 +25,11 @@
 }
 
 .playbtn:hover{
-  background-color: #6382BF !important;
+  background-color: #7e57c2 !important;
 }
 
 .playbtn:focus-visible{
-  outline: 3px solid #6382BF;
+  outline: 3px solid #7e57c2;
   outline-offset: 3px;
 }
 

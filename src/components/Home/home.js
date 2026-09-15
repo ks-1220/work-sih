@@ -1,30 +1,20 @@
 "use client";
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import { useAuth } from '../../store/auth';
-import { useRouter, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import Navbar from '../Navbar/navbar';
 import { useTranslation } from "react-i18next";
 import FitnessEventsMap from '../map/FitnessEventsMap';
 import SampleDataBadge from '../shared/SampleDataBadge';
 import { demoHomeStats } from '../../data/demoStats';
-import { resolvePostAuthDestination } from '../../services/onboarding';
-import GoogleSignInButton from '../auth/GoogleSignInButton';
 import './home.css';
 
 export default function Homesection() {
   const { t } = useTranslation();
-  const { user, isLoggedIN, isAuthReady, storetokenInLS, LogoutUser } = useAuth();
-  const router = useRouter();
+  const { isLoggedIN, isAuthReady, LogoutUser } = useAuth();
   const pathname = usePathname();
-  const [googleError, setGoogleError] = useState(false);
-
-  // Single prominent entry: real Google button; success lands via onboarding gate.
-  const handleGoogleSuccess = (appToken) => {
-    storetokenInLS(appToken);
-    router.push(resolvePostAuthDestination(pathname || '/'));
-  };
 
   const activities = [
     {
@@ -80,8 +70,8 @@ export default function Homesection() {
 
       {/* Main Content Section */}
       <section className="content">
-        {/* Single prominent homepage login — hidden until auth is ready (no flash),
-            hidden after login. Real Google button with backend exchange. */}
+        {/* Homepage login — hidden until auth is ready (no flash),
+            hidden after login. Email sign-in only. */}
         {!isAuthReady ? (
           <div className="home-hero-login home-hero-skeleton" aria-hidden="true">
             <div>
@@ -96,19 +86,8 @@ export default function Homesection() {
               <p>{t('home.welcomeSub')}</p>
             </div>
             <div className="home-hero-actions">
-              <GoogleSignInButton
-                next={pathname || '/'}
-                theme="filled_blue"
-                onSuccess={handleGoogleSuccess}
-                onError={() => setGoogleError(true)}
-              />
               <Link href={`/login?next=${encodeURIComponent(pathname || '/')}`} className="home-email-btn">{t('home.emailBtn')}</Link>
             </div>
-            {googleError && (
-              <p style={{ margin: '8px 0 0', fontSize: '0.82rem', opacity: 0.95 }}>
-                {t('home.googleError')}
-              </p>
-            )}
           </div>
         ) : null}
         {/* Left Content Area */}
@@ -202,10 +181,6 @@ export default function Homesection() {
         <div className="right-content">
           {/* User Info Bar — single login lives in the hero above; no duplicate pill here */}
           <div className="user-info">
-            <div className="icon-container">
-              <i className="fa fa-bell nav-icon" title={t('home.notifications')}></i>
-              <i className="fa fa-message nav-icon" title={t('home.messages')}></i>
-            </div>
             {isAuthReady && isLoggedIN ? (
               <div className="user-actions">
                 <button

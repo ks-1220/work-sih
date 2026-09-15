@@ -7,7 +7,6 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { loginUser } from "../../services/api";
 import { useAuth } from "../../store/auth";
 import { resolvePostAuthDestination } from "../../services/onboarding";
-import GoogleSignInButton from "../auth/GoogleSignInButton";
 import { useTranslation } from "react-i18next";
 import styles from "../auth/AuthForm.module.css";
 
@@ -41,18 +40,6 @@ const CustomLogin = () => {
       setCustomMessage("Login successful! Taking you to your fitness snapshot…");
       router.push(resolvePostAuthDestination(next));
     }
-  };
-
-  const handleGoogleSuccess = (appToken) => {
-    storetokenInLS(appToken);
-    setIsError(false);
-    setCustomMessage("Signed in with Google! Taking you to your fitness snapshot…");
-    router.push(resolvePostAuthDestination(next));
-  };
-
-  const handleGoogleError = (message) => {
-    setIsError(true);
-    setCustomMessage(message);
   };
 
   return (
@@ -106,8 +93,6 @@ const CustomLogin = () => {
         <button className={styles.button} type="submit" disabled={busy}>
           {busy ? t("login.signingIn") : t("login.buttonText")}
         </button>
-        <div className={styles.divider}>or</div>
-        <GoogleSignInButton next={next} onSuccess={handleGoogleSuccess} onError={handleGoogleError} />
       </form>
       {customMessage && (
         <p className={isError ? styles.error : styles.message} role={isError ? "alert" : "status"}>

@@ -1,15 +1,17 @@
 import WithNavbar from "../../components/layout/WithNavbar";
-import Wellness from "../../components/wellness/wellness";
+import { SeniorModels, WellnessSteps, ComingSoon } from "../../components/wellness/wellness";
 import WellnessHub from "../../components/wellness/WellnessHub";
 
-// work-sih's Wellness (senior checks) leads — it is what the sidebar
-// Wellness button is expected to open. Our hub sections (Ayurveda,
-// clinics, mental health) follow underneath without a second hero.
+// Final order: purple banner + 2 original model cards, compact steps strip,
+// adjusted Ayurveda + near-you clinics + breathwork, coming-soon pills last.
+// All sections share one centred 1120px container.
 export default function WellnessPage() {
   return (
     <WithNavbar>
-      <Wellness />
+      <SeniorModels />
+      <WellnessSteps />
       <WellnessHub showHero={false} />
+      <ComingSoon />
     </WithNavbar>
   );
 }

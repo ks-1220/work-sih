@@ -1,40 +1,41 @@
 /*
  * Design tokens.
  *
- * Primary palette requested:
- * Navbar color: #2646A6
- * Website purple/accent color: #6382BF
+ * Lilac light theme + purplish dark navbar, matched to the Fitness
+ * landing (FitnessLanding.module.css):
+ * deep purple #493971, ink #2d1b4e, accents #6a1b9a / #7e57c2,
+ * lavender #b39ddb, light washes #ede7f6 / #e8dff5 / #f3e5f5.
  */
 
 :root {
-  /* Brand Primary */
-  --swasth-navbar: #2646A6;
-  --swasth-violet-deep: #2646A6;
-  --swasth-violet: #6382BF;
-  --swasth-violet-mid: #6382BF;
-  --swasth-violet-light: #8ea7d8;
-  --swasth-lavender: #dbe4f6;
-  --swasth-surface: #f3f6fc;
+  /* Brand Primary — purplish dark (navbar) + lilac (light surfaces) */
+  --swasth-navbar: #493971;
+  --swasth-violet-deep: #493971;
+  --swasth-violet: #7e57c2;
+  --swasth-violet-mid: #9575cd;
+  --swasth-violet-light: #b39ddb;
+  --swasth-lavender: #ede7f6;
+  --swasth-surface: #f5f0fd;
 
-  /* Modern Professional Athletic Palette */
-  --wiki-navy-dark: #1b3582;
-  --wiki-navy-primary: #2646A6;
-  --wiki-navy-light: #3e62c9;
-  --wiki-navy-hover: #3457bd;
-  --wiki-accent-purple: #6382BF;
-  --wiki-accent-soft: #8fa7d9;
-  --wiki-canvas: #edf2f9;
-  --wiki-canvas-soft: #f4f7fc;
-  --wiki-surface: #ffffff;
-  --wiki-border: #dbe3f3;
-  --wiki-border-focus: #2646A6;
-  --wiki-text-main: #0f172a;
-  --wiki-text-muted: #53647e;
+  /* Lilac light theme (was navy) */
+  --wiki-navy-dark: #2d1b4e;
+  --wiki-navy-primary: #493971;
+  --wiki-navy-light: #7e57c2;
+  --wiki-navy-hover: #5e4b8b;
+  --wiki-accent-purple: #7e57c2;
+  --wiki-accent-soft: #b39ddb;
+  --wiki-canvas: #ede7f6;
+  --wiki-canvas-soft: #f3e5f5;
+  --wiki-surface: #faf7ff;
+  --wiki-border: #ddd0f2;
+  --wiki-border-focus: #7e57c2;
+  --wiki-text-main: #2d1b4e;
+  --wiki-text-muted: #6b5b8e;
   --wiki-accent-red: #d32f2f;
   --wiki-accent-coral: #ef4444;
-  --wiki-accent-blue: #2646A6;
-  --wiki-toggle-bg: #cbd5e1;
-  --wiki-toggle-active: #2646A6;
+  --wiki-accent-blue: #6a1b9a;
+  --wiki-toggle-bg: #d1c4e9;
+  --wiki-toggle-active: #493971;
 
   /* Text */
   --swasth-ink: #0f172a;

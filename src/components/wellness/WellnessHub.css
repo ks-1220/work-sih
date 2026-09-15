@@ -1,13 +1,15 @@
-/* Wellness Hub — navy #2646A6 / #6382BF, glass cards, soft motion. */
+/* Wellness Hub — purple #493971 / #7e57c2, compact spacing, photo cards + clinic map. */
 
 .wellness-page {
   min-height: 100vh;
-  padding: 20px 22px 28px;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 12px clamp(12px, 3vw, 28px) 20px;
   box-sizing: border-box;
   background:
-    radial-gradient(900px 420px at 8% 0%, rgba(99, 130, 191, 0.18), transparent 60%),
-    #f4f7fc;
-  color: #0f172a;
+    radial-gradient(900px 420px at 8% 0%, rgba(126, 87, 194, 0.16), transparent 60%),
+    #f5f0fd;
+  color: #2d1b4e;
   font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
@@ -15,14 +17,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 14px;
+  gap: 10px;
   flex-wrap: wrap;
-  padding: 22px 24px;
-  border-radius: 18px;
+  padding: 14px 16px;
+  border-radius: 14px;
   color: #fff;
-  background: linear-gradient(135deg, #1e3a8a 0%, #2646A6 55%, #6382BF 100%);
-  box-shadow: 0 10px 28px rgba(38, 70, 166, 0.25);
-  margin-bottom: 20px;
+  background: linear-gradient(135deg, #493971 0%, #6a1b9a 55%, #7e57c2 100%);
+  box-shadow: 0 8px 20px rgba(73, 57, 113, 0.25);
+  margin-bottom: 14px;
 }
 
 .wellness-hero h1 {
@@ -51,21 +53,21 @@
 }
 
 .well-section {
-  margin-bottom: 26px;
+  margin-bottom: 16px;
 }
 
 .well-section h2 {
   display: flex;
   align-items: center;
-  gap: 9px;
-  margin: 0 0 6px;
-  font-size: 1.2rem;
+  gap: 8px;
+  margin: 0 0 4px;
+  font-size: 1.15rem;
   font-weight: 800;
-  color: #1e293b;
+  color: #2d1b4e;
 }
 
 .well-section h2 i {
-  color: #2646A6;
+  color: #493971;
 }
 
 .well-tag {
@@ -74,39 +76,39 @@
   text-transform: uppercase;
   letter-spacing: 0.06em;
   color: #fff;
-  background: #2646A6;
+  background: #493971;
   padding: 3px 10px;
   border-radius: 999px;
 }
 
 .well-lead {
-  margin: 0 0 14px;
-  font-size: 0.9rem;
-  color: #5b6b86;
+  margin: 0 0 10px;
+  font-size: 0.86rem;
+  color: #6b5b8e;
   max-width: 70ch;
 }
 
 .well-sub {
-  margin: 18px 0 10px;
-  font-size: 0.98rem;
+  margin: 12px 0 8px;
+  font-size: 0.95rem;
   font-weight: 800;
-  color: #334155;
+  color: #493971;
 }
 
 .glass-card {
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(255, 255, 255, 0.78);
   -webkit-backdrop-filter: blur(12px);
   backdrop-filter: blur(12px);
-  border: 1px solid rgba(219, 227, 243, 0.9);
-  border-radius: 16px;
-  box-shadow: 0 8px 24px rgba(38, 70, 166, 0.1);
-  padding: 18px;
+  border: 1px solid rgba(221, 208, 242, 0.9);
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(73, 57, 113, 0.1);
+  padding: 12px 14px;
 }
 
 .dosha-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
+  gap: 10px;
 }
 
 .dosha-head {
@@ -124,7 +126,7 @@
   border-radius: 14px;
   color: #fff;
   font-size: 1.15rem;
-  background: linear-gradient(135deg, #2646A6, #6382BF);
+  background: linear-gradient(135deg, #493971, #7e57c2);
   flex-shrink: 0;
 }
 
@@ -164,7 +166,7 @@
 
 .dina-card i {
   font-size: 1.2rem;
-  color: #2646A6;
+  color: #493971;
 }
 
 .dina-card strong {
@@ -199,8 +201,8 @@
 
 .filter-on {
   color: #fff;
-  background: #2646A6;
-  border-color: #2646A6;
+  background: #493971;
+  border-color: #493971;
   box-shadow: 0 4px 12px rgba(38, 70, 166, 0.3);
 }
 
@@ -226,7 +228,7 @@
   margin: 6px 0;
   font-size: 0.85rem;
   font-weight: 600;
-  color: #2646A6;
+  color: #493971;
 }
 
 .clinic-meta {
@@ -237,7 +239,7 @@
 
 .clinic-meta i {
   width: 16px;
-  color: #6382BF;
+  color: #7e57c2;
 }
 
 .mental-grid {
@@ -267,20 +269,20 @@
   flex-shrink: 0;
   font-weight: 800;
   font-size: 0.95rem;
-  color: #2646A6;
-  background: radial-gradient(circle, #ffffff 55%, #dbe4f6 100%);
-  border: 3px solid #c9d6f0;
+  color: #493971;
+  background: radial-gradient(circle, #ffffff 55%, #ede7f6 100%);
+  border: 3px solid #d1c4e9;
   transition: transform var(--phase-secs, 4s) ease-in-out, background 0.4s ease;
 }
 
 .breath-live.breath-inhale {
   transform: scale(1.18);
-  background: radial-gradient(circle, #ffffff 40%, #c3d4f2 100%);
+  background: radial-gradient(circle, #ffffff 40%, #d8cdef 100%);
 }
 
 .breath-live.breath-hold {
   transform: scale(1.18);
-  border-color: #2646A6;
+  border-color: #493971;
 }
 
 .breath-live.breath-exhale {
@@ -308,20 +310,20 @@
   font-size: 0.85rem;
   font-weight: 800;
   color: #fff;
-  background: #2646A6;
+  background: #493971;
   border: none;
   border-radius: 999px;
   cursor: pointer;
 }
 
 .breath-ghost {
-  color: #2646A6;
+  color: #493971;
   background: transparent;
-  border: 1.5px solid #c9d6f0;
+  border: 1.5px solid #d1c4e9;
 }
 
 .helpline-card {
-  background: linear-gradient(135deg, rgba(38, 70, 166, 0.94), rgba(99, 130, 191, 0.94));
+  background: linear-gradient(135deg, #493971 0%, #6a1b9a 60%, #7e57c2 100%);
   color: #fff;
   border: none;
 }
@@ -358,7 +360,7 @@
 
 .tip-card i {
   font-size: 1.25rem;
-  color: #2646A6;
+  color: #493971;
 }
 
 .tip-card strong {
@@ -381,9 +383,9 @@
   font-weight: 800;
   color: #fff;
   text-decoration: none;
-  background: linear-gradient(135deg, #2646A6, #3b5fc4);
+  background: linear-gradient(135deg, #493971, #7e57c2);
   border-radius: 999px;
-  box-shadow: 0 6px 16px rgba(38, 70, 166, 0.3);
+  box-shadow: 0 6px 16px rgba(73, 57, 113, 0.3);
   transition: transform 0.15s ease, filter 0.2s ease;
 }
 
@@ -433,5 +435,151 @@
   .breath-circle,
   .filter-chip {
     transition: none;
+  }
+}
+
+/* ── Ayurveda photo cards (focus section) ── */
+.dosha-photo-card {
+  padding: 0;
+  overflow: hidden;
+}
+.dosha-photo {
+  position: relative;
+  height: 150px;
+  overflow: hidden;
+}
+.dosha-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.dosha-icon-float {
+  position: absolute;
+  left: 12px;
+  bottom: -18px;
+  width: 44px;
+  height: 44px;
+  font-size: 1.05rem;
+}
+.dosha-body {
+  padding: 26px 14px 12px;
+}
+.dosha-body h3 {
+  margin: 0;
+  font-size: 1.02rem;
+  color: #2d1b4e;
+}
+.dosha-body small {
+  color: #7e57c2;
+  font-weight: 700;
+}
+.dosha-body p {
+  margin: 6px 0;
+  font-size: 0.83rem;
+  line-height: 1.5;
+  color: #5b5470;
+}
+.dina-compact {
+  grid-template-columns: repeat(5, 1fr);
+}
+.dina-compact .dina-card {
+  padding: 10px 12px;
+}
+
+/* ── Clinics: map + nearby cards ── */
+.clinic-split {
+  display: grid;
+  grid-template-columns: 1.15fr 1fr;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+.clinic-map-wrap {
+  min-width: 0;
+}
+.clinic-map {
+  height: 340px;
+  width: 100%;
+  border-radius: 14px;
+  border: 1px solid #ddd0f2;
+  overflow: hidden;
+  z-index: 0;
+}
+.clinic-map-loading {
+  display: grid;
+  place-items: center;
+  background: #ede7f6;
+  color: #493971;
+  font-weight: 700;
+}
+.clinic-map-note {
+  margin: 6px 0 0;
+  font-size: 0.76rem;
+  color: #6b5b8e;
+}
+.clinic-map-note span {
+  opacity: 0.8;
+}
+.near-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.near-title {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.near-card {
+  padding: 10px 12px;
+  border-left: 3px solid #7e57c2;
+}
+.near-card h4 {
+  margin: 0;
+  font-size: 0.88rem;
+  color: #2d1b4e;
+}
+.near-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.near-dist {
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #fff;
+  background: #493971;
+  border-radius: 999px;
+  padding: 2px 10px;
+}
+.near-dir {
+  display: inline-block;
+  margin-top: 6px;
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: #6a1b9a;
+  text-decoration: none;
+}
+.near-dir:hover {
+  text-decoration: underline;
+}
+.clinic-grid-compact {
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.clinic-grid-compact .clinic-card {
+  padding: 10px 12px;
+}
+
+@media (max-width: 960px) {
+  .clinic-split {
+    grid-template-columns: 1fr;
+  }
+  .clinic-map {
+    height: 280px;
   }
 }
