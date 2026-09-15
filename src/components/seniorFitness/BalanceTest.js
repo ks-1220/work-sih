@@ -39,6 +39,10 @@ export default function BalanceTest() {
   const totalTicksRef = useRef(0);
   const secondsLeftRef = useRef(CFG.TEST_DURATION_SECONDS);
   const runningRef = useRef(false);
+  // Tracks the in-flight MoveNet warm-up promise so mount pre-warming and a
+  // fast Start click share one creation instead of making duplicates.
+  const warmupPromiseRef = useRef(null);
+  const mountedRef = useRef(true);
 
   const [isRunning, setIsRunning] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -46,17 +50,56 @@ export default function BalanceTest() {
   const [isStable, setIsStable] = useState(true);
   const [stablePercent, setStablePercent] = useState(0);
   const [statusMessage, setStatusMessage] = useState("");
+  // True while the MoveNet detector is loading (mount warm-up or a Start
+  // that raced it). The Start button is disabled in this state.
+  const [isInitializing, setIsInitializing] = useState(true);
+
+  // Returns the cached detector, creating it once on first call. Concurrent
+  // callers share the same in-flight promise, so duplicate detectors are
+  // never created. Resolves to null if loading failed.
+  const ensureDetector = () => {
+    if (detectorRef.current) return Promise.resolve(detectorRef.current);
+    if (!warmupPromiseRef.current) {
+      warmupPromiseRef.current = poseDetection
+        .createDetector(poseDetection.SupportedModels.MoveNet, {
+          modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
+        })
+        .then((detector) => {
+          // Unmounted while loading - release immediately instead of caching.
+          if (!mountedRef.current) {
+            detector.dispose();
+            return null;
+          }
+          detectorRef.current = detector;
+          return detector;
+        })
+        .catch((error) => {
+          console.error("Failed to load pose model:", error);
+          return null;
+        })
+        .finally(() => {
+          warmupPromiseRef.current = null;
+        });
+    }
+    return warmupPromiseRef.current;
+  };
 
   useEffect(() => {
+    mountedRef.current = true;
     tf.setBackend("webgl").catch((error) => {
       console.error("Failed to initialize WebGL backend:", error);
     });
+    // Pre-warm the detector on mount so clicking Start feels instant. The
+    // webcam below mounts at the same time, so camera startup happens in
+    // parallel with model loading.
+    ensureDetector().then(() => {
+      if (mountedRef.current) setIsInitializing(false);
+    });
   }, []);
 
-  // Clears both intervals and releases the detector. Used on finish, on a
-  // re-start (in case a previous run's intervals are somehow still alive)
-  // and on unmount, so there is exactly one place that owns teardown.
-  const stopDetectionAndTimers = () => {
+  // Clears both intervals only. The cached detector is intentionally kept so
+  // re-starts (Try Again) are instant; it is released on unmount.
+  const stopTimers = () => {
     if (detectionIntervalRef.current) {
       clearInterval(detectionIntervalRef.current);
       detectionIntervalRef.current = null;
@@ -65,6 +108,9 @@ export default function BalanceTest() {
       clearInterval(timerIntervalRef.current);
       timerIntervalRef.current = null;
     }
+  };
+
+  const disposeDetector = () => {
     if (detectorRef.current) {
       detectorRef.current.dispose();
       detectorRef.current = null;
@@ -73,8 +119,10 @@ export default function BalanceTest() {
 
   useEffect(() => {
     return () => {
+      mountedRef.current = false;
       runningRef.current = false;
-      stopDetectionAndTimers();
+      stopTimers();
+      disposeDetector();
     };
   }, []);
 
@@ -146,7 +194,7 @@ export default function BalanceTest() {
     // this ref is checked and set synchronously, before the first await.
     if (runningRef.current) return;
     runningRef.current = true;
-    stopDetectionAndTimers();
+    stopTimers();
 
     setIsFinished(false);
     setSecondsLeft(CFG.TEST_DURATION_SECONDS);
@@ -158,17 +206,24 @@ export default function BalanceTest() {
     totalTicksRef.current = 0;
     secondsLeftRef.current = CFG.TEST_DURATION_SECONDS;
 
-    const detector = await poseDetection.createDetector(
-      poseDetection.SupportedModels.MoveNet,
-      { modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER }
-    );
-
-    // The component may have unmounted, or the test may have been stopped
-    // manually, while the detector was loading - don't start timers for a
-    // run that's no longer wanted.
-    if (!runningRef.current) {
-      detector.dispose();
-      return;
+    // Reuse the mount-time warmed detector; if warm-up hasn't finished (or
+    // failed), wait for it here with the button showing loading feedback.
+    let detector = detectorRef.current;
+    if (!detector) {
+      setIsInitializing(true);
+      detector = await ensureDetector();
+      if (!mountedRef.current) {
+        runningRef.current = false;
+        return;
+      }
+      setIsInitializing(false);
+      if (!detector) {
+        runningRef.current = false;
+        setStatusMessage(
+          "Could not load the pose model. Please check your connection and try again."
+        );
+        return;
+      }
     }
     detectorRef.current = detector;
 
@@ -190,7 +245,8 @@ export default function BalanceTest() {
   const finishTest = () => {
     if (!runningRef.current) return;
     runningRef.current = false;
-    stopDetectionAndTimers();
+    // Keep the cached detector so Try Again starts instantly.
+    stopTimers();
 
     setIsRunning(false);
     setIsFinished(true);
@@ -226,14 +282,28 @@ export default function BalanceTest() {
             <li>Have a wall, counter or chair within reach in case you need support.</li>
             <li>When ready, click Start and try to stand as still as possible for 30 seconds.</li>
           </ol>
-          <button className={styles.primaryBtn} onClick={startTest}>
-            Start Test
+          <button
+            className={styles.primaryBtn}
+            onClick={startTest}
+            disabled={isInitializing}
+          >
+            {isInitializing ? "Loading pose model…" : "Start Test"}
           </button>
+          {isInitializing && (
+            <p className={styles.loadingText}>
+              Preparing… warming up the camera and pose model.
+            </p>
+          )}
         </div>
       )}
 
-      {(isRunning || isFinished) && (
-        <div className={styles.cameraArea}>
+      {/* The camera mounts with the instructions (hidden until the test
+          starts) so camera startup runs in parallel with model warm-up. */}
+      <div
+        className={`${styles.cameraArea} ${
+          !(isRunning || isFinished) ? styles.cameraHidden : ""
+        }`}
+      >
           <div className={styles.videoWrap}>
             <Webcam ref={webcamRef} width={480} height={360} className={styles.webcam} />
             <canvas ref={canvasRef} width={480} height={360} className={styles.canvasOverlay} />
@@ -267,13 +337,16 @@ export default function BalanceTest() {
               <h3>Test complete</h3>
               <p className={styles.resultCount}>Steady for {stablePercent}% of the attempt</p>
               <p>{statusMessage}</p>
-              <button className={styles.primaryBtn} onClick={startTest}>
-                Try Again
+              <button
+                className={styles.primaryBtn}
+                onClick={startTest}
+                disabled={isInitializing}
+              >
+                {isInitializing ? "Loading pose model…" : "Try Again"}
               </button>
             </div>
           )}
-        </div>
-      )}
+      </div>
     </div>
   );
 }

@@ -135,10 +135,21 @@
  &:not(:last-child) {
   margin-right: 25px;
  }
+ // The inbox and bell are buttons now; strip the browser button chrome so
+ // they look exactly like the original icons.
+ @at-root button#{&} {
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: block;
+  font: inherit;
+  color: inherit;
+ }
  &.alert {
   position: relative;
   &:before {
-   content: "2";
+   content: attr(data-count);
    font-size: 9px;
    font-weight: 700;
    position: absolute;
@@ -153,10 +164,159 @@
    right: 0px;
    color: #fff;
   }
-  &:last-child:before {
-   content: "5";
+ }
+}
+
+.notif-panel {
+ margin-top: 16px;
+ width: 100%;
+ background: var(--theme-bg-color);
+ border: 1px solid var(--border-color);
+ border-radius: 14px;
+ box-shadow: 0 16px 40px rgba(27, 31, 49, 0.18);
+ z-index: 20;
+ text-align: left;
+ overflow: hidden;
+ ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 340px;
+  overflow: auto;
+ }
+ li a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 10px 14px;
+  text-decoration: none;
+  color: var(--body-color);
+  border-top: 1px solid var(--border-color);
+  &:hover,
+  &:focus-visible {
+   background: var(--button-bg-color);
   }
  }
+}
+
+.notif-panel-head {
+ display: flex;
+ justify-content: space-between;
+ align-items: center;
+ padding: 12px 14px;
+ button {
+  background: none;
+  border: 0;
+  color: var(--button-color);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+ }
+}
+
+.notif-icon {
+ width: 32px;
+ height: 32px;
+ border-radius: 50%;
+ display: grid;
+ place-items: center;
+ background: var(--button-bg-color);
+ color: var(--button-color);
+ font-size: 13px;
+}
+
+.notif-text {
+ strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+ }
+ small {
+  display: block;
+  font-size: 12px;
+  color: var(--main-color);
+  margin-top: 2px;
+ }
+}
+
+.notif-time {
+ font-size: 11px;
+ color: var(--main-light-color);
+}
+
+.notif-unread a {
+ background: #f6f0fc;
+ .notif-text strong:after {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #ff537b;
+  margin-left: 6px;
+  vertical-align: middle;
+ }
+}
+
+.notif-all {
+ display: block;
+ padding: 10px 14px;
+ border-top: 1px solid var(--border-color);
+ font-size: 13px;
+ font-weight: 600;
+ color: var(--button-color);
+ text-decoration: none;
+}
+
+.msg {
+ cursor: pointer;
+ &.msg-open {
+  box-shadow: inset 4px 0 0 var(--button-color);
+  background-color: var(--theme-bg-color);
+ }
+ &.msg-unread .msg-title {
+  font-weight: 700;
+  color: #000;
+ }
+}
+
+.msg-content {
+ min-width: 0;
+}
+
+.msg-from {
+ font-size: 12px;
+ color: var(--main-color);
+ margin-top: 4px;
+}
+
+.msg-tag {
+ display: inline-block;
+ font-size: 10px;
+ font-weight: 700;
+ text-transform: uppercase;
+ letter-spacing: 0.04em;
+ padding: 1px 7px;
+ border-radius: 999px;
+ background: var(--button-bg-color);
+ color: var(--button-color);
+ &-appointment { background: #e3f2fd; color: #1565c0; }
+ &-coach { background: #fff3e0; color: #b45309; }
+ &-event { background: #e8f5e9; color: #2e7d32; }
+ &-community { background: #f3e5f5; color: #6a1b9a; }
+}
+
+.mail-detail-role {
+ font-size: 12px;
+ font-weight: 500;
+ color: var(--main-color);
+}
+
+.mail-inside p {
+ margin: 0 0 12px;
 }
 .home-heading{
   display: flex;
@@ -1207,3 +1367,22 @@
  }
 }
 
+
+/* The inbox now shows real subjects, senders and tags, which the old 10% / 16%
+   columns squeezed to one word per line. Readable fixed widths on desktop. */
+@media screen and (min-width: 1161px) {
+ body .inbox-container,
+ body.chrome .inbox-container,
+ body.edge .inbox-container {
+  grid-template-columns: minmax(280px, 340px) minmax(0, 1fr);
+  flex-grow: 1;
+  flex-shrink: 1;
+  min-width: 0;
+ }
+ // Flex children default to min-width: auto, which let the message detail
+ // push the whole area wider than the viewport and clip its right edge.
+ .main-area,
+ .mail-detail {
+  min-width: 0;
+ }
+}

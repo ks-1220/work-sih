@@ -63,6 +63,14 @@ export default function ChairStandTest() {
   const repCountRef = useRef(0);
   const secondsLeftRef = useRef(CFG.TEST_DURATION_SECONDS);
   const runningRef = useRef(false);
+  // Guards the async detection loop: while one detectFrame() is still
+  // awaiting estimatePoses, interval ticks are skipped instead of piling up
+  // overlapping calls that could corrupt the counting state machine.
+  const frameInFlightRef = useRef(false);
+  // Tracks the in-flight MoveNet warm-up promise so mount pre-warming and a
+  // fast Start click share one creation instead of making duplicates.
+  const warmupPromiseRef = useRef(null);
+  const mountedRef = useRef(true);
 
   const [isRunning, setIsRunning] = useState(false);
   const [isFinished, setIsFinished] = useState(false);
@@ -70,17 +78,56 @@ export default function ChairStandTest() {
   const [repCount, setRepCount] = useState(0);
   const [poseState, setPoseState] = useState("seated");
   const [statusMessage, setStatusMessage] = useState("");
+  // True while the MoveNet detector is loading (mount warm-up or a Start
+  // that raced it). The Start button is disabled in this state.
+  const [isInitializing, setIsInitializing] = useState(true);
+
+  // Returns the cached detector, creating it once on first call. Concurrent
+  // callers share the same in-flight promise, so duplicate detectors are
+  // never created. Resolves to null if loading failed.
+  const ensureDetector = () => {
+    if (detectorRef.current) return Promise.resolve(detectorRef.current);
+    if (!warmupPromiseRef.current) {
+      warmupPromiseRef.current = poseDetection
+        .createDetector(poseDetection.SupportedModels.MoveNet, {
+          modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
+        })
+        .then((detector) => {
+          // Unmounted while loading - release immediately instead of caching.
+          if (!mountedRef.current) {
+            detector.dispose();
+            return null;
+          }
+          detectorRef.current = detector;
+          return detector;
+        })
+        .catch((error) => {
+          console.error("Failed to load pose model:", error);
+          return null;
+        })
+        .finally(() => {
+          warmupPromiseRef.current = null;
+        });
+    }
+    return warmupPromiseRef.current;
+  };
 
   useEffect(() => {
+    mountedRef.current = true;
     tf.setBackend("webgl").catch((error) => {
       console.error("Failed to initialize WebGL backend:", error);
     });
+    // Pre-warm the detector on mount so clicking Start feels instant. The
+    // webcam below mounts at the same time, so camera startup happens in
+    // parallel with model loading.
+    ensureDetector().then(() => {
+      if (mountedRef.current) setIsInitializing(false);
+    });
   }, []);
 
-  // Clears both intervals and releases the detector. Used on finish, on a
-  // re-start (in case a previous run's intervals are somehow still alive)
-  // and on unmount, so there is exactly one place that owns teardown.
-  const stopDetectionAndTimers = () => {
+  // Clears both intervals only. The cached detector is intentionally kept so
+  // re-starts (Try Again) are instant; it is released on unmount.
+  const stopTimers = () => {
     if (detectionIntervalRef.current) {
       clearInterval(detectionIntervalRef.current);
       detectionIntervalRef.current = null;
@@ -89,6 +136,9 @@ export default function ChairStandTest() {
       clearInterval(timerIntervalRef.current);
       timerIntervalRef.current = null;
     }
+  };
+
+  const disposeDetector = () => {
     if (detectorRef.current) {
       detectorRef.current.dispose();
       detectorRef.current = null;
@@ -97,8 +147,10 @@ export default function ChairStandTest() {
 
   useEffect(() => {
     return () => {
+      mountedRef.current = false;
       runningRef.current = false;
-      stopDetectionAndTimers();
+      stopTimers();
+      disposeDetector();
     };
   }, []);
 
@@ -111,6 +163,10 @@ export default function ChairStandTest() {
     ) {
       return;
     }
+    // Skip this tick if the previous async detection hasn't settled yet, so
+    // overlapping estimatePoses calls can never corrupt the counting refs.
+    if (frameInFlightRef.current) return;
+    frameInFlightRef.current = true;
 
     const video = webcamRef.current.video;
     const canvas = canvasRef.current;
@@ -171,6 +227,8 @@ export default function ChairStandTest() {
       }
     } catch (err) {
       console.error(err);
+    } finally {
+      frameInFlightRef.current = false;
     }
   };
 
@@ -180,7 +238,7 @@ export default function ChairStandTest() {
     // this ref is checked and set synchronously, before the first await.
     if (runningRef.current) return;
     runningRef.current = true;
-    stopDetectionAndTimers();
+    stopTimers();
 
     setIsFinished(false);
     setRepCount(0);
@@ -190,20 +248,28 @@ export default function ChairStandTest() {
     candidateRef.current = { state: "seated", count: 0 };
     stoodThisCycleRef.current = false;
     secondsLeftRef.current = CFG.TEST_DURATION_SECONDS;
+    frameInFlightRef.current = false;
     setPoseState("seated");
     setStatusMessage("");
 
-    const detector = await poseDetection.createDetector(
-      poseDetection.SupportedModels.MoveNet,
-      { modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER }
-    );
-
-    // The component may have unmounted, or the test may have been stopped
-    // manually, while the detector was loading - don't start timers for a
-    // run that's no longer wanted.
-    if (!runningRef.current) {
-      detector.dispose();
-      return;
+    // Reuse the mount-time warmed detector; if warm-up hasn't finished (or
+    // failed), wait for it here with the button showing loading feedback.
+    let detector = detectorRef.current;
+    if (!detector) {
+      setIsInitializing(true);
+      detector = await ensureDetector();
+      if (!mountedRef.current) {
+        runningRef.current = false;
+        return;
+      }
+      setIsInitializing(false);
+      if (!detector) {
+        runningRef.current = false;
+        setStatusMessage(
+          "Could not load the pose model. Please check your connection and try again."
+        );
+        return;
+      }
     }
     detectorRef.current = detector;
 
@@ -225,7 +291,8 @@ export default function ChairStandTest() {
   const finishTest = () => {
     if (!runningRef.current) return;
     runningRef.current = false;
-    stopDetectionAndTimers();
+    // Keep the cached detector so Try Again starts instantly.
+    stopTimers();
 
     setIsRunning(false);
     setIsFinished(true);
@@ -251,17 +318,31 @@ export default function ChairStandTest() {
           <ol>
             <li>Place a sturdy chair in view of the camera, without arms if possible.</li>
             <li>Sit in the middle of the chair with feet flat on the floor.</li>
-            <li>Make sure your hips, knees and ankles are all visible on camera.</li>
+            <li>Stand side-on (or at a slight angle) to the camera, keeping your hips, knees and ankles all visible.</li>
             <li>When ready, click Start and stand up and sit down as many times as you safely can for 30 seconds.</li>
           </ol>
-          <button className={styles.primaryBtn} onClick={startTest}>
-            Start Test
+          <button
+            className={styles.primaryBtn}
+            onClick={startTest}
+            disabled={isInitializing}
+          >
+            {isInitializing ? "Loading pose model…" : "Start Test"}
           </button>
+          {isInitializing && (
+            <p className={styles.loadingText}>
+              Preparing… warming up the camera and pose model.
+            </p>
+          )}
         </div>
       )}
 
-      {(isRunning || isFinished) && (
-        <div className={styles.cameraArea}>
+      {/* The camera mounts with the instructions (hidden until the test
+          starts) so camera startup runs in parallel with model warm-up. */}
+      <div
+        className={`${styles.cameraArea} ${
+          !(isRunning || isFinished) ? styles.cameraHidden : ""
+        }`}
+      >
           <div className={styles.videoWrap}>
             <Webcam ref={webcamRef} width={480} height={360} className={styles.webcam} />
             <canvas ref={canvasRef} width={480} height={360} className={styles.canvasOverlay} />
@@ -295,13 +376,16 @@ export default function ChairStandTest() {
               <h3>Test complete</h3>
               <p className={styles.resultCount}>{repCount} reps in 30 seconds</p>
               <p>{statusMessage}</p>
-              <button className={styles.primaryBtn} onClick={startTest}>
-                Try Again
+              <button
+                className={styles.primaryBtn}
+                onClick={startTest}
+                disabled={isInitializing}
+              >
+                {isInitializing ? "Loading pose model…" : "Try Again"}
               </button>
             </div>
           )}
-        </div>
-      )}
+      </div>
     </div>
   );
 }

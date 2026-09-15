@@ -1,4 +1,4 @@
-/* Regional recipes in the split look: navy filter pills, compact
+/* Regional recipes in the split look: purple/lilac filter pills, compact
    two-column centered photo cards with a YouTube play badge. */
 
 .recipe-section {
@@ -133,7 +133,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #2646a6;
+  background: #493971;
   color: #ffffff;
   font-size: 15px;
   flex-shrink: 0;
@@ -178,8 +178,8 @@
   flex-shrink: 0;
   font-size: 0.7rem;
   font-weight: 800;
-  color: #2646a6;
-  background: #dbe4f6;
+  color: #493971;
+  background: #ede7f6;
   border-radius: 999px;
   padding: 4px 10px;
 }
@@ -206,9 +206,9 @@
 .region-selector button {
   min-width: 76px;
   padding: 9px 16px;
-  border: 1px solid #b9c8ea;
-  background-color: #dbe4f6;
-  color: #2646a6;
+  border: 1px solid #b39ddb;
+  background-color: #ede7f6;
+  color: #493971;
   font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
@@ -218,16 +218,16 @@
 }
 
 .region-selector button:hover {
-  background-color: #2646a6;
-  border-color: #2646a6;
+  background-color: #493971;
+  border-color: #493971;
   color: #ffffff;
 }
 
 .region-selector button.active {
-  background-color: #1b3582;
+  background-color: #2d1b4e;
   color: #ffffff;
-  border-color: #1b3582;
-  box-shadow: 0 4px 10px rgba(27, 53, 130, 0.3);
+  border-color: #2d1b4e;
+  box-shadow: 0 4px 10px rgba(45, 27, 78, 0.3);
 }
 
 .recipe-thumbnails {
@@ -256,13 +256,13 @@
 
 .recipe-thumbnail:hover {
   transform: translateY(-5px) scale(1.03);
-  box-shadow: 0 16px 32px rgba(38, 70, 166, 0.24);
-  border-color: #2646a6;
+  box-shadow: 0 16px 32px rgba(73, 57, 113, 0.24);
+  border-color: #493971;
 }
 
 .recipe-thumbnail:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 22px rgba(38, 70, 166, 0.16);
+  box-shadow: 0 10px 22px rgba(73, 57, 113, 0.16);
 }
 
 .recipe-thumbnail img {

@@ -5,6 +5,7 @@
 // Tokens come first so every later stylesheet can reference the variables.
 import "../styles/tokens.css";
 import "../index.css";
+import "../styles/lilac-theme.css";
 import "@fortawesome/fontawesome-free/css/all.min.css";
 import "leaflet/dist/leaflet.css";
 
@@ -23,7 +24,7 @@ export const metadata = {
 export const viewport = {
   width: "device-width",
   initialScale: 1,
-  themeColor: "#000000",
+  themeColor: "#493971",
 };
 
 export default function RootLayout({ children }) {

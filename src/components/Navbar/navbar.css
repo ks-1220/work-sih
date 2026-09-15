@@ -1,16 +1,17 @@
-/* MuscleWiki-style Curvy Ends Left Navigation Sidebar in #2646A6 */
+/* MuscleWiki-style Curvy Ends Left Navigation Sidebar in purplish dark #493971 (fitness palette) */
 
 .main-menu {
   position: sticky;
   top: 0;
   height: 100vh;
-  background-color: #2646A6;
+  background-color: #493971;
+  background-image: linear-gradient(180deg, #4a3673 0%, #493971 55%, #3c2a61 100%);
   width: 90px;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 14px 6px 12px 6px;
-  box-shadow: 2px 0 14px rgba(38, 70, 166, 0.2);
+  box-shadow: 2px 0 14px rgba(73, 57, 113, 0.35);
   user-select: none;
   z-index: 1000;
   box-sizing: border-box;
@@ -110,79 +111,15 @@
 }
 
 .nav-item.active i {
-  color: #2646A6;
+  color: #493971;
 }
 
 .nav-item.active .nav-text {
-  color: #2646A6;
+  color: #493971;
   font-weight: 800;
 }
 
-/* WELLNESS CTA: gradient pill that stands out right under Fitness */
-.nav-item.nav-cta a {
-  background: linear-gradient(135deg, #ffffff 0%, #dbe7ff 100%);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.22);
-}
-
-.nav-item.nav-cta i,
-.nav-item.nav-cta .nav-text {
-  color: #2646A6;
-}
-
-.nav-item.nav-cta .nav-text {
-  font-weight: 800;
-}
-
-.nav-item.nav-cta:hover a {
-  background: #ffffff;
-  transform: translateY(-1px);
-}
-
-.nav-item.nav-cta.active a {
-  outline: 2px solid #ffffff;
-  outline-offset: 1px;
-}
-
-/* BOTTOM CURVY ENDS ACTION BUTTON */
-.sidebar-action-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-top: 6px;
-}
-
-.sidebar-curvy-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 74px;
-  height: 58px;
-  background-color: #e04444;
-  color: #ffffff;
-  border-radius: 14px; /* Curvy ends */
-  text-decoration: none;
-  box-shadow: 0 4px 12px rgba(224, 68, 68, 0.35);
-  transition: all 0.2s ease;
-}
-
-.sidebar-curvy-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(224, 68, 68, 0.45);
-  background-color: #d63333;
-}
-
-.sidebar-curvy-btn i {
-  font-size: 18px;
-  margin-bottom: 2px;
-}
-
-.sidebar-curvy-btn span {
-  font-size: 0.72rem;
-  font-weight: 800;
-  letter-spacing: 0.3px;
-}
+/* WELLNESS: no special highlight — same as every other nav item */
 
 /* Zen audio button */
 .sidebar-zen-btn {
@@ -234,9 +171,5 @@
   .nav-item a {
     width: 68px;
     height: 56px;
-  }
-  .sidebar-curvy-btn {
-    width: 68px;
-    height: 52px;
   }
 }

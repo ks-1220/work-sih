@@ -1,4 +1,4 @@
-/* Photo swap cards: compact 2-per-row grid, navy accents only.
+/* Photo swap cards: compact 2-per-row grid, purple/lilac accents only.
    Full-bleed local food photo, title pill, description box, swap footer.
    Type inherits the page's uniform professional stack. */
 
@@ -34,7 +34,7 @@
 
 .photo-swap-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 12px 26px rgba(38, 70, 166, 0.22);
+  box-shadow: 0 12px 26px rgba(73, 57, 113, 0.24);
 }
 
 .photo-swap-card:hover .photo-swap-bg {
@@ -63,7 +63,7 @@
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: #ffffff;
-  background: rgba(38, 70, 166, 0.62);
+  background: rgba(73, 57, 113, 0.65);
   border-radius: 10px;
   padding: 2px 12px;
   margin-top: 2px;
@@ -137,9 +137,9 @@
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  border: 1.5px solid #2646a6;
+  border: 1.5px solid #493971;
   background: transparent;
-  color: #2646a6;
+  color: #493971;
   font-size: 0.68rem;
   font-weight: 700;
   border-radius: 7px;
@@ -149,12 +149,12 @@
 }
 
 .photo-swap-add:hover {
-  background: #2646a6;
+  background: #493971;
   color: #ffffff;
 }
 
 .photo-swap-add.added {
-  background: #2646a6;
+  background: #493971;
   color: #ffffff;
 }
 

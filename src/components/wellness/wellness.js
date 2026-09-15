@@ -34,31 +34,28 @@ const COMING_SOON = [
   { icon: "fas fa-seedling", label: "Healthy Aging" },
 ];
 
-function Wellness() {
+// Top of the wellness page: purple banner, then the two assessment models
+// in the original card look. Ayurveda follows below in the hub.
+export function SeniorModels() {
   return (
-    <div className={styles.page}>
-      <header className={styles.hero}>
-        <h1 className={styles.heroTitle}>Wellness</h1>
-        <p className={styles.heroLead}>
+    <div className={styles.topFlow}>
+      <header className={styles.modelsBanner}>
+        <h1 className={styles.modelsBannerTitle}>Wellness</h1>
+        <p className={styles.modelsBannerLead}>
           Inclusive wellness support designed for seniors and every stage of life.
         </p>
       </header>
 
-      <section className={styles.seniorSection} aria-labelledby="senior-wellness-check">
-        <div className={styles.seniorHeading}>
-          <span className={styles.seniorBadge} aria-hidden="true">
-            <i className="fas fa-user-clock"></i>
-          </span>
-          <div>
-            <h2 id="senior-wellness-check" className={styles.sectionTitle}>
-              Senior Wellness Check
-            </h2>
-            <p className={styles.sectionLead}>
-              Simple, senior-friendly functional wellness assessments designed to
-              help older adults understand their movement, strength and
-              stability.
-            </p>
-          </div>
+      <section className={styles.modelsSection} aria-labelledby="senior-wellness-check">
+        <div className={styles.modelsSectionHead}>
+          <h2 id="senior-wellness-check" className={styles.sectionTitle}>
+            Senior Wellness Check
+          </h2>
+          <p className={styles.sectionLead}>
+            Simple, senior-friendly functional wellness assessments designed to
+            help older adults understand their movement, strength and
+            stability.
+          </p>
         </div>
 
         <div className={styles.testGrid}>
@@ -83,7 +80,70 @@ function Wellness() {
           professional.
         </p>
       </section>
+    </div>
+  );
+}
 
+// Journey explainer + coming-soon pills — rendered after the hub sections.
+// Compact 3-step strip — small fonts, sits right under the model cards.
+export function WellnessSteps() {
+  const STEPS = [
+    { n: "1", label: "Assessment", text: "Take a short, guided test using your camera." },
+    { n: "2", label: "Result", text: "See your rep count or stability percentage right away." },
+    { n: "3", label: "Wellness guidance", text: "Read a simple, non-clinical note on what your result suggests." },
+  ];
+  return (
+    <section className={styles.stepsCompact} aria-labelledby="your-wellness-check">
+      <div className={styles.stepsCompactCard}>
+        <h2 id="your-wellness-check" className={styles.stepsCompactTitle}>
+          Your Wellness Check
+        </h2>
+        <p className={styles.stepsCompactLead}>
+          Complete the assessments to receive simple functional wellness indicators and guidance.
+        </p>
+        <div className={styles.stepsCompactRow}>
+          {STEPS.map((s, i) => (
+            <React.Fragment key={s.n}>
+              <div className={styles.stepsCompactStep}>
+                <span className={styles.stepsCompactNum}>{s.n}</span>
+                <div>
+                  <h3 className={styles.stepsCompactLabel}>{s.label}</h3>
+                  <p className={styles.stepsCompactText}>{s.text}</p>
+                </div>
+              </div>
+              {i < STEPS.length - 1 && (
+                <i className={`fas fa-arrow-right ${styles.stepsCompactArrow}`} aria-hidden="true"></i>
+              )}
+            </React.Fragment>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Coming-soon pills — last on the page.
+export function ComingSoon() {
+  return (
+    <section className={styles.comingSoon} aria-labelledby="more-wellness">
+      <h2 id="more-wellness" className={styles.comingSoonTitle}>
+        More wellness features coming soon
+      </h2>
+      <div className={styles.comingSoonGrid}>
+        {COMING_SOON.map((item) => (
+          <span key={item.label} className={styles.comingSoonPill}>
+            <i className={item.icon} aria-hidden="true"></i>
+            {item.label}
+          </span>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export function WellnessExtras() {
+  return (
+    <>
       <section className={styles.journeySection} aria-labelledby="your-wellness-check">
         <h2 id="your-wellness-check" className={styles.sectionTitle}>
           Your Wellness Check
@@ -120,19 +180,16 @@ function Wellness() {
         </div>
       </section>
 
-      <section className={styles.comingSoon} aria-labelledby="more-wellness">
-        <h2 id="more-wellness" className={styles.comingSoonTitle}>
-          More wellness features coming soon
-        </h2>
-        <div className={styles.comingSoonGrid}>
-          {COMING_SOON.map((item) => (
-            <span key={item.label} className={styles.comingSoonPill}>
-              <i className={item.icon} aria-hidden="true"></i>
-              {item.label}
-            </span>
-          ))}
-        </div>
-      </section>
+      <ComingSoon />
+    </>
+  );
+}
+
+function Wellness() {
+  return (
+    <div className={styles.page}>
+      <SeniorModels />
+      <WellnessExtras />
     </div>
   );
 }

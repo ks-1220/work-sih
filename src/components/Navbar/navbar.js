@@ -9,18 +9,17 @@ import WhatsAppFloat from '../shared/WhatsAppFloat';
 const audio2 = "/media/audio2.mp3";
 import './navbar.css';
 
-// Sidebar order: Home, Fitness, Wellness (CTA), Dietary, Tracker, SheFit,
-// Serenity. Sustain (/sus) and About (/about) stay reachable by URL and via
+// Sidebar order: Home, Fitness, Wellness, Dietary, Tracker, SheFit.
+// Sustain (/sus) and About (/about) stay reachable by URL and via
 // the Terms/Privacy footer links. Logout is appended for signed-in users.
 // Labels are i18n keys resolved at render time.
 const ORIGINAL_NAV_ITEMS = [
   { href: '/', icon: 'fa-solid fa-house', labelKey: 'nav.home' },
   { href: '/start', icon: 'fa-solid fa-dumbbell', labelKey: 'nav.fitness' },
-  { href: '/wellness', icon: 'fa-solid fa-spa', labelKey: 'nav.wellness', cta: true },
+  { href: '/wellness', icon: 'fa-solid fa-spa', labelKey: 'nav.wellness' },
   { href: '/cards', icon: 'fa-solid fa-apple-whole', labelKey: 'nav.dietary' },
   { href: '/tracker', icon: 'fa-solid fa-chart-line', labelKey: 'nav.tracker' },
   { href: '/she', icon: 'fa-solid fa-venus', labelKey: 'nav.shefit' },
-  { href: '/arthub', icon: 'fa-solid fa-hand-holding-heart', labelKey: 'nav.serenity' },
 ];
 
 export default function Navbar() {
@@ -59,13 +58,13 @@ export default function Navbar() {
           <i className="fa-solid fa-bars"></i>
         </div>
 
-        {/* Complete Original Nav Items with Curvy Ends Styling */}
+        {/* Sidebar nav items with curvy-ends styling */}
         <ul>
           {navItems.map((item) => {
             const isActive = pathname === item.href;
             const label = t(item.labelKey);
             return (
-              <li key={item.href} className={`nav-item ${isActive ? 'active' : ''} ${item.cta ? 'nav-cta' : ''}`}>
+              <li key={item.href} className={`nav-item ${isActive ? 'active' : ''}`}>
                 <Link href={item.href} title={label}>
                   <i className={item.icon}></i>
                   <span className="nav-text">{label}</span>
@@ -88,14 +87,6 @@ export default function Navbar() {
         <audio id="audioPlayer" loop>
           <source src={audio2} type="audio/mp3" />
         </audio>
-
-        {/* Bottom Curvy-Ended Action Button (Red 'Build' / 'AI Pose' button) */}
-        <div className="sidebar-action-container">
-          <Link href="/yoga" className="sidebar-curvy-btn" title={t('nav.buildTitle')}>
-            <i className="fa-solid fa-clipboard-check"></i>
-            <span>{t('nav.build')}</span>
-          </Link>
-        </div>
 
         {/* Bottom Legal Copyright */}
         <div className="sidebar-bottom-legal">

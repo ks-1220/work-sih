@@ -6,13 +6,13 @@ import PlannerBanner from '../components/dietlink/card';
 import RecipeSection from '../components/recipesection/RecipeSection';
 import Navbar from '../components/Navbar/navbar';
 
-// Split look, dietary page only: blue sidebar, white left panel with the
+// Split look, dietary page only: purple sidebar, lilac left panel with the
 // purple banner + photo swap cards, regional recipes on the right canvas.
 const Container = styled.div`
   display: flex;
   flex-direction: row;
   min-height: 100vh;
-  background-color: #f2f5fa;
+  background: linear-gradient(168deg, #ede7f6 0%, #e8dff5 40%, #f3e5f5 100%);
   font-family: 'Segoe UI', system-ui, -apple-system, Roboto, 'Helvetica Neue', Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -40,13 +40,14 @@ const Content = styled.div`
 `;
 
 const LeftPanel = styled.div`
-  background: #ffffff;
+  background: #faf7ff;
+  border: 1px solid #ddd0f2;
   border-radius: 14px;
   padding: 16px 16px 18px;
   display: flex;
   flex-direction: column;
   gap: 18px;
-  box-shadow: 0 2px 10px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 2px 10px rgba(73, 57, 113, 0.08);
   box-sizing: border-box;
   min-width: 0;
   overflow: visible;
