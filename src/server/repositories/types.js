@@ -41,6 +41,15 @@
  * @property {string} bodyHash
  * @property {object} result
  * @property {string} createdAt
+ *
+ * @typedef {object} CycleLog
+ * @property {string}   id
+ * @property {string}   ownerId
+ * @property {string}   startDate   YYYY-MM-DD, the logged period start
+ * @property {string}   [endDate]   YYYY-MM-DD, the logged period end
+ * @property {string[]} symptoms    from a fixed, non-clinical vocabulary
+ * @property {string}   [note]      free-text, private to the owner
+ * @property {string}   createdAt
  */
 
 /**
@@ -61,6 +70,10 @@
  *   find:   (ownerId: string, key: string) => Promise<IdempotencyRecord|null>,
  *   record: (ownerId: string, key: string, bodyHash: string, result: object) => Promise<void>
  * }} idempotency
+ * @property {{
+ *   append:  (ownerId: string, log: object) => Promise<CycleLog>,
+ *   listAll: (ownerId: string) => Promise<CycleLog[]>
+ * }} cycleLogs
  * @property {() => { name: string, durable: boolean }} describe
  */
 

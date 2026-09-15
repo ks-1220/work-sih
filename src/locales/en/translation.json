@@ -160,18 +160,8 @@
     "title2": "Generate Sustain Points",
     "text2": "Click on the below button to generate your daily sustain points to take one step ahead towards sustainability.",
     "button2": "Generate"
-  },
-  "menstrualTracker": {
-    "title": "Menstrual Cycle Tracker",
-    "lastPeriodLabel": "Last Menstrual Cycle Date:",
-    "calendarHeader": {
-      "prev": "Previous Month",
-      "next": "Next Month"
-    },
-    "days": ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
-    "mythVsFact": "Myth vs Fact"
   }
-  
+
   }
   
   

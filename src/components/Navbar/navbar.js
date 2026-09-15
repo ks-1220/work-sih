@@ -25,6 +25,7 @@ const NAV_ITEMS = [
   { href: '/arthub', icon: 'fas fa-hand-holding-heart', label: 'Serenity' },
   { href: '/she', icon: 'fas fa-venus', label: 'SheFit' },
   { href: '/tracker', icon: 'fas fa-chart-line', label: 'Tracker' },
+  { href: '/wellness', icon: 'fas fa-heart-pulse', label: 'Wellness' },
   { href: '/profile', icon: 'fa fa-user nav-icon', label: 'Profile' },
   { href: '/about', icon: 'fas fa-circle-info', label: 'About' },
 ];
