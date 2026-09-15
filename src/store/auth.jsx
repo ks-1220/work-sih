@@ -14,9 +14,13 @@ export const AuthProvider = ({ children }) => {
     const [token, setToken] = useState("");
     const [user, setUser] = useState("");
     const [admin, setAdmin] = useState("");
+    // True once localStorage has been read on the client. Guards against the
+    // login hero flashing for already-logged-in users on first paint.
+    const [isAuthReady, setIsAuthReady] = useState(false);
 
     useEffect(() => {
         setToken(localStorage.getItem("token") || "");
+        setIsAuthReady(true);
     }, []);
 
     const storetokenInLS = useCallback((serverToken) => {
@@ -93,7 +97,7 @@ export const AuthProvider = ({ children }) => {
 
     return (
         <AuthContext.Provider
-            value={{ isLoggedIN, token, storetokenInLS, LogoutUser, LogoutAdmin, user, admin }}
+            value={{ isLoggedIN, isAuthReady, token, storetokenInLS, LogoutUser, LogoutAdmin, user, admin }}
         >
             {children}
         </AuthContext.Provider>

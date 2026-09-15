@@ -1,18 +1,18 @@
 /*
  * Shared styling for the sign-in, registration and admin sign-in forms.
+ * CSS-module scoped, so nothing leaks to other pages.
  *
- * Replaces two stylesheets that were both broken in different ways:
- *
- *  - login.css opened with a `*` reset that leaked to every page, since
- *    global CSS is not unloaded on navigation in the App Router.
- *  - register.css defined `.register-*` class names while register.js used
- *    `.custom-*`, so none of it ever applied. The form only looked styled when
- *    login.css happened to already be loaded. It also carried its own `*`
- *    reset plus bare `input, select`, `h2` and `button` rules.
- *
- * The admin sign-in form imported no stylesheet at all and rendered as raw
- * HTML. All three now share this module, which cannot leak.
+ * Fixes the old overflow bug: inputs used `width: 100%` plus padding with no
+ * `box-sizing`, so text and placeholders bled past the card edges. Every
+ * control here is border-box with equal heights.
  */
+
+.container,
+.container *,
+.container *::before,
+.container *::after {
+  box-sizing: border-box;
+}
 
 .container {
   display: flex;
@@ -20,93 +20,299 @@
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  padding: var(--swasth-space-lg, 24px);
-  background-color: var(--swasth-surface, #f1ecfb);
+  padding: 24px 16px;
   font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
+  background:
+    radial-gradient(900px 480px at 12% 8%, rgba(99, 130, 191, 0.22), transparent 60%),
+    radial-gradient(800px 460px at 88% 90%, rgba(38, 70, 166, 0.16), transparent 60%),
+    #edf2f9;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 18px;
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  color: #2646A6;
+}
+
+.brandMark {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #2646A6, #6382BF);
+  color: #fff;
+  font-size: 1.05rem;
+  box-shadow: 0 6px 16px rgba(38, 70, 166, 0.3);
 }
 
 .heading {
-  margin: 0 0 var(--swasth-space-lg, 24px);
+  margin: 0 0 6px;
   font-size: clamp(1.4rem, 3vw, 1.8rem);
-  font-weight: 600;
-  color: var(--swasth-violet-deep, #493971);
+  font-weight: 800;
+  color: #0f172a;
   text-align: center;
+  letter-spacing: -0.01em;
+}
+
+.subheading {
+  margin: 0 0 22px;
+  font-size: 0.92rem;
+  color: #64748b;
+  text-align: center;
+  max-width: 420px;
 }
 
 .form {
   display: flex;
   flex-direction: column;
-  gap: var(--swasth-space-md, 16px);
+  gap: 14px;
   width: 100%;
   max-width: 420px;
-  padding: var(--swasth-space-xl, 40px) var(--swasth-space-lg, 24px);
-  background: #fff;
-  border: 1px solid var(--swasth-border, #e4dcf1);
-  border-radius: var(--swasth-radius-md, 14px);
-  box-shadow: 0 6px 20px rgba(73, 57, 113, 0.08);
+  padding: 28px 26px;
+  background: rgba(255, 255, 255, 0.78);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(219, 227, 243, 0.9);
+  border-radius: 18px;
+  box-shadow: 0 12px 36px rgba(38, 70, 166, 0.12);
 }
 
-/* Applies to both <input> and <select>, so the gender field on the
-   registration form matches the text fields beside it. */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.label {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #334155;
+}
+
+/* Equal-height controls: 52px everywhere, text can never escape the card. */
 .input {
   width: 100%;
-  padding: 12px 14px;
+  max-width: 100%;
+  min-width: 0;
+  height: 52px;
+  padding: 0 14px;
   font: inherit;
   font-size: 1rem;
-  color: var(--swasth-ink, #2c2340);
+  color: #0f172a;
   background: #fff;
-  border: 1px solid var(--swasth-border, #e4dcf1);
-  border-radius: var(--swasth-radius-sm, 8px);
+  border: 1px solid #dbe3f3;
+  border-radius: 12px;
   outline: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
-.input::placeholder {
-  /* The old placeholder colour failed contrast against white. */
-  color: #6f6785;
+select.input {
+  white-space: nowrap;
+  cursor: pointer;
 }
 
-.input:focus-visible {
-  border-color: var(--swasth-violet, #6a1b9a);
-  box-shadow: 0 0 0 3px rgba(106, 27, 154, 0.18);
+.input::placeholder {
+  color: #8a8fa3;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  opacity: 1;
+}
+
+.input:focus-visible,
+.input:focus {
+  border-color: #6382BF;
+  box-shadow: 0 0 0 3px rgba(99, 130, 191, 0.22);
+}
+
+.passwordWrap {
+  position: relative;
+  min-width: 0;
+}
+
+.passwordWrap .input {
+  padding-right: 48px;
+}
+
+.eyeBtn {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  color: #64748b;
+  cursor: pointer;
+}
+
+.eyeBtn:hover {
+  background: #eef2f9;
+  color: #2646A6;
+}
+
+.eyeBtn:focus-visible {
+  outline: 2px solid #6382BF;
+  outline-offset: 1px;
 }
 
 .button {
-  padding: 13px;
+  width: 100%;
+  height: 52px;
+  padding: 0 16px;
   font: inherit;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 700;
   color: #fff;
-  background-color: var(--swasth-violet-deep, #493971);
+  background: linear-gradient(135deg, #2646A6, #3b5fc4);
   border: none;
-  border-radius: var(--swasth-radius-sm, 8px);
+  border-radius: 12px;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  box-shadow: 0 6px 16px rgba(38, 70, 166, 0.25);
+  transition: transform 0.15s ease, box-shadow 0.2s ease, filter 0.2s ease;
 }
 
-/* The previous hover turned a violet button blue (#0056b3), left over from a
-   Bootstrap default. */
-.button:hover {
-  background-color: var(--swasth-violet, #6a1b9a);
+.button:hover:not(:disabled) {
+  filter: brightness(1.07);
+  transform: translateY(-1px);
+  box-shadow: 0 10px 22px rgba(38, 70, 166, 0.3);
 }
 
 .button:focus-visible {
-  outline: 3px solid var(--swasth-violet, #6a1b9a);
+  outline: 3px solid #6382BF;
   outline-offset: 2px;
 }
 
 .button:disabled {
-  background-color: #b9b2c9;
+  background: #b9b2c9;
+  box-shadow: none;
   cursor: not-allowed;
+  transform: none;
+}
+
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 2px 0;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: #dbe3f3;
+}
+
+.googleWrap {
+  display: flex;
+  justify-content: center;
+  min-height: 44px;
+}
+
+.googleNotice {
+  width: 100%;
+  padding: 10px 12px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: #64748b;
+  text-align: center;
+  background: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 10px;
+}
+
+.googleNotice code {
+  font-size: 0.75rem;
+  color: #2646A6;
+}
+
+.retryBtn {
+  margin: 0 2px;
+  padding: 2px 10px;
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #2646A6;
+  background: #fff;
+  border: 1px solid #c9d6f0;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.retryBtn:hover {
+  background: #eef2fb;
+}
+
+.retryBtn:focus-visible {
+  outline: 2px solid #6382BF;
+  outline-offset: 1px;
 }
 
 .message {
   max-width: 420px;
-  margin-top: var(--swasth-space-md, 16px);
-  font-size: 0.92rem;
+  margin-top: 16px;
+  font-size: 0.9rem;
   line-height: 1.5;
-  color: var(--swasth-muted, #5c5470);
+  color: #5c5470;
   text-align: center;
+}
+
+.error {
+  max-width: 420px;
+  margin-top: 16px;
+  padding: 10px 14px;
+  font-size: 0.88rem;
+  line-height: 1.5;
+  color: #9f1239;
+  text-align: center;
+  background: rgba(255, 241, 242, 0.9);
+  border: 1px solid #fecdd3;
+  border-radius: 10px;
+}
+
+.links {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  max-width: 420px;
+  margin-top: 18px;
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.links a {
+  color: #2646A6;
+  text-decoration: none;
+}
+
+.links a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .form {
+    padding: 22px 18px;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

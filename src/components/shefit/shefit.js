@@ -1,168 +1,173 @@
 "use client";
 
 import React, { useMemo, useState } from "react";
-import { useTranslation } from "react-i18next";
-import one from "../../assets/one.jpg";
-import two from "../../assets/two.jpg";
-import three from "../../assets/three.jpg";
-import four from "../../assets/four.jpg";
-import five from "../../assets/five.jpg";
-import six from "../../assets/six.jpg";
-import Navbar from "../Navbar/navbar";
-import "./shefit.css";
+import CycleTracker from "./CycleTracker";
+import MythOrFact from "./MythOrFact";
+import { getWellnessInsights } from "../../utils/wellnessInsights";
+import styles from "./shefit.module.css";
 
-const MenstrualCycleTracker = () => {
-  const { t } = useTranslation();
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [lastPeriodDate, setLastPeriodDate] = useState(null);
+// Educational content only - phrased to inform rather than diagnose, per
+// the "PCOS can involve..." / "some people experience..." guidance. Kept as
+// a plain data array rather than a CMS or extra file, since this is static
+// copy with no reuse elsewhere.
+const EDUCATION_TOPICS = [
+  {
+    title: "PCOS & Hormonal Health",
+    icon: "fas fa-dna",
+    description: "What PCOS and hormonal changes can look like, in plain language.",
+    points: [
+      "PCOS (Polycystic Ovary Syndrome) can involve irregular periods, hormonal changes, and symptoms like acne or excess hair growth - but it looks different from person to person.",
+      "Hormonal fluctuations are a normal part of the menstrual cycle. Larger or more disruptive changes are worth discussing with a healthcare professional rather than self-diagnosing.",
+      "A diagnosis of PCOS or any hormonal condition can only be made by a healthcare professional, usually through a combination of history, examination and tests.",
+    ],
+  },
+  {
+    title: "Menstrual Health",
+    icon: "fas fa-calendar-days",
+    description: "How to make sense of your own cycle, without comparing it to anyone else's.",
+    points: [
+      "Cycle length and flow can vary widely between people, and even cycle to cycle for the same person - there isn't one universal 'normal'.",
+      "Some cramping, mood changes or fatigue around your period are common, but severe pain that disrupts daily life is worth raising with a doctor.",
+      "Tracking your own cycle over time - not comparing it to someone else's - is the most useful way to notice what's typical for you.",
+    ],
+  },
+  {
+    title: "General Women's Health",
+    icon: "fas fa-heart-pulse",
+    description: "Small habits that make it easier to notice changes in your body over time.",
+    points: [
+      "Regular check-ups, even when nothing feels wrong, help build a health history that makes it easier to notice changes over time.",
+      "Symptoms can have many possible explanations - persistent or unusual symptoms are best discussed with a healthcare professional rather than searched and self-assessed.",
+      "You know your own body best. If something feels different for you, that's worth mentioning at your next appointment even if it seems minor.",
+    ],
+  },
+  {
+    title: "Nutrition, Exercise & Sleep",
+    icon: "fas fa-spa",
+    description: "How everyday habits like food, movement and rest connect to how you feel.",
+    points: [
+      "Balanced meals, regular movement and consistent sleep can all support hormonal balance and general wellbeing, though they aren't a treatment for any specific condition.",
+      "Gentle activity is generally fine during your period if you feel up to it - comfort should guide the decision, not a strict rule either way.",
+      "Poor sleep and high stress are both commonly linked to cycle changes for many people - if either has shifted a lot recently, it may be worth reflecting on.",
+    ],
+  },
+];
 
-  /**
-   * The month grid is derived from the selected month and the logged date, so
-   * it is computed during render rather than pushed into state by an effect.
-   * The previous version called setCalendarDays inside useEffect, which meant
-   * every month change painted an empty grid first and filled it in on the
-   * following render.
-   */
-  const calendarDays = useMemo(() => {
-    const days = [];
-    const year = currentDate.getFullYear();
-    const month = currentDate.getMonth();
+function Shefit() {
+  const [entries, setEntries] = useState([]);
+  const insights = useMemo(() => getWellnessInsights(entries), [entries]);
+  const [openTopic, setOpenTopic] = useState(null);
 
-    const firstDayOfWeek = new Date(year, month, 1).getDay();
-    const daysInMonth = new Date(year, month + 1, 0).getDate();
-    const prevMonthLastDay = new Date(year, month, 0).getDate();
-
-    for (let i = firstDayOfWeek; i > 0; i--) {
-      days.push({ day: prevMonthLastDay - i + 1, otherMonth: true });
-    }
-
-    const today = new Date().toDateString();
-
-    for (let i = 1; i <= daysInMonth; i++) {
-      const thisDay = new Date(year, month, i);
-
-      // Only the date the user actually entered is marked. The calendar used
-      // to mark a single day at lastPeriod + 28 and call it a prediction; a
-      // fixed constant is not a forecast, and one recorded date is not enough
-      // information to estimate anything.
-      const isLoggedPeriod =
-        !!lastPeriodDate && thisDay.toDateString() === lastPeriodDate.toDateString();
-
-      days.push({
-        day: i,
-        today: thisDay.toDateString() === today,
-        period: isLoggedPeriod,
-      });
-    }
-
-    // Pad the final row so the grid stays rectangular.
-    const trailing = (7 - (days.length % 7)) % 7;
-    for (let i = 1; i <= trailing; i++) {
-      days.push({ day: i, otherMonth: true });
-    }
-
-    return days;
-  }, [currentDate, lastPeriodDate]);
-
-  const handlePrevMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() - 1)
-    );
-  };
-
-  const handleNextMonth = () => {
-    setCurrentDate(
-      new Date(currentDate.getFullYear(), currentDate.getMonth() + 1)
-    );
-  };
-
-  const handleLastPeriodChange = (event) => {
-    setLastPeriodDate(new Date(event.target.value));
+  const toggleTopic = (title) => {
+    setOpenTopic((prev) => (prev === title ? null : title));
   };
 
   return (
-    <div
-      style={{
-        backgroundColor: "rgb(73, 57, 113)",
-        minHeight: "100vh",
-      }}
-    >
-      <div style={{ display: "flex" }}>
-        <Navbar />
-        <div className="shepage" style={{ display: "flex" }}>
-          <div className="tracker-section">
-            <div className="tracker-container">
-              <h1>{t("menstrualTracker.title")}</h1>
-              <div className="input-section">
-                <label htmlFor="lastPeriod">{t("menstrualTracker.lastPeriodLabel")}</label>
-                <input
-                  type="date"
-                  id="lastPeriod"
-                  onChange={handleLastPeriodChange}
-                />
-              </div>
+    <div className={styles.page}>
+      <header className={styles.hero}>
+        <p className={styles.heroKicker}>SHEFIT</p>
+        <h1 className={styles.heroTitle}>Women&apos;s Health &amp; Wellness</h1>
+        <p className={styles.heroLead}>
+          Understand your health, track your wellbeing, and learn more about
+          women&apos;s health.
+        </p>
+      </header>
 
-              <p className="tracker-note">
-                {lastPeriodDate
-                  ? `Logged: ${lastPeriodDate.toLocaleDateString("en-GB", {
-                      day: "2-digit",
-                      month: "short",
-                      year: "numeric",
-                    })}. One date is not enough to estimate a future period, so no prediction is shown.`
-                  : "Enter your last period date to mark it on the calendar."}
-              </p>
-              <p className="tracker-note tracker-note-muted">
-                This tracker does not predict periods, fertile windows or safe days,
-                and entries are not saved when you leave the page.
-              </p>
-              <div className="calendar-header">
-                <button onClick={handlePrevMonth}>
-                  &#8592;
-                </button>
-                <h2>
-                  {currentDate.toLocaleString("default", { month: "long" })}{" "}
-                  {currentDate.getFullYear()}
-                </h2>
-                <button onClick={handleNextMonth}>
-                &#8594;
-                </button>
-              </div>
-              <div className="calendarshe">
-                {t("menstrualTracker.days", { returnObjects: true }).map((day, index) => (
-                  <div key={index} className="day-header">
-                    {day}
-                  </div>
-                ))}
-                {calendarDays.map((day, index) => (
-                  <div
-                    key={index}
-                    className={`day ${day.otherMonth ? "other-month" : ""} ${
-                      day.today ? "today" : ""
-                    } ${day.period ? "period" : ""}`}
-                  >
-                    {day.day}
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          <div className="myth-fact-section">
-            <div className="myth-fact-container">
-              <h2 className="section-title">{t("menstrualTracker.mythVsFact")}</h2>
-              <div className="myth-fact-grid">
-                {[one, two, three, four, five, six].map((image, index) => (
-                  <div key={index} className="myth-card">
-                    <img src={image.src} alt={`Myth ${index + 1}`} />
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
+      <section className={styles.section} aria-labelledby="menstrual-health">
+        <h2 id="menstrual-health" className={styles.sectionTitle}>
+          Menstrual Health
+        </h2>
+        <div className={styles.trackerCard}>
+          <CycleTracker onEntriesChange={setEntries} />
+          <p className={styles.privacyNote}>
+            🔒 Your entries are stored only in this browser and are not sent anywhere.
+          </p>
         </div>
-      </div>
+      </section>
+
+      <section className={styles.section} aria-labelledby="wellness-insights">
+        <h2 id="wellness-insights" className={styles.sectionTitle}>
+          Wellness Insights
+        </h2>
+        <div className={styles.insightsCard}>
+          {insights.map((insight, index) => (
+            <p key={index} className={styles.insightText}>
+              {insight}
+            </p>
+          ))}
+        </div>
+      </section>
+
+      <section className={styles.section} aria-labelledby="myth-or-fact">
+        <h2 id="myth-or-fact" className={styles.sectionTitle}>
+          Myth or Fact
+        </h2>
+        <MythOrFact />
+      </section>
+
+      <section className={styles.section} aria-labelledby="womens-health-education">
+        <h2 id="womens-health-education" className={styles.sectionTitle}>
+          Know Your Body
+        </h2>
+        <p className={styles.sectionSubtitle}>
+          A few short, friendly reads - tap a card to explore it.
+        </p>
+        <div className={styles.educationGrid}>
+          {EDUCATION_TOPICS.map((topic) => {
+            const isOpen = openTopic === topic.title;
+            const panelId = `education-panel-${topic.title.replace(/\s+/g, "-")}`;
+
+            return (
+              <div
+                key={topic.title}
+                className={`${styles.educationCard} ${isOpen ? styles.educationCardOpen : ""}`}
+              >
+                <button
+                  type="button"
+                  className={styles.educationCardHeader}
+                  onClick={() => toggleTopic(topic.title)}
+                  aria-expanded={isOpen}
+                  aria-controls={panelId}
+                >
+                  <span className={styles.educationIcon} aria-hidden="true">
+                    <i className={topic.icon}></i>
+                  </span>
+                  <span className={styles.educationHeaderText}>
+                    <span className={styles.educationTitle}>{topic.title}</span>
+                    <span className={styles.educationDescription}>{topic.description}</span>
+                  </span>
+                  <span className={styles.educationCta}>
+                    {isOpen ? "Close" : "Explore"}
+                    <i className={`fas fa-chevron-down ${styles.educationChevron}`} aria-hidden="true"></i>
+                  </span>
+                </button>
+
+                <div
+                  id={panelId}
+                  className={styles.educationPanelWrap}
+                  role="region"
+                  aria-label={topic.title}
+                >
+                  <div className={styles.educationPanelInner}>
+                    <ul className={styles.educationList}>
+                      {topic.points.map((point, index) => (
+                        <li key={index}>{point}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        <p className={styles.educationDisclaimer}>
+          This information is educational, not a diagnosis. If symptoms are
+          persistent or concerning, consider speaking with a healthcare
+          professional.
+        </p>
+      </section>
     </div>
   );
-};
+}
 
-export default MenstrualCycleTracker;
+export default Shefit;

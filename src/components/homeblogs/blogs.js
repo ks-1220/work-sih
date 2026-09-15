@@ -33,29 +33,29 @@ Thanks for following my fitness journey. Here's to more records, more streaks, a
       padding: '20px',
       fontFamily: 'Arial, sans-serif',
       lineHeight: '1.6',
-      backgroundColor: '#F0D0F9', // Soft lavender background
+      backgroundColor: '#edf2f9',
       minHeight: '100vh',
-      color: '#4a4a4a'
+      color: '#0f172a'
     }}>
       <div style={{
-        backgroundColor: '#944DA9', // Vibrant purple header
+        backgroundColor: '#2646A6',
         padding: '20px',
-        borderBottom: '2px solid #944DA9', // Deeper purple border
+        borderBottom: '2px solid #6382BF',
         marginBottom: '20px',
         borderRadius: '8px 8px 0 0'
       }}>
         <h1 style={{
-          color: '#ffffff', // White title color
+          color: '#ffffff',
           fontSize: '2em',
           marginBottom: '10px',
-          textShadow: '1px 1px 2px rgba(0,0,0,0.2)' // Subtle text shadow
+          textShadow: '1px 1px 2px rgba(0,0,0,0.2)'
         }}>
           {blogPost.title}
         </h1>
         <div style={{
           display: 'flex',
           justifyContent: 'space-between',
-          color: '#e6d6ff', // Soft purple text for author and date
+          color: '#dbe3f3',
           fontSize: '0.9em'
         }}>
           <span>Author: {blogPost.author}</span>
@@ -76,22 +76,23 @@ Thanks for following my fitness journey. Here's to more records, more streaks, a
               maxWidth: '100%',
               height: 'auto',
               borderRadius: '8px',
-              boxShadow: '0 4px 6px rgba(0,0,0,0.1)' // Subtle shadow
+              boxShadow: '0 4px 6px rgba(0,0,0,0.1)'
             }}
           />
       </div>
 
       <div style={{
         textAlign: 'justify',
-        backgroundColor: '#E7BCF5', // Very soft purple background for content
+        backgroundColor: '#ffffff',
         padding: '20px',
         borderRadius: '8px',
-        boxShadow: '0 2px 4px rgba(0,0,0,0.05)' // Subtle shadow
+        border: '1px solid #dbe3f3',
+        boxShadow: '0 2px 4px rgba(38, 70, 166, 0.05)'
       }}>
         {blogPost.content.split('\n\n').map((paragraph, index) => (
           <p key={index} style={{ 
             marginBottom: '15px',
-            color: '#4a4a4a' // Dark gray text for readability
+            color: '#0f172a'
           }}>
             {paragraph}
           </p>

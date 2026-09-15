@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { registerUser } from "../../services/api";
 import { useAuth } from "../../store/auth";
+import { resolvePostAuthDestination } from "../../services/onboarding";
 import styles from "../auth/AuthForm.module.css";
 
 const Register = () => {
@@ -21,6 +22,8 @@ const Register = () => {
   });
   const [message, setMessage] = useState("");
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const next = searchParams.get("next") || "/";
   const { storetokenInLS } = useAuth();
 
   const handleChange = (e) => {
@@ -31,14 +34,16 @@ const Register = () => {
     e.preventDefault();
     try {
       const data = { ...formData, medicalComplications: formData.medicalComplications.split(",") };
-      const response = await registerUser(data, router, storetokenInLS);
+      // registerUser stores the token and routes to /login; on success we
+      // take the user through the fitness snapshot (onboarding) instead.
+      const response = await registerUser(data, { push: () => {} }, storetokenInLS);
 
-      if (response?.msg) {
-        setMessage(response.msg); 
-      } else if (response?.error) {
-        setMessage(response.error); 
+      // response.ok in the API layer already stored the JWT; anything without
+      // an error flag is a success → continue to the fitness snapshot.
+      if (response?.error) {
+        setMessage(response.message || response.error);
       } else {
-        setMessage(t("register.errorMessage"));
+        router.push(resolvePostAuthDestination(next));
       }
     } catch (error) {
       console.error("Error during registration:", error);

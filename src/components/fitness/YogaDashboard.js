@@ -2,42 +2,43 @@
 
 import React from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
 import styles from "./YogaDashboard.module.css";
 
-/* ─── Static data ──────────────────────────────────────────── */
+/* ─── Static data (text resolves via i18n at render) ──────────── */
 
 const GURUS = [
-  { name: "Raghav Ji", style: "Hatha Yoga", img: "/guru-1.jpg" },
-  { name: "Anushka Verma", style: "Vinyasa", img: "/guru-2.jpg" },
-  { name: "Meera Iyer", style: "Meditation", img: "/guru-3.jpg" },
-  { name: "Kunal Sharma", style: "Ashtanga", img: "/guru-4.jpg" },
+  { name: "Raghav Ji", styleKey: "fitness.styleHatha", img: "/guru-1.jpg" },
+  { name: "Anushka Verma", styleKey: "fitness.styleVinyasa", img: "/guru-2.jpg" },
+  { name: "Meera Iyer", styleKey: "fitness.styleMeditation", img: "/guru-3.jpg" },
+  { name: "Kunal Sharma", styleKey: "fitness.styleAshtanga", img: "/guru-4.jpg" },
 ];
 
 const VENUES = [
   {
     name: "Central Park Yoga Ground",
-    distance: "1.8 km away",
+    dist: "1.8",
     tags: [
-      { label: "Outdoor", style: "tagGreen" },
-      { label: "Group Sessions", style: "tagBlue" },
+      { labelKey: "fitness.tagOutdoor", style: "tagGreen" },
+      { labelKey: "fitness.tagGroup", style: "tagBlue" },
     ],
     cropPosition: "0% 0%",
   },
   {
     name: "Santoshi Yoga Centre",
-    distance: "2.4 km away",
+    dist: "2.4",
     tags: [
-      { label: "Indoor", style: "tagPurple" },
-      { label: "Certified Instructors", style: "tagOrange" },
+      { labelKey: "fitness.tagIndoor", style: "tagPurple" },
+      { labelKey: "fitness.tagCertified", style: "tagOrange" },
     ],
     cropPosition: "33.33% 0%",
   },
   {
     name: "Riverside Wellness Park",
-    distance: "3.1 km away",
+    dist: "3.1",
     tags: [
-      { label: "Outdoor", style: "tagGreen" },
-      { label: "Morning Batches", style: "tagOrange" },
+      { labelKey: "fitness.tagOutdoor", style: "tagGreen" },
+      { labelKey: "fitness.tagMorning", style: "tagOrange" },
     ],
     cropPosition: "66.66% 0%",
   },
@@ -58,14 +59,21 @@ const TODAY = 14;
 /* ─── Component ────────────────────────────────────────────── */
 
 export default function YogaDashboard() {
+  const { t, i18n } = useTranslation();
+  const locale = i18n?.language?.startsWith('hi') ? 'hi-IN' : 'en-US';
+  // Locale-aware short weekday names starting Sunday (Sept 7, 2025 was a Sunday).
+  const weekdays = Array.from({ length: 7 }, (_, i) =>
+    new Date(2025, 8, 7 + i).toLocaleString(locale, { weekday: 'short' })
+  );
+
   return (
     <div className={styles.page}>
       {/* ═══ TOP BREADCRUMB ═══ */}
       <div className={styles.topBar}>
         <Link href="/start" className={styles.backBtn}>
-          <span>←</span> Back to Fitness Modes
+          <span>←</span> {t('fitness.backModes')}
         </Link>
-        <span className={styles.categoryBadge}>🧘 Yoga &amp; Mindfulness</span>
+        <span className={styles.categoryBadge}>🧘 {t('fitness.yogaBadge')}</span>
       </div>
 
       {/* ═══ HERO BANNER ═══ */}
@@ -73,19 +81,17 @@ export default function YogaDashboard() {
         <img
           className={styles.heroImage}
           src="/hero-banner.jpg"
-          alt="Person meditating on a hilltop at sunrise with misty mountains"
+          alt={t('fitness.heroAlt')}
         />
         <div className={styles.heroOverlay}>
-          <span className={styles.heroEyebrow}>A Healthier, Happier You</span>
-          <h1 className={styles.heroTitle}>Yoga, Your Way</h1>
-          <p className={styles.heroSubtitle}>Move &nbsp;•&nbsp; Breathe &nbsp;•&nbsp; Be Present</p>
+          <span className={styles.heroEyebrow}>{t('fitness.eyebrow')}</span>
+          <h1 className={styles.heroTitle}>{t('fitness.yogaTitle')}</h1>
+          <p className={styles.heroSubtitle}>{t('fitness.yogaTrio')}</p>
           <Link href="/start/yoga/practice" className={styles.heroCta}>
-            Start Practice <span>→</span>
+            {t('fitness.startPractice')} <span>→</span>
           </Link>
         </div>
-        <p className={styles.heroQuote}>
-          &ldquo;A calm mind creates a stronger you.&rdquo;
-        </p>
+        <p className={styles.heroQuote}>&ldquo;{t('fitness.quote')}&rdquo;</p>
       </section>
 
       {/* ═══ DASHBOARD GRID ═══ */}
@@ -95,18 +101,18 @@ export default function YogaDashboard() {
           <div className={styles.poseCoachLeft}>
             <div className={styles.cardHeader}>
               <div className={`${styles.cardIcon} ${styles.iconPurple}`}>🧘</div>
-              <h2 className={styles.cardTitle}>Pose Coach</h2>
+              <h2 className={styles.cardTitle}>{t('fitness.poseCoach')}</h2>
             </div>
-            <p className={styles.cardSub}>Real-time posture feedback &amp; correction</p>
+            <p className={styles.cardSub}>{t('fitness.poseCoachSub')}</p>
             <Link href="/start/yoga/practice" className={styles.cardBtn}>
-              Try Now <span>→</span>
+              {t('fitness.tryNow')} <span>→</span>
             </Link>
           </div>
           <div className={styles.poseCoachRight}>
             <img
               className={styles.poseImg}
               src="/pose-coach.jpg"
-              alt="Illustration of a woman in Warrior II pose with AI skeletal overlay"
+              alt={t('fitness.poseAlt')}
             />
             <div className={styles.accuracyRing}>
               <svg viewBox="0 0 80 80">
@@ -115,7 +121,7 @@ export default function YogaDashboard() {
               </svg>
               <div className={styles.ringLabel}>
                 <span className={styles.ringPercent}>92%</span>
-                <span className={styles.ringText}>Posture<br />Accuracy</span>
+                <span className={styles.ringText}>{t('fitness.accuracy')}</span>
               </div>
             </div>
           </div>
@@ -125,22 +131,22 @@ export default function YogaDashboard() {
         <div className={`${styles.card} ${styles.gurusCard}`}>
           <div className={styles.cardHeader}>
             <div className={`${styles.cardIcon} ${styles.iconAmber}`}>✨</div>
-            <h2 className={styles.cardTitle}>Yoga Gurus</h2>
+            <h2 className={styles.cardTitle}>{t('fitness.gurus')}</h2>
           </div>
-          <p className={styles.cardSub}>Learn from inspiring teachers</p>
+          <p className={styles.cardSub}>{t('fitness.gurusSub')}</p>
           <div className={styles.gurusRow}>
             {GURUS.map((g) => (
               <div key={g.name} className={styles.guruItem}>
                 <img className={styles.guruAvatar} src={g.img} alt={g.name} />
                 <span className={styles.guruName}>{g.name}</span>
-                <span className={styles.guruStyle}>{g.style}</span>
+                <span className={styles.guruStyle}>{t(g.styleKey)}</span>
               </div>
             ))}
-            <button className={styles.gurusArrow} aria-label="See more gurus">›</button>
+            <button className={styles.gurusArrow} aria-label={t('fitness.moreGurus')}>›</button>
           </div>
           <div className={styles.guruCardBottom}>
             <Link href="/yoga" className={styles.cardBtn}>
-              Explore Gurus <span>→</span>
+              {t('fitness.exploreGurus')} <span>→</span>
             </Link>
           </div>
         </div>
@@ -149,22 +155,22 @@ export default function YogaDashboard() {
         <div className={`${styles.card}`}>
           <div className={styles.cardHeader}>
             <div className={`${styles.cardIcon} ${styles.iconTeal}`}>📅</div>
-            <h2 className={styles.cardTitle}>Yoga Calendar</h2>
+            <h2 className={styles.cardTitle}>{t('fitness.calTitle')}</h2>
           </div>
-          <p className={styles.cardSub}>Sessions near you</p>
+          <p className={styles.cardSub}>{t('fitness.calSub')}</p>
           <div className={styles.calendarCard}>
             <div className={styles.calendarWidget}>
               <div className={styles.calMonthHeader}>
                 <div className={styles.calNav}>
-                  <button className={styles.calNavBtn} aria-label="Previous month">‹</button>
+                  <button className={styles.calNavBtn} aria-label={t('fitness.prevMonth')}>‹</button>
                 </div>
-                <span className={styles.calMonthTitle}>September 2025</span>
+                <span className={styles.calMonthTitle}>{t('fitness.calMonth')}</span>
                 <div className={styles.calNav}>
-                  <button className={styles.calNavBtn} aria-label="Next month">›</button>
+                  <button className={styles.calNavBtn} aria-label={t('fitness.nextMonth')}>›</button>
                 </div>
               </div>
               <div className={styles.calGrid}>
-                {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((d) => (
+                {weekdays.map((d) => (
                   <span key={d} className={styles.calDayHeader}>{d}</span>
                 ))}
                 {SEPT_2025.map((day, i) => {
@@ -185,16 +191,16 @@ export default function YogaDashboard() {
             </div>
             <div className={styles.calendarRight}>
               <div className={styles.calCategory}>
-                <span className={styles.catIcon}>📍</span> Parks
+                <span className={styles.catIcon}>📍</span> {t('fitness.catParks')}
               </div>
               <div className={styles.calCategory}>
-                <span className={styles.catIcon}>🏛️</span> Community Centres
+                <span className={styles.catIcon}>🏛️</span> {t('fitness.catCommunity')}
               </div>
               <div className={styles.calCategory}>
-                <span className={styles.catIcon}>🎪</span> Special Events
+                <span className={styles.catIcon}>🎪</span> {t('fitness.catEvents')}
               </div>
               <Link href="/yoga" className={styles.cardBtn} style={{ marginTop: "auto" }}>
-                View Calendar <span>→</span>
+                {t('fitness.viewCalendar')} <span>→</span>
               </Link>
             </div>
           </div>
@@ -206,16 +212,16 @@ export default function YogaDashboard() {
             <div className={styles.pledgeLeft}>
               <div className={styles.cardHeader}>
                 <div className={`${styles.cardIcon} ${styles.iconPink}`}>🪷</div>
-                <h2 className={styles.cardTitle}>My Yoga Pledge</h2>
+                <h2 className={styles.cardTitle}>{t('fitness.pledge')}</h2>
               </div>
-              <p className={styles.cardSub}>Commit. Practice. Grow.</p>
+              <p className={styles.cardSub}>{t('fitness.pledgeSub')}</p>
               <Link href="/yoga" className={styles.cardBtn}>
-                Take the Pledge <span>→</span>
+                {t('fitness.takePledge')} <span>→</span>
               </Link>
             </div>
             <div className={styles.pledgeCert}>
               <span className={styles.pledgeLotus}>🪷</span>
-              <span className={styles.pledgeCertTitle}>My Yoga Pledge</span>
+              <span className={styles.pledgeCertTitle}>{t('fitness.pledge')}</span>
               <div className={styles.pledgeCheck}>✓</div>
             </div>
           </div>
@@ -227,10 +233,10 @@ export default function YogaDashboard() {
         <div className={styles.nearHeader}>
           <div className={styles.nearHeaderLeft}>
             <span className={styles.nearIcon}>📍</span>
-            <h2 className={styles.nearTitle}>Near You</h2>
-            <span className={styles.nearSub}>Find yoga centres and parks around you</span>
+            <h2 className={styles.nearTitle}>{t('fitness.nearYou')}</h2>
+            <span className={styles.nearSub}>{t('fitness.nearSub')}</span>
           </div>
-          <Link href="/yoga" className={styles.viewAll}>View All →</Link>
+          <Link href="/yoga" className={styles.viewAll}>{t('fitness.viewAll')} →</Link>
         </div>
         <div className={styles.nearGrid}>
           {VENUES.map((v) => (
@@ -245,15 +251,15 @@ export default function YogaDashboard() {
               </div>
               <div className={styles.venueBody}>
                 <h3 className={styles.venueName}>{v.name}</h3>
-                <p className={styles.venueDistance}>📍 {v.distance}</p>
+                <p className={styles.venueDistance}>📍 {t('fitness.kmAway', { d: v.dist })}</p>
                 <div className={styles.venueTags}>
-                  {v.tags.map((t) => (
-                    <span key={t.label} className={`${styles.venueTag} ${styles[t.style]}`}>
-                      {t.label}
+                  {v.tags.map((tag) => (
+                    <span key={tag.labelKey} className={`${styles.venueTag} ${styles[tag.style]}`}>
+                      {t(tag.labelKey)}
                     </span>
                   ))}
                 </div>
-                <button className={styles.venueBtn}>View</button>
+                <button className={styles.venueBtn}>{t('fitness.view')}</button>
               </div>
             </div>
           ))}

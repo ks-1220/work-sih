@@ -3,147 +3,111 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../store/auth';
-import speaker from "../../assets/speaker.png";
-// Audio and video live in public/media: Next has no webpack loader for these
-// file types, so they cannot be imported the way Create React App allowed.
+import WhatsAppFloat from '../shared/WhatsAppFloat';
 const audio2 = "/media/audio2.mp3";
 import './navbar.css';
 
-// Every entry carries its own href, so the list can grow without renumbering
-// anything.
-//
-// SheFit used to be filtered on `user.gender === 'Female'`. A gender string is
-// not an eligibility rule, and menstrual health education does not depend on
-// the value on an account, so the section is available to everyone. Private
-// records, when they exist, are gated by consent and ownership instead.
-const NAV_ITEMS = [
-  { href: '/', icon: 'fa fa-house nav-icon', label: 'Home' },
-  { href: '/start', icon: 'fas fa-weight', label: 'Fitness' },
-  { href: '/cards', icon: 'fas fa-apple-alt', label: 'Dietary' },
-  { href: '/sus', icon: 'fas fa-leaf', label: 'Sustain' },
-  { href: '/arthub', icon: 'fas fa-hand-holding-heart', label: 'Serenity' },
-  { href: '/she', icon: 'fas fa-venus', label: 'SheFit' },
-  { href: '/tracker', icon: 'fas fa-chart-line', label: 'Tracker' },
-  { href: '/profile', icon: 'fa fa-user nav-icon', label: 'Profile' },
-  { href: '/about', icon: 'fas fa-circle-info', label: 'About' },
+// Sidebar order: Home, Fitness, Wellness (CTA), Dietary, Tracker, SheFit,
+// Serenity. Sustain (/sus) and About (/about) stay reachable by URL and via
+// the Terms/Privacy footer links. Logout is appended for signed-in users.
+// Labels are i18n keys resolved at render time.
+const ORIGINAL_NAV_ITEMS = [
+  { href: '/', icon: 'fa-solid fa-house', labelKey: 'nav.home' },
+  { href: '/start', icon: 'fa-solid fa-dumbbell', labelKey: 'nav.fitness' },
+  { href: '/wellness', icon: 'fa-solid fa-spa', labelKey: 'nav.wellness', cta: true },
+  { href: '/cards', icon: 'fa-solid fa-apple-whole', labelKey: 'nav.dietary' },
+  { href: '/tracker', icon: 'fa-solid fa-chart-line', labelKey: 'nav.tracker' },
+  { href: '/she', icon: 'fa-solid fa-venus', labelKey: 'nav.shefit' },
+  { href: '/arthub', icon: 'fa-solid fa-hand-holding-heart', labelKey: 'nav.serenity' },
 ];
 
-const Navbar = () => {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const [showChatbot, setShowChatbot] = useState(false);  // To toggle chatbot visibility
-  const { isLoggedIN } = useAuth();
-
-  // Derived from the URL rather than held in state. The old version set an
-  // index on click, but every link was a plain anchor that reloaded the
-  // document, so the component remounted and the index reset to 0 every time.
-  // The highlight was permanently stuck on Home.
+export default function Navbar() {
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const pathname = usePathname();
+  const { t } = useTranslation();
+  // Auth-aware: show a Logout entry only for signed-in users (no flash —
+  // nothing renders until the client has read the stored token).
+  const { isLoggedIN, isAuthReady } = useAuth();
+  const navItems =
+    isAuthReady && isLoggedIN
+      ? [...ORIGINAL_NAV_ITEMS, { href: '/logout', icon: 'fa-solid fa-right-from-bracket', labelKey: 'nav.logout' }]
+      : ORIGINAL_NAV_ITEMS;
 
-  const toggleDropdown = () => setShowDropdown((prev) => !prev);
-  const toggleChatbot = () => setShowChatbot(!showChatbot);  // Toggle function for chatbot visibility
+  const toggleAudio = () => {
+    const audioElement = document.getElementById('audioPlayer');
+    if (!audioElement) return;
+
+    if (isPlayingAudio) {
+      audioElement.pause();
+      setIsPlayingAudio(false);
+    } else {
+      audioElement.play().then(() => {
+        setIsPlayingAudio(true);
+      }).catch((err) => {
+        console.log('Audio playback error:', err);
+      });
+    }
+  };
 
   return (
-    <main>
-      <nav className="main-menu">
-        <h1>Swasth∞</h1>
-        <img className="logo" src="https://github.com/ecemgo/mini-samples-great-tricks/assets/13468728/4cfdcb5a-0137-4457-8be1-6e7bd1f29ebb" alt="" />
+    <>
+      <nav className="main-menu" aria-label={t('nav.menu')}>
+        {/* Top Hamburger Icon */}
+        <div className="sidebar-hamburger" title={t('nav.menu')}>
+          <i className="fa-solid fa-bars"></i>
+        </div>
+
+        {/* Complete Original Nav Items with Curvy Ends Styling */}
         <ul>
-          {NAV_ITEMS.map((item) => (
-            <li
-              key={item.href}
-              className={`nav-item ${pathname === item.href ? 'active' : ''}`}
-            >
-              <b></b>
-              <b></b>
-              <Link href={item.href}>
-                <i className={item.icon}></i>
-                <span className="nav-text">{item.label}</span>
-              </Link>
-            </li>
-          ))}
-          <li className="nav-item">
-            <b></b>
-            <b></b>
-            <div onClick={() => {
-              const audioElement = document.getElementById('audioPlayer');
-              if (audioElement) {
-                audioElement.play().catch(error => {
-                  console.log('Audio playback failed:', error);
-                });
-              }
-            }}>
-              <img 
-                src={speaker.src}
-                alt="Play Audio" 
-                style={{ width: '50px', height: '40px', cursor: 'pointer', backgroundColor:'white', borderRadius:'50px'}} 
-              />
-            </div>
-            <audio id="audioPlayer">
-              <source src={audio2} type="audio/mp3" />
-              Your browser does not support the audio element.
-            </audio>
-          </li>
+          {navItems.map((item) => {
+            const isActive = pathname === item.href;
+            const label = t(item.labelKey);
+            return (
+              <li key={item.href} className={`nav-item ${isActive ? 'active' : ''} ${item.cta ? 'nav-cta' : ''}`}>
+                <Link href={item.href} title={label}>
+                  <i className={item.icon}></i>
+                  <span className="nav-text">{label}</span>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
 
-        <div className="user-menu">
-          <div className="user-icon-circle" onClick={toggleDropdown}>
-            <i className="fas fa-user-cog"></i>
+        {/* Ambient Serene Sound Toggle */}
+        <button
+          className="sidebar-zen-btn"
+          onClick={toggleAudio}
+          title={isPlayingAudio ? t('nav.zenPause') : t('nav.zenPlay')}
+          aria-label="Toggle zen audio"
+        >
+          <i className={`fa-solid ${isPlayingAudio ? 'fa-pause' : 'fa-music'}`}></i>
+          <span>{isPlayingAudio ? t('nav.pause') : t('nav.zen')}</span>
+        </button>
+        <audio id="audioPlayer" loop>
+          <source src={audio2} type="audio/mp3" />
+        </audio>
+
+        {/* Bottom Curvy-Ended Action Button (Red 'Build' / 'AI Pose' button) */}
+        <div className="sidebar-action-container">
+          <Link href="/yoga" className="sidebar-curvy-btn" title={t('nav.buildTitle')}>
+            <i className="fa-solid fa-clipboard-check"></i>
+            <span>{t('nav.build')}</span>
+          </Link>
+        </div>
+
+        {/* Bottom Legal Copyright */}
+        <div className="sidebar-bottom-legal">
+          <div>&copy; 2026 Swasth</div>
+          <div>
+            <Link href="/about">{t('nav.terms')}</Link> | <Link href="/about">{t('nav.privacy')}</Link>
           </div>
-          {showDropdown && (
-            <div className="dropdown-menu-nav">
-              {isLoggedIN ? (<Link href="/logout">Logout</Link>) : (<>
-                <Link href="/register">Register</Link>
-                <Link href="/login">Login</Link>
-              </>)}
-            </div>
-          )}
         </div>
       </nav>
 
-      {/* Chatbot Icon */}
-      <div 
-        className="chatbot-icon" 
-        onClick={toggleChatbot} 
-        style={{ 
-          position: 'fixed', 
-          bottom: '20px', 
-          right: '20px', 
-          backgroundColor: '#e1bee7', 
-          borderRadius: '50%', 
-          padding: '10px', 
-          cursor: 'pointer' 
-        }}
-      >
-        <i className="fas fa-comment-alt" style={{ color: 'rgb(57,73,117)', fontSize: '24px' }}></i>
-      </div>
-
-      {/* Chatbot iframe */}
-      {showChatbot && (
-        <div 
-          className="chatbot-container" 
-          style={{ 
-            position: 'fixed', 
-            bottom: '70px', 
-            right: '20px', 
-            width: '350px', 
-            height: '500px', 
-            backgroundColor: 'white', 
-            borderRadius: '8px', 
-            boxShadow: '0 4px 8px rgba(0,0,0,0.2)', 
-            zIndex: 9999
-          }}
-        >
-          <iframe
-            src="https://www.chatbase.co/chatbot-iframe/ADV93zEpeXv-8WlwW2wJB"
-            width="100%"
-            style={{ height: '100%' }}
-            frameBorder="0"
-          ></iframe>
-        </div>
-      )}
-    </main>
-  );
-}
-
-export default Navbar;
+        {/* Floating WhatsApp button (bottom-right, site-wide) */}
+        <WhatsAppFloat />
+      </>
+    );
+  }
