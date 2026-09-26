@@ -23,3 +23,19 @@ export const SYMPTOM_LABELS = {
   back_pain: "Back pain",
   nausea: "Nausea",
 };
+
+export const SYMPTOM_LABELS_HI = {
+  cramps: "ऐंठन",
+  headache: "सिरदर्द",
+  fatigue: "थकान",
+  mood_changes: "मूड बदलाव",
+  bloating: "पेट फूलना",
+  acne: "मुँहासे",
+  back_pain: "पीठ दर्द",
+  nausea: "मतली",
+};
+
+export function symptomLabel(symptom, lang) {
+  if (String(lang).startsWith("hi")) return SYMPTOM_LABELS_HI[symptom] ?? SYMPTOM_LABELS[symptom] ?? symptom;
+  return SYMPTOM_LABELS[symptom] ?? symptom;
+}

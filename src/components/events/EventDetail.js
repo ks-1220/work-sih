@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import {
   ACCESS_TAGS,
   AGE_GROUPS,
@@ -18,7 +19,7 @@ import useStoredList from '../../lib/useStoredList';
 import useToday from '../../lib/useToday';
 import PhotoCredit from '../shared/PhotoCredit';
 import SampleDataBadge from '../shared/SampleDataBadge';
-import { eventStatus } from './EventsExplorer';
+import { eventStatus, statusText } from './EventsExplorer';
 import styles from './Events.module.css';
 
 const SAVED_KEY = 'swasth.savedEvents.v1';
@@ -45,6 +46,7 @@ function icsFor(event, city) {
 }
 
 export default function EventDetail({ event }) {
+  const { t } = useTranslation();
   const today = useToday();
   const city = getCity(event.city);
   const type = EVENT_TYPES[event.type];
@@ -68,7 +70,7 @@ export default function EventDetail({ event }) {
 
   const toggleSave = () => {
     const nowSaved = savedEvents.toggle(event.id);
-    setToast(nowSaved ? 'Saved to your events on this device' : 'Removed from saved events');
+    setToast(nowSaved ? t('ev.toastSaved') : t('ev.toastRemoved'));
   };
 
   const addToCalendar = () => {
@@ -79,7 +81,7 @@ export default function EventDetail({ event }) {
     a.download = `${event.id}.ics`;
     a.click();
     URL.revokeObjectURL(url);
-    setToast('Calendar file downloaded');
+    setToast(t('ev.toastCal'));
   };
 
   const share = async () => {
@@ -104,9 +106,9 @@ export default function EventDetail({ event }) {
   return (
     <div className={styles.page}>
       <nav className={styles.crumbs} aria-label="Breadcrumb">
-        <Link href="/">Home</Link>
+        <Link href="/">{t('nav.home')}</Link>
         <span aria-hidden="true">/</span>
-        <Link href="/events">Events</Link>
+        <Link href="/events">{t('ev.metaTitle')}</Link>
         <span aria-hidden="true">/</span>
         <Link href={`/events/${event.city}`}>{city?.name}</Link>
       </nav>
@@ -118,11 +120,11 @@ export default function EventDetail({ event }) {
           <div className={styles.cardTop}>
             <span className={styles.typeChipLight}><i className={type.icon} aria-hidden="true" /> {type.label}</span>
             <span className={styles.typeChipLight}>{event.level}</span>
-            {status && <span className={`${styles.status} ${styles[status.tone]}`}>{status.label}</span>}
+            {status && <span className={`${styles.status} ${styles[status.tone]}`}>{statusText(status, t)}</span>}
           </div>
           <h1 className={styles.detailTitle}>{event.title}</h1>
           <p className={styles.detailSub}>
-            by {event.organiser} · {formatDate(event.date)}{event.endDate ? ` – ${formatDate(event.endDate)}` : ''} · {city?.name}
+            {t('ev.by')} {event.organiser} · {formatDate(event.date)}{event.endDate ? ` – ${formatDate(event.endDate)}` : ''} · {city?.name}
           </p>
         </div>
         <PhotoCredit photo={hero} style={{ position: 'absolute', right: 12, bottom: 8, color: '#fff' }} />
@@ -134,44 +136,44 @@ export default function EventDetail({ event }) {
             <div className={styles.infoItem}>
               <i className="fa-regular fa-calendar" aria-hidden="true" />
               <div>
-                <small>Date & start time</small>
+                <small>{t('ev.dateTime')}</small>
                 <strong>{formatDate(event.date, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })}</strong>
-                <span>{event.endDate ? `Until ${formatDate(event.endDate)} · ` : ''}Starts {event.time} IST</span>
+                <span>{event.endDate ? t('ev.until', { date: formatDate(event.endDate) }) + ' · ' : ''}{t('ev.startsAt', { time: event.time })}</span>
               </div>
             </div>
             <div className={styles.infoItem}>
               <i className="fa-solid fa-location-dot" aria-hidden="true" />
               <div>
-                <small>Venue</small>
+                <small>{t('ev.venue')}</small>
                 <strong>{event.venue}</strong>
                 <span>{event.address}</span>
-                <a href={mapLink} target="_blank" rel="noopener noreferrer">Open in Maps</a>
+                <a href={mapLink} target="_blank" rel="noopener noreferrer">{t('ev.openMaps')}</a>
               </div>
             </div>
             <div className={styles.infoItem}>
               <i className="fa-solid fa-user-group" aria-hidden="true" />
               <div>
-                <small>Age groups</small>
+                <small>{t('ev.ageGroups')}</small>
                 <strong>{event.ageGroups.map((a) => AGE_GROUPS[a]).join(', ')}</strong>
               </div>
             </div>
             <div className={styles.infoItem}>
               <i className="fa-regular fa-hourglass-half" aria-hidden="true" />
               <div>
-                <small>Registration closes</small>
+                <small>{t('ev.regCloses')}</small>
                 <strong>{formatDate(event.registrationCloses)}</strong>
-                {closesIn !== null && closesIn >= 0 && <span>{closesIn === 0 ? 'Today' : `In ${closesIn} days`}</span>}
+                {closesIn !== null && closesIn >= 0 && <span>{closesIn === 0 ? t('ev.today') : t('ev.inDays', { n: closesIn })}</span>}
               </div>
             </div>
           </div>
 
           <section className={styles.block}>
-            <h2>About this event</h2>
+            <h2>{t('ev.about')}</h2>
             <p>{event.description}</p>
           </section>
 
           <section className={styles.block}>
-            <h2>Categories & format</h2>
+            <h2>{t('ev.formats')}</h2>
             <div className={styles.chipWrap}>
               {event.formats.map((f) => (
                 <span key={f} className={styles.formatChip}>{f}</span>
@@ -180,7 +182,7 @@ export default function EventDetail({ event }) {
           </section>
 
           <section className={styles.block}>
-            <h2>Accessibility & inclusion</h2>
+            <h2>{t('ev.access')}</h2>
             {event.access.length ? (
               <ul className={styles.accessList}>
                 {event.access.map((a) => (
@@ -188,23 +190,23 @@ export default function EventDetail({ event }) {
                 ))}
               </ul>
             ) : (
-              <p className={styles.muted}>The organiser has not listed specific access provisions. Contact them before registering if you have access needs.</p>
+              <p className={styles.muted}>{t('ev.noAccess')}</p>
             )}
           </section>
 
           <div className={styles.twoCol}>
             <section className={styles.block}>
-              <h2>Highlights</h2>
+              <h2>{t('ev.highlights')}</h2>
               <ul className={styles.tickList}>
                 {event.highlights.map((h) => <li key={h}>{h}</li>)}
               </ul>
             </section>
             <section className={styles.block}>
-              <h2>What&rsquo;s included</h2>
+              <h2>{t('ev.included')}</h2>
               <ul className={styles.tickList}>
                 {event.includes.map((h) => <li key={h}>{h}</li>)}
               </ul>
-              <h2 className={styles.mt}>What to bring</h2>
+              <h2 className={styles.mt}>{t('ev.bring')}</h2>
               <ul className={styles.tickList}>
                 {event.bring.map((h) => <li key={h}>{h}</li>)}
               </ul>
@@ -212,24 +214,24 @@ export default function EventDetail({ event }) {
           </div>
 
           <p className={styles.muted}>
-            <SampleDataBadge label="Illustrative listing" /> Dates, prices and availability are sample data for this demo. Always confirm with the organiser before paying.
+            <SampleDataBadge label="Illustrative listing" /> {t('ev.sampleNote')}
           </p>
         </article>
 
         <aside className={styles.ticketCard}>
-          <h2>Tickets</h2>
+          <h2>{t('ev.tickets')}</h2>
           <ul className={styles.tiers}>
             {event.price.tiers.map((t) => (
               <li key={t.label}>
                 <span>{t.label}</span>
-                <strong>{t.amount === 0 ? 'Free' : `₹${t.amount.toLocaleString('en-IN')}`}</strong>
+                <strong>{t.amount === 0 ? t('ev.free') : `₹${t.amount.toLocaleString('en-IN')}`}</strong>
               </li>
             ))}
           </ul>
           <div className={styles.capacityBig}>
             <span className={styles.bar}><span style={{ width: `${fill}%` }} /></span>
             <small>
-              {event.registered.toLocaleString('en-IN')} registered · {left > 0 ? `${left.toLocaleString('en-IN')} spots left` : 'Sold out'}
+              {left > 0 ? t('ev.regStats', { reg: event.registered.toLocaleString('en-IN'), left: left.toLocaleString('en-IN') }) : t('ev.regFull', { reg: event.registered.toLocaleString('en-IN') })}
             </small>
           </div>
 
@@ -241,34 +243,34 @@ export default function EventDetail({ event }) {
               className={`${styles.primaryBtn} ${styles.block100} ${canRegister ? '' : styles.disabled}`}
               aria-disabled={!canRegister}
             >
-              Register on organiser site <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
+              {t('ev.registerSite')} <i className="fa-solid fa-arrow-up-right-from-square" aria-hidden="true" />
             </a>
           ) : (
             <button className={`${styles.primaryBtn} ${styles.block100}`} onClick={toggleSave} disabled={!canRegister && !saved}>
-              {saved ? <><i className="fa-solid fa-check" aria-hidden="true" /> Interested</> : 'I’m interested'}
+              {saved ? <><i className="fa-solid fa-check" aria-hidden="true" /> {t('ev.interested')}</> : t('ev.interestedCta')}
             </button>
           )}
 
           <div className={styles.actionRow}>
             <button className={styles.ghostBtn} onClick={toggleSave} aria-pressed={saved}>
-              <i className={saved ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'} aria-hidden="true" /> {saved ? 'Saved' : 'Save'}
+              <i className={saved ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'} aria-hidden="true" /> {saved ? t('ev.saved') : t('ev.saveBtn')}
             </button>
             <button className={styles.ghostBtn} onClick={addToCalendar}>
-              <i className="fa-regular fa-calendar-plus" aria-hidden="true" /> Calendar
+              <i className="fa-regular fa-calendar-plus" aria-hidden="true" /> {t('ev.calendarBtn')}
             </button>
             <button className={styles.ghostBtn} onClick={share}>
-              <i className="fa-solid fa-share-nodes" aria-hidden="true" /> Share
+              <i className="fa-solid fa-share-nodes" aria-hidden="true" /> {t('ev.shareBtn')}
             </button>
           </div>
           <p className={styles.organiser}>
-            <i className="fa-solid fa-building-flag" aria-hidden="true" /> Organised by <strong>{event.organiser}</strong>
+            <i className="fa-solid fa-building-flag" aria-hidden="true" /> {t('ev.organisedBy')} <strong>{event.organiser}</strong>
           </p>
         </aside>
       </div>
 
       {more.length > 0 && (
         <section className={styles.more}>
-          <h2>More in {city?.name}</h2>
+          <h2>{t('ev.moreIn', { city: city?.name })}</h2>
           <div className={styles.moreGrid}>
             {more.map((e) => (
               <Link key={e.id} href={`/events/${e.city}/${e.id}`} className={styles.moreCard}>

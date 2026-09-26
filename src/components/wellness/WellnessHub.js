@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useTranslation } from 'react-i18next';
 import { NEARBY_CENTRES } from './nearbyCentres';
+import PageHeader from '../layout/PageHeader';
 import './WellnessHub.css';
 
 // Leaflet touches `window` at import time — keep it out of SSR like the
@@ -103,15 +104,12 @@ export default function WellnessHub({ showHero = true }) {
   return (
     <div className="wellness-page">
       {showHero && (
-        <header className="wellness-hero">
-          <div>
-            <h1>{t('wellness.title')}</h1>
-            <p>{t('wellness.subtitle')}</p>
-          </div>
-          <span className="wellness-info-chip">
-            <i className="fa-solid fa-circle-info"></i> {t('wellness.guidanceChip')}
-          </span>
-        </header>
+        <PageHeader
+          title={t('wellness.title')}
+          subtitle={t('wellness.subtitle')}
+          chipIcon="fa-solid fa-circle-info"
+          chipText={t('wellness.guidanceChip')}
+        />
       )}
 
       {/* 1 · AYURVEDA — the hero focus, with photos */}

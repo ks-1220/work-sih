@@ -13,45 +13,6 @@
   font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
 }
 
-.wellness-hero {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  flex-wrap: wrap;
-  padding: 14px 16px;
-  border-radius: 14px;
-  color: #fff;
-  background: linear-gradient(135deg, #493971 0%, #6a1b9a 55%, #7e57c2 100%);
-  box-shadow: 0 8px 20px rgba(73, 57, 113, 0.25);
-  margin-bottom: 14px;
-}
-
-.wellness-hero h1 {
-  margin: 0;
-  font-size: clamp(1.5rem, 3vw, 2rem);
-  font-weight: 900;
-  letter-spacing: 0.01em;
-}
-
-.wellness-hero p {
-  margin: 6px 0 0;
-  font-size: 0.92rem;
-  opacity: 0.93;
-}
-
-.wellness-info-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 8px 14px;
-  font-size: 0.78rem;
-  font-weight: 700;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.4);
-  border-radius: 999px;
-}
-
 .well-section {
   margin-bottom: 16px;
 }

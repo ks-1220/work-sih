@@ -3,6 +3,7 @@
 import { useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslation } from 'react-i18next';
 import {
   ACCESS_TAGS,
   AGE_GROUPS,
@@ -22,23 +23,28 @@ import SampleDataBadge from '../shared/SampleDataBadge';
 import styles from './Events.module.css';
 
 const WHEN = [
-  ['upcoming', 'Upcoming'],
-  ['week', 'Next 7 days'],
-  ['month', 'Next 30 days'],
-  ['quarter', 'Next 3 months'],
-  ['past', 'Past events'],
-  ['all', 'All dates'],
+  ['upcoming', 'ev.whenUpcoming'],
+  ['week', 'ev.whenWeek'],
+  ['month', 'ev.whenMonth'],
+  ['quarter', 'ev.whenQuarter'],
+  ['past', 'ev.whenPast'],
+  ['all', 'ev.whenAll'],
 ];
 
 const SORTS = [
-  ['soonest', 'Soonest first'],
-  ['latest', 'Latest first'],
-  ['price-asc', 'Price: low to high'],
-  ['price-desc', 'Price: high to low'],
-  ['popular', 'Most popular'],
+  ['soonest', 'ev.sortSoonest'],
+  ['latest', 'ev.sortLatest'],
+  ['price-asc', 'ev.sortPriceAsc'],
+  ['price-desc', 'ev.sortPriceDesc'],
+  ['popular', 'ev.sortPopular'],
 ];
 
-const LEVELS = ['All levels', 'Beginner', 'Intermediate', 'Advanced'];
+// Ids stay English (they match data values); labels resolve via i18n.
+const LEVELS = [
+  ['Beginner', 'ev.levelBeginner'],
+  ['Intermediate', 'ev.levelIntermediate'],
+  ['Advanced', 'ev.levelAdvanced'],
+];
 
 const initialFilters = {
   query: '',
@@ -57,16 +63,24 @@ function toggle(list, value) {
 
 export function eventStatus(event, today) {
   if (!today) return null;
-  if (isPast(event, today)) return { label: 'Past event', tone: 'muted' };
-  if (spotsLeft(event) === 0) return { label: 'Sold out', tone: 'danger' };
+  if (isPast(event, today)) return { key: 'ev.stPast', tone: 'muted' };
+  if (spotsLeft(event) === 0) return { key: 'ev.stSoldOut', tone: 'danger' };
   const closesIn = daysBetween(today, event.registrationCloses);
-  if (closesIn < 0) return { label: 'Registration closed', tone: 'muted' };
-  if (closesIn <= 7) return { label: closesIn === 0 ? 'Closes today' : `Closes in ${closesIn}d`, tone: 'warning' };
-  if (spotsLeft(event) / event.capacity < 0.15) return { label: 'Filling fast', tone: 'warning' };
+  if (closesIn < 0) return { key: 'ev.stClosed', tone: 'muted' };
+  if (closesIn <= 7) return closesIn === 0 ? { key: 'ev.stToday', tone: 'warning' } : { key: 'ev.stClosesIn', tone: 'warning', days: closesIn };
+  if (spotsLeft(event) / event.capacity < 0.15) return { key: 'ev.stFilling', tone: 'warning' };
   return null;
 }
 
+/** Resolve an eventStatus() result through i18n (handles the day count). */
+export function statusText(status, t) {
+  if (!status) return '';
+  if (status.key === 'ev.stClosesIn') return t(status.key, { days: status.days });
+  return t(status.key);
+}
+
 export default function EventsExplorer({ citySlug = null }) {
+  const { t } = useTranslation();
   const router = useRouter();
   const today = useToday();
   const city = CITIES.find((c) => c.slug === citySlug) || null;
@@ -124,14 +138,14 @@ export default function EventsExplorer({ citySlug = null }) {
     filters.access.length +
     (filters.openOnly ? 1 : 0);
 
-  const heading = city ? `Fitness events in ${city.name}` : 'Fitness events across India';
+  const heading = city ? t('ev.headingIn', { city: city.name }) : t('ev.headingAll');
 
   return (
     <div className={styles.page}>
       <nav className={styles.crumbs} aria-label="Breadcrumb">
-        <Link href="/">Home</Link>
+        <Link href="/">{t('nav.home')}</Link>
         <span aria-hidden="true">/</span>
-        {city ? <Link href="/events">Events</Link> : <span>Events</span>}
+        {city ? <Link href="/events">{t('ev.metaTitle')}</Link> : <span>{t('ev.metaTitle')}</span>}
         {city && (
           <>
             <span aria-hidden="true">/</span>
@@ -144,7 +158,7 @@ export default function EventsExplorer({ citySlug = null }) {
         <div>
           <h1 className={styles.h1}>{heading}</h1>
           <p className={styles.sub}>
-            Runs, HYROX, rides, yoga, treks and adaptive sport, filtered for your age, budget and access needs.{' '}
+            {t('ev.sub')}{' '}
             <SampleDataBadge label="Illustrative listings" />
           </p>
         </div>
@@ -153,9 +167,9 @@ export default function EventsExplorer({ citySlug = null }) {
           <select
             value={city ? city.slug : ''}
             onChange={(e) => router.push(e.target.value ? `/events/${e.target.value}` : '/events')}
-            aria-label="Choose city"
+            aria-label={t('ev.chooseCity')}
           >
-            <option value="">All cities</option>
+            <option value="">{t('ev.allCities')}</option>
             {CITIES.map((c) => (
               <option key={c.slug} value={c.slug}>
                 {c.name}
@@ -168,41 +182,41 @@ export default function EventsExplorer({ citySlug = null }) {
       <div className={styles.layout}>
         <aside className={`${styles.filters} ${showFilters ? styles.filtersOpen : ''}`} aria-label="Filters">
           <div className={styles.filterHead}>
-            <strong>Filters</strong>
+            <strong>{t('ev.filters')}</strong>
             {activeCount > 0 && (
               <button className={styles.linkBtn} onClick={() => setFilters(initialFilters)}>
-                Reset ({activeCount})
+                {t('ev.resetCount', { n: activeCount })}
               </button>
             )}
           </div>
 
           <fieldset className={styles.fieldset}>
-            <legend>When</legend>
+            <legend>{t('ev.when')}</legend>
             {WHEN.map(([id, label]) => (
               <label key={id} className={styles.radio}>
                 <input type="radio" name="when" checked={filters.when === id} onChange={() => set({ when: id })} />
-                {label}
+                {t(label)}
               </label>
             ))}
           </fieldset>
 
           <fieldset className={styles.fieldset}>
-            <legend>Price</legend>
+            <legend>{t('ev.price')}</legend>
             <div className={styles.segment}>
               {[
-                ['all', 'All'],
-                ['free', 'Free'],
-                ['paid', 'Paid'],
+                ['all', 'ev.priceAll'],
+                ['free', 'ev.free'],
+                ['paid', 'ev.paid'],
               ].map(([id, label]) => (
                 <button key={id} aria-pressed={filters.price === id} className={filters.price === id ? styles.segOn : ''} onClick={() => set({ price: id })}>
-                  {label}
+                  {t(label)}
                 </button>
               ))}
             </div>
           </fieldset>
 
           <fieldset className={styles.fieldset}>
-            <legend>Type of event</legend>
+            <legend>{t('ev.type')}</legend>
             <div className={styles.chipWrap}>
               {Object.entries(EVENT_TYPES).map(([id, t]) => (
                 <button
@@ -218,27 +232,27 @@ export default function EventsExplorer({ citySlug = null }) {
           </fieldset>
 
           <fieldset className={styles.fieldset}>
-            <legend>Age group</legend>
+            <legend>{t('ev.age')}</legend>
             {Object.entries(AGE_GROUPS).map(([id, label]) => (
               <label key={id} className={styles.radio}>
                 <input type="checkbox" checked={filters.ages.includes(id)} onChange={() => set({ ages: toggle(filters.ages, id) })} />
-                {label}
+                {t(label)}
               </label>
             ))}
           </fieldset>
 
           <fieldset className={styles.fieldset}>
-            <legend>Level</legend>
+            <legend>{t('ev.level')}</legend>
             <select className={styles.select} value={filters.level} onChange={(e) => set({ level: e.target.value })}>
-              <option value="any">Any level</option>
-              {LEVELS.map((l) => (
-                <option key={l}>{l}</option>
+              <option value="any">{t('ev.levelAny')}</option>
+              {LEVELS.map(([id, key]) => (
+                <option key={id} value={id}>{t(key)}</option>
               ))}
             </select>
           </fieldset>
 
           <fieldset className={styles.fieldset}>
-            <legend>Accessibility & inclusion</legend>
+            <legend>{t('ev.access')}</legend>
             {Object.entries(ACCESS_TAGS).map(([id, tag]) => (
               <label key={id} className={styles.radio}>
                 <input type="checkbox" checked={filters.access.includes(id)} onChange={() => set({ access: toggle(filters.access, id) })} />
@@ -249,11 +263,11 @@ export default function EventsExplorer({ citySlug = null }) {
 
           <label className={`${styles.radio} ${styles.switchRow}`}>
             <input type="checkbox" checked={filters.openOnly} onChange={() => set({ openOnly: !filters.openOnly })} />
-            Hide sold-out events
+            {t('ev.hideSoldOut')}
           </label>
 
           <button className={`${styles.primaryBtn} ${styles.applyBtn}`} onClick={() => setShowFilters(false)}>
-            Show {results.length} events
+            {t('ev.showN', { n: results.length })}
           </button>
         </aside>
 
@@ -263,38 +277,38 @@ export default function EventsExplorer({ citySlug = null }) {
               <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
               <input
                 type="search"
-                placeholder="Search events, organisers, venues"
+                placeholder={t('ev.searchPh')}
                 value={filters.query}
                 onChange={(e) => set({ query: e.target.value })}
               />
             </label>
             <button className={styles.filterToggle} onClick={() => setShowFilters((v) => !v)} aria-expanded={showFilters}>
-              <i className="fa-solid fa-filter" aria-hidden="true" /> Filters{activeCount ? ` (${activeCount})` : ''}
+              <i className="fa-solid fa-filter" aria-hidden="true" /> {t('ev.filters')}{activeCount ? ` (${activeCount})` : ''}
             </button>
-            <select className={styles.select} value={sort} onChange={(e) => setSort(e.target.value)} aria-label="Sort events">
+            <select className={styles.select} value={sort} onChange={(e) => setSort(e.target.value)} aria-label={t('ev.sortLabel')}>
               {SORTS.map(([id, label]) => (
                 <option key={id} value={id}>
-                  {label}
+                  {t(label)}
                 </option>
               ))}
             </select>
           </div>
 
           <p className={styles.count} aria-live="polite">
-            {results.length} {results.length === 1 ? 'event' : 'events'}
+            {t('ev.count', { count: results.length })}
           </p>
 
           {results.length === 0 ? (
             <div className={styles.empty}>
               <i className="fa-regular fa-calendar-xmark" aria-hidden="true" />
-              <p>No events match these filters{city ? ` in ${city.name}` : ''}.</p>
+              <p>{city ? t('ev.emptyCity', { city: city.name }) : t('ev.emptyAll')}</p>
               <div className={styles.emptyActions}>
                 <button className={styles.primaryBtn} onClick={() => setFilters(initialFilters)}>
-                  Reset filters
+                  {t('ev.resetFilters')}
                 </button>
                 {city && (
                   <Link className={styles.ghostBtn} href="/events">
-                    See all cities
+                    {t('ev.seeAllCities')}
                   </Link>
                 )}
               </div>
@@ -313,6 +327,7 @@ export default function EventsExplorer({ citySlug = null }) {
 }
 
 function EventCard({ event, today, showCity }) {
+  const { t } = useTranslation();
   const img = photo(event.photo);
   const type = EVENT_TYPES[event.type];
   const status = eventStatus(event, today);
@@ -337,7 +352,7 @@ function EventCard({ event, today, showCity }) {
             <i className={type.icon} aria-hidden="true" /> {type.label}
           </span>
           <span className={styles.level}>{event.level}</span>
-          {status && <span className={`${styles.status} ${styles[status.tone]}`}>{status.label}</span>}
+          {status && <span className={`${styles.status} ${styles[status.tone]}`}>{statusText(status, t)}</span>}
         </div>
         <h2 className={styles.cardTitle}>
           <Link href={href}>{event.title}</Link>
@@ -358,10 +373,10 @@ function EventCard({ event, today, showCity }) {
           </span>
           <span className={styles.capacity} title={`${event.registered.toLocaleString('en-IN')} of ${event.capacity.toLocaleString('en-IN')} registered`}>
             <span className={styles.bar}><span style={{ width: `${fill}%` }} /></span>
-            {spotsLeft(event) > 0 ? `${spotsLeft(event).toLocaleString('en-IN')} spots left` : 'Full'}
+            {spotsLeft(event) > 0 ? t('ev.spotsLeft', { n: spotsLeft(event).toLocaleString('en-IN') }) : t('ev.full')}
           </span>
           <Link href={href} className={styles.detailsLink}>
-            Details <i className="fa-solid fa-arrow-right" aria-hidden="true" />
+            {t('ev.details')} <i className="fa-solid fa-arrow-right" aria-hidden="true" />
           </Link>
         </div>
       </div>

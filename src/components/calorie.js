@@ -4,6 +4,7 @@
 
 
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 // Calorie dataset as a constant
 const calorieData = [
@@ -60,6 +61,7 @@ const calorieData = [
 ];
 
 const CalorieTracker = () => {
+    const { t } = useTranslation();
     const [age, setAge] = useState('');
     const [gender, setGender] = useState('');
     const [breakfast, setBreakfast] = useState('');
@@ -113,38 +115,38 @@ const CalorieTracker = () => {
     return (
         <div style={{ maxWidth: '500px', margin: '0 auto', padding: '20px' }}>
             <div style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '20px' }}>
-                <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Indian Food Calorie Tracker</h2>
+                <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>{t('cal.title')}</h2>
                 <div style={{ marginBottom: '15px' }}>
-                    <label>Age</label>
+                    <label>{t('cal.age')}</label>
                     <input
                         type="number"
                         value={age}
                         onChange={(e) => setAge(e.target.value)}
-                        placeholder="Enter your age"
+                        placeholder={t('cal.agePh')}
                         style={{ width: '100%', padding: '8px', marginTop: '5px' }}
                     />
                 </div>
                 <div style={{ marginBottom: '15px' }}>
-                    <label>Gender</label>
+                    <label>{t('cal.gender')}</label>
                     <select
                         value={gender}
                         onChange={(e) => setGender(e.target.value)}
                         style={{ width: '100%', padding: '8px', marginTop: '5px' }}
                     >
-                        <option value="" disabled>Select Gender</option>
-                        <option value="Male">Male</option>
-                        <option value="Female">Female</option>
+                        <option value="" disabled>{t('cal.genderPh')}</option>
+                        <option value="Male">{t('cal.male')}</option>
+                        <option value="Female">{t('cal.female')}</option>
                     </select>
                 </div>
-                {['Breakfast', 'Lunch', 'Dinner', 'Snacks'].map((meal) => (
+                {['breakfast', 'lunch', 'dinner', 'snacks'].map((meal) => (
                     <div style={{ marginBottom: '15px' }} key={meal}>
-                        <label>{meal}</label>
+                        <label>{t(`cal.${meal}`)}</label>
                         <input
-                            placeholder={`Enter items for ${meal.toLowerCase()}`}
+                            placeholder={t('cal.mealPh', { meal: t(`cal.${meal}`).toLowerCase() })}
                             onChange={(e) =>
-                                meal === 'Breakfast' ? setBreakfast(e.target.value) :
-                                meal === 'Lunch' ? setLunch(e.target.value) :
-                                meal === 'Dinner' ? setDinner(e.target.value) :
+                                meal === 'breakfast' ? setBreakfast(e.target.value) :
+                                meal === 'lunch' ? setLunch(e.target.value) :
+                                meal === 'dinner' ? setDinner(e.target.value) :
                                 setSnacks(e.target.value)
                             }
                             style={{ width: '100%', padding: '8px', marginTop: '5px' }}
@@ -163,14 +165,14 @@ const CalorieTracker = () => {
                         cursor: 'pointer',
                     }}
                 >
-                    Calculate Calories
+                    {t('cal.calculate')}
                 </button>
                 {results && (
                     <div style={{ marginTop: '20px' }}>
-                        <h3>Calorie Analysis</h3>
-                        <p>Total Calories Consumed: {results.totalCalories} calories</p>
-                        <p>Estimated BMR: {results.bmr.toFixed(0)} calories</p>
-                        <p>Net Calorie Intake: {results.netCalories.toFixed(0)} calories</p>
+                        <h3>{t('cal.analysis')}</h3>
+                        <p>{t('cal.total')}: {results.totalCalories} {t('cal.unit')}</p>
+                        <p>{t('cal.bmr')}: {results.bmr.toFixed(0)} {t('cal.unit')}</p>
+                        <p>{t('cal.net')}: {results.netCalories.toFixed(0)} {t('cal.unit')}</p>
                     </div>
                 )}
             </div>

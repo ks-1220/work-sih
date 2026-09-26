@@ -1,11 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useTranslation } from "react-i18next";
 import { registerUser } from "../../services/api";
 import { useAuth } from "../../store/auth";
 import { resolvePostAuthDestination } from "../../services/onboarding";
+import { takePendingGoogleProfile } from "../../services/googleAuth";
+import GoogleAuthButton from "../auth/GoogleAuthButton";
+import GoogleProfileForm from "../auth/GoogleProfileForm";
 import styles from "../auth/AuthForm.module.css";
 
 const Register = () => {
@@ -21,10 +24,18 @@ const Register = () => {
     password: "",
   });
   const [message, setMessage] = useState("");
+  // Set when Google verified a NEW user: show the required-inputs form
+  // instead of the email form. May also arrive via login/home handoff.
+  const [googlePending, setGooglePending] = useState(null);
   const router = useRouter();
   const searchParams = useSearchParams();
   const next = searchParams.get("next") || "/";
   const { storetokenInLS } = useAuth();
+
+  useEffect(() => {
+    const handed = takePendingGoogleProfile();
+    if (handed) setGooglePending(handed);
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -51,9 +62,53 @@ const Register = () => {
     }
   };
 
+  const handleGoogleSuccess = async (appToken) => {
+    // Known Google user: backend returned the app JWT straight away.
+    storetokenInLS(appToken);
+    router.push(resolvePostAuthDestination(next));
+  };
+
+  const handleGoogleNeedsProfile = async (pending) => {
+    // New Google user: collect the required inputs, then finish signup.
+    setGooglePending(pending);
+    setMessage("");
+  };
+
+  const handleGoogleProfileDone = async (appToken) => {
+    storetokenInLS(appToken);
+    router.push(resolvePostAuthDestination(next));
+  };
+
+  const handleGoogleError = (message) => {
+    setMessage(message || t("google.failed"));
+  };
+
   return (
     <div className={styles.container}>
-      <h2 className={styles.heading}>{t("register.heading")}</h2>
+      <h2 className={styles.heading}>
+        {googlePending ? t("google.completeTitle") : t("register.heading")}
+      </h2>
+      {googlePending ? (
+        <GoogleProfileForm
+          pending={googlePending}
+          onSuccess={handleGoogleProfileDone}
+          onError={handleGoogleError}
+          onBack={() => setGooglePending(null)}
+        />
+      ) : (
+      <>
+      <div className={styles.form} style={{ marginBottom: 14 }}>
+        <GoogleAuthButton
+          mode="signup"
+          variant="card"
+          onSuccess={handleGoogleSuccess}
+          onNeedsProfile={handleGoogleNeedsProfile}
+          onError={handleGoogleError}
+        />
+        <div className={styles.divider} aria-hidden="true">
+          or
+        </div>
+      </div>
       <form className={styles.form} onSubmit={handleSubmit}>
         <input
           type="text"
@@ -132,6 +187,8 @@ const Register = () => {
           {t("register.buttonText")}
         </button>
       </form>
+      </>
+      )}
       {message && <p className={styles.message}>{typeof message === "string" ? message : JSON.stringify(message)}</p>}
     </div>
   );

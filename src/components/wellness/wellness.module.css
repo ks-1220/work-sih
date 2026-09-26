@@ -298,27 +298,14 @@
   background: #f5f0fd;
 }
 
-.modelsBanner {
-  background: linear-gradient(135deg, var(--violet-deep) 0%, var(--violet) 55%, #8e44c7 100%);
-  color: #fff;
-  text-align: center;
-  padding: clamp(26px, 5vw, 48px) clamp(16px, 4vw, 40px);
-}
+/* Page headers use the shared PageHeader component. */
 
-.modelsBannerTitle {
-  margin: 0 0 8px;
-  font-size: clamp(1.8rem, 4vw, 2.6rem);
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  color: #fff;
-}
-
-.modelsBannerLead {
+/* Constrains the header bar to the same centred container as the content
+   below (Senior Wellness Check), so all left/right edges line up. */
+.topBarWrap {
+  max-width: 1120px;
   margin: 0 auto;
-  max-width: 60ch;
-  color: rgba(255, 255, 255, 0.92);
-  font-size: clamp(0.95rem, 1.8vw, 1.15rem);
-  line-height: 1.6;
+  padding: clamp(16px, 3vw, 28px) clamp(12px, 3vw, 28px) 0;
 }
 
 /* Same centred container as the hub + extras below — both ends aligned. */

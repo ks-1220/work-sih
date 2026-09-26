@@ -9,6 +9,8 @@ import hi from './locales/hi/translation.json';
 // the Next.js server render. It was already inert in practice: `lng: 'en'`
 // below pins the initial language, so detection never ran. Language is chosen
 // through the LanguageSwitcher component instead.
+// Resources are bundled at build/dev-compile time: touching this file forces
+// a fresh compile of the locale chunks (tracker.lastMonth and friends).
 if (!i18n.isInitialized) {
   i18n.use(initReactI18next).init({
     resources: {
