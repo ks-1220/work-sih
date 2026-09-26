@@ -5,6 +5,8 @@ import SwapCards from '../components/dietcards/dietcards';
 import PlannerBanner from '../components/dietlink/card';
 import RecipeSection from '../components/recipesection/RecipeSection';
 import Navbar from '../components/Navbar/navbar';
+import PageHeader from '../components/layout/PageHeader';
+import { useTranslation } from 'react-i18next';
 
 // Split look, dietary page only: purple sidebar, lilac left panel with the
 // purple banner + photo swap cards, regional recipes on the right canvas.
@@ -63,12 +65,16 @@ const RightPanel = styled.div`
 `;
 
 export default function DietaryPage() {
+  const { t } = useTranslation();
   return (
     <Container>
       <Sidebar>
         <Navbar />
       </Sidebar>
       <Content>
+        <div style={{ gridColumn: '1 / -1' }}>
+          <PageHeader title={t('nav.dietary')} subtitle={t('dietarySub')} />
+        </div>
         <LeftPanel>
           <PlannerBanner />
           <SwapCards />

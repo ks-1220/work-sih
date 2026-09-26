@@ -7,7 +7,9 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { loginUser } from "../../services/api";
 import { useAuth } from "../../store/auth";
 import { resolvePostAuthDestination } from "../../services/onboarding";
+import { stashPendingGoogleProfile } from "../../services/googleAuth";
 import { useTranslation } from "react-i18next";
+import GoogleAuthButton from "../auth/GoogleAuthButton";
 import styles from "../auth/AuthForm.module.css";
 
 const CustomLogin = () => {
@@ -42,6 +44,26 @@ const CustomLogin = () => {
     }
   };
 
+  const handleGoogleSuccess = async (appToken) => {
+    storetokenInLS(appToken);
+    setIsError(false);
+    setCustomMessage("Login successful! Taking you to your fitness snapshot…");
+    router.push(resolvePostAuthDestination(next));
+  };
+
+  const handleGoogleNeedsProfile = async (pending) => {
+    // Google verified a NEW user on the login page: hand the verified
+    // credential to /register so the profile form renders without a
+    // second Google click.
+    stashPendingGoogleProfile(pending);
+    router.push(`/register?next=${encodeURIComponent(next)}`);
+  };
+
+  const handleGoogleError = (message) => {
+    setIsError(true);
+    setCustomMessage(message || t("google.failed"));
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.brand}>
@@ -52,6 +74,19 @@ const CustomLogin = () => {
       </div>
       <h2 className={styles.heading}>{t("login.heading")}</h2>
       <p className={styles.subheading}>{t("login.subheading")}</p>
+      {/* Google comes first: one-tap-free GIS button, same app JWT as email. */}
+      <div className={styles.form} style={{ marginBottom: 14 }}>
+        <GoogleAuthButton
+          mode="login"
+          variant="card"
+          onSuccess={handleGoogleSuccess}
+          onNeedsProfile={handleGoogleNeedsProfile}
+          onError={handleGoogleError}
+        />
+        <div className={styles.divider} aria-hidden="true">
+          or
+        </div>
+      </div>
       <form className={styles.form} onSubmit={handleCustomSubmit}>
         <label className={styles.field}>
           <span className={styles.label}>{t("login.emailPlaceholder")}</span>

@@ -1,30 +1,40 @@
 "use client";
 
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { MYTH_FACT_QUESTIONS } from "./mythFactData";
+import { useAuth } from "../../store/auth";
+import { awardBadges } from "../../utils/badges";
 import styles from "./shefit.module.css";
 
-// A lightweight, stateless-across-visits quiz: no score is kept, nothing is
-// persisted or sent anywhere. The interaction (answer, reveal, explanation,
-// next) is the whole point - no points/badges/leaderboards as required.
+// A lightweight quiz: finishing all questions earns the Quiz Whiz badge
+// (per-user). Answers themselves are never persisted or sent anywhere.
 export default function MythOrFact() {
+  const { t, i18n } = useTranslation();
+  const { user } = useAuth();
   const [index, setIndex] = useState(0);
   const [selected, setSelected] = useState(null);
   const [done, setDone] = useState(false);
+  const [correct, setCorrect] = useState(0);
 
   const total = MYTH_FACT_QUESTIONS.length;
   const question = MYTH_FACT_QUESTIONS[index];
   const revealed = selected !== null;
   const isCorrect = revealed && selected === question.answer;
+  const lang = i18n?.language?.startsWith("hi") ? "hi" : "en";
+  const statement = lang === "hi" && question.statementHi ? question.statementHi : question.statement;
+  const explanation = lang === "hi" && question.explanationHi ? question.explanationHi : question.explanation;
 
   const handleAnswer = (choice) => {
     if (revealed) return;
     setSelected(choice);
+    if (choice === question.answer) setCorrect((c) => c + 1);
   };
 
   const handleNext = () => {
     if (index + 1 >= total) {
       setDone(true);
+      awardBadges(user, ["quiz_whiz"]);
       return;
     }
     setIndex((prev) => prev + 1);
@@ -34,19 +44,20 @@ export default function MythOrFact() {
   const handleRestart = () => {
     setIndex(0);
     setSelected(null);
+    setCorrect(0);
     setDone(false);
   };
 
   if (done) {
     return (
       <div className={styles.quizCard}>
-        <p className={styles.quizEmoji} aria-hidden="true">💡</p>
-        <h3 className={styles.quizDoneTitle}>You&apos;ve been through all {total} questions</h3>
+        <p className={styles.quizEmoji} aria-hidden="true">🏅</p>
+        <h3 className={styles.quizDoneTitle}>{t("shefit.quizDone", { total, correct })}</h3>
         <p className={styles.quizDoneText}>
-          Curious for another round, or want to look at a statement again?
+          {t("shefit.quizBadgeNote")}
         </p>
         <button className={styles.primaryBtn} onClick={handleRestart}>
-          Play Again
+          {t("shefit.playAgain")}
         </button>
       </div>
     );
@@ -54,9 +65,12 @@ export default function MythOrFact() {
 
   return (
     <div className={styles.quizCard}>
+      <div className={styles.quizProgressTop} aria-hidden="true">
+        <span style={{ width: `${((index + (revealed ? 1 : 0)) / total) * 100}%` }} />
+      </div>
       <p className={styles.quizEmoji} aria-hidden="true">💡</p>
-      <p className={styles.quizKicker}>MYTH OR FACT?</p>
-      <h3 className={styles.quizStatement}>&ldquo;{question.statement}&rdquo;</h3>
+      <p className={styles.quizKicker}>{t("shefit.quizKicker")}</p>
+      <h3 className={styles.quizStatement}>&ldquo;{statement}&rdquo;</h3>
 
       <div className={styles.quizChoices}>
         <button
@@ -66,7 +80,7 @@ export default function MythOrFact() {
           onClick={() => handleAnswer("myth")}
           disabled={revealed}
         >
-          MYTH
+          {t("shefit.myth")}
         </button>
         <button
           className={`${styles.quizChoiceBtn} ${
@@ -75,24 +89,24 @@ export default function MythOrFact() {
           onClick={() => handleAnswer("fact")}
           disabled={revealed}
         >
-          FACT
+          {t("shefit.fact")}
         </button>
       </div>
 
       {revealed && (
         <div className={styles.quizResult}>
           <p className={isCorrect ? styles.quizCorrectLabel : styles.quizWrongLabel}>
-            {isCorrect ? "That's right." : "Not quite."}
+            {isCorrect ? t("shefit.right") : t("shefit.wrong")}
           </p>
-          <p className={styles.quizExplanation}>{question.explanation}</p>
+          <p className={styles.quizExplanation}>{explanation}</p>
           <button className={styles.primaryBtn} onClick={handleNext}>
-            {index + 1 >= total ? "Finish" : "Next"}
+            {index + 1 >= total ? t("shefit.finish") : t("shefit.next")}
           </button>
         </div>
       )}
 
       <p className={styles.quizProgress}>
-        Question {index + 1} of {total}
+        {t("shefit.quizProgress", { current: index + 1, total })}
       </p>
     </div>
   );

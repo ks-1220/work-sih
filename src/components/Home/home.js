@@ -3,18 +3,22 @@
 import React from 'react';
 import Link from 'next/link';
 import { useAuth } from '../../store/auth';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import Navbar from '../Navbar/navbar';
 import { useTranslation } from "react-i18next";
 import FitnessEventsMap from '../map/FitnessEventsMap';
 import SampleDataBadge from '../shared/SampleDataBadge';
+import GoogleAuthButton from '../auth/GoogleAuthButton';
+import GovBanner from '../gov/GovBanner';
+import { stashPendingGoogleProfile } from '../../services/googleAuth';
 import { demoHomeStats } from '../../data/demoStats';
 import './home.css';
 
 export default function Homesection() {
   const { t } = useTranslation();
-  const { isLoggedIN, isAuthReady, LogoutUser } = useAuth();
+  const { isLoggedIN, isAuthReady, LogoutUser, storetokenInLS } = useAuth();
   const pathname = usePathname();
+  const router = useRouter();
 
   const activities = [
     {
@@ -86,10 +90,24 @@ export default function Homesection() {
               <p>{t('home.welcomeSub')}</p>
             </div>
             <div className="home-hero-actions">
+              <div className="home-google-wrap">
+                <GoogleAuthButton
+                  mode="continue"
+                  variant="hero"
+                  onSuccess={(token) => storetokenInLS(token)}
+                  onNeedsProfile={(pending) => {
+                    stashPendingGoogleProfile(pending);
+                    router.push(`/register?next=${encodeURIComponent(pathname || '/')}`);
+                  }}
+                  onError={() => {}}
+                />
+              </div>
               <Link href={`/login?next=${encodeURIComponent(pathname || '/')}`} className="home-email-btn">{t('home.emailBtn')}</Link>
             </div>
           </div>
         ) : null}
+        {/* Government fitness missions — visible to everyone */}
+        <GovBanner />
         {/* Left Content Area */}
         <div className="left-content">
           {/* Fitness Activities Gallery */}

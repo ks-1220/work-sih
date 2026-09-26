@@ -11,18 +11,28 @@ const PILLARS = [
   { code: 'C', labelKey: 'pillars.creative', icon: 'fa-solid fa-palette' },
 ];
 
-const TOTAL_DAYS = 30;
-
-export default function Calendar({ activityCounts = {}, onActivitySelect }) {
+export default function Calendar({
+  activityCounts = {},
+  onActivitySelect,
+  year,
+  month,
+  onPrevMonth,
+  onNextMonth,
+  onGoToday,
+}) {
   const { t, i18n } = useTranslation();
   const now = new Date();
-  // Locale-aware month names — Hindi renders महीना names, English default.
-  const locale = i18n?.language?.startsWith('hi') ? 'hi-IN' : 'en-US';
-  const monthName = now.toLocaleString(locale, { month: 'long' });
-  const year = now.getFullYear();
-  const isEnglish = !i18n?.language?.startsWith('hi');
+  // Uncontrolled fallback (keeps old callers working): current month.
+  const viewYear = year ?? now.getFullYear();
+  const viewMonth = month ?? now.getMonth() + 1; // 1-12
+  const canNav = Boolean(onPrevMonth && onNextMonth);
 
-  const days = Array.from({ length: TOTAL_DAYS }, (_, i) => i + 1);
+  const locale = i18n?.language?.startsWith('hi') ? 'hi-IN' : 'en-US';
+  const monthName = new Date(viewYear, viewMonth - 1, 1).toLocaleString(locale, { month: 'long' });
+  const isEnglish = !i18n?.language?.startsWith('hi');
+  const daysInMonth = new Date(viewYear, viewMonth, 0).getDate();
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  const isCurrentMonth = viewYear === now.getFullYear() && viewMonth === now.getMonth() + 1;
 
   const ordinal = (day) => {
     if (!isEnglish) return `${monthName} ${day}`;
@@ -33,8 +43,26 @@ export default function Calendar({ activityCounts = {}, onActivitySelect }) {
   return (
     <div className="weboox-cal">
       <div className="weboox-cal-title">
-        <h2>{monthName} {year}</h2>
+        <h2>{monthName} {viewYear}</h2>
         <span>{t('calendar.hint')}</span>
+        {canNav && (
+          <div className="weboox-month-nav" role="group" aria-label={t('calendar.monthNav')}>
+            <button type="button" onClick={onPrevMonth} aria-label={t('calendar.prevMonth')}>
+              <i className="fa-solid fa-chevron-left"></i> {t('calendar.prevMonth')}
+            </button>
+            <button
+              type="button"
+              onClick={onGoToday || (() => {})}
+              disabled={!onGoToday}
+              style={onGoToday ? undefined : { display: "none" }}
+            >
+              {t('calendar.todayMonth')}
+            </button>
+            <button type="button" onClick={onNextMonth} aria-label={t('calendar.nextMonth')}>
+              {t('calendar.nextMonth')} <i className="fa-solid fa-chevron-right"></i>
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="weboox-grid">
@@ -46,7 +74,7 @@ export default function Calendar({ activityCounts = {}, onActivitySelect }) {
             C: !!activityCounts[day]?.C,
           };
           const done = Object.values(checks).filter(Boolean).length;
-          const isToday = day === now.getDate();
+          const isToday = isCurrentMonth && day === now.getDate();
 
           return (
             <div key={day} className={`weboox-card ${isToday ? 'weboox-card-today' : ''}`}>

@@ -313,6 +313,38 @@ main1 {
   max-width: 100%;
 }
 
+/* Google Identity Services button slot on the dark hero. GIS renders its own
+   branded iframe inside; this wrapper keeps it pill-aligned with the email
+   button and constrains its notice text to a readable width. */
+.home-google-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  max-width: 300px;
+}
+
+.home-google-wrap p {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.92);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px dashed rgba(255, 255, 255, 0.45);
+  border-radius: 10px;
+  padding: 8px 10px;
+}
+
+.home-google-wrap p code {
+  font-size: 0.72rem;
+  color: #fff;
+}
+
+.home-google-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .home-email-btn:focus-visible {
   outline: 3px solid #fff;
   outline-offset: 2px;

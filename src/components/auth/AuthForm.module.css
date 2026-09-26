@@ -224,8 +224,55 @@ select.input {
 
 .googleWrap {
   display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
   justify-content: center;
   min-height: 44px;
+}
+
+/* "Last signed in as X" + "Google verified Y" identity chips. Never a bare
+   spinner: every Google stage carries a labelled notice. */
+.accountHint {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  padding: 8px 12px;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  color: #493971;
+  background: #f1f5fd;
+  border: 1px solid #dbe3f3;
+  border-radius: 999px;
+}
+
+.accountHint img {
+  border-radius: 50%;
+  flex: none;
+}
+
+.accountHint strong {
+  font-weight: 800;
+}
+
+/* Small inline spinner used inside staged status notices. */
+.spinner {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: 6px;
+  vertical-align: -2px;
+  border: 2px solid #c9d6f0;
+  border-top-color: #493971;
+  border-radius: 50%;
+  animation: google-spin 0.9s linear infinite;
+}
+
+@keyframes google-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .googleNotice {
@@ -319,5 +366,8 @@ select.input {
   .input,
   .button {
     transition: none;
+  }
+  .spinner {
+    animation: none;
   }
 }

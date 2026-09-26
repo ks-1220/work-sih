@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { SYMPTOM_LABELS, SYMPTOM_OPTIONS } from "../../utils/symptomOptions";
+import { useTranslation } from "react-i18next";
+import { useAuth } from "../../store/auth";
+import { SYMPTOM_OPTIONS, symptomLabel } from "../../utils/symptomOptions";
 import { addLocalCycleEntry, getLocalCycleSummary } from "../../utils/localCycleLog";
 import styles from "./shefit.module.css";
 
@@ -46,9 +48,18 @@ function buildCalendarDays(viewDate, entries) {
   return days;
 }
 
-const WEEKDAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const WEEKDAY_LABELS_HI = ["रवि", "सोम", "मंगल", "बुध", "गुरु", "शुक्र", "शनि"];
 
 export default function CycleTracker({ onEntriesChange }) {
+  const { t, i18n } = useTranslation();
+  const { user } = useAuth();
+  const lang = i18n?.language?.startsWith("hi") ? "hi" : "en";
+  const locale = lang === "hi" ? "hi-IN" : "en-US";
+  const weekdays = lang === "hi"
+    ? WEEKDAY_LABELS_HI
+    : Array.from({ length: 7 }, (_, i) =>
+        new Date(2024, 0, 7 + i).toLocaleString(locale, { weekday: "short" })
+      );
   const [viewDate, setViewDate] = useState(() => new Date());
   const [entries, setEntries] = useState([]);
   const [cycleCount, setCycleCount] = useState(0);
@@ -65,14 +76,14 @@ export default function CycleTracker({ onEntriesChange }) {
   const loadSummary = useCallback(() => {
     setLoadError("");
     try {
-      const data = getLocalCycleSummary();
+      const data = getLocalCycleSummary(user);
       setEntries(data.entries ?? []);
       setCycleCount(data.cycleCount ?? 0);
       setAverageCycleLengthDays(data.averageCycleLengthDays ?? null);
     } catch (err) {
-      setLoadError(err.message || "Could not load your cycle history.");
+      setLoadError(t("cyc.loadError"));
     }
-  }, []);
+  }, [t, user]);
 
   useEffect(() => {
     // Reads from localStorage on mount. Runs client-side only (this file is
@@ -95,24 +106,24 @@ export default function CycleTracker({ onEntriesChange }) {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (!startDate) {
-      setSubmitError("Please choose a period start date.");
+      setSubmitError(t("cyc.needStart"));
       return;
     }
     if (endDate && endDate < startDate) {
-      setSubmitError("End date must not be before the start date.");
+      setSubmitError(t("cyc.badRange"));
       return;
     }
 
     setSubmitting(true);
     setSubmitError("");
     try {
-      addLocalCycleEntry({ startDate, endDate, symptoms, note });
+      addLocalCycleEntry({ startDate, endDate, symptoms, note }, user);
       setEndDate("");
       setSymptoms([]);
       setNote("");
       loadSummary();
     } catch (err) {
-      setSubmitError(err.message || "Could not save this entry.");
+      setSubmitError(t("cyc.saveError"));
     } finally {
       setSubmitting(false);
     }
@@ -128,10 +139,10 @@ export default function CycleTracker({ onEntriesChange }) {
   return (
     <div className={styles.trackerGrid}>
       <div className={styles.trackerColumn}>
-        <h3 className={styles.trackerColumnTitle}>Log Period</h3>
+        <h3 className={styles.trackerColumnTitle}>{t("cyc.logTitle")}</h3>
         <form onSubmit={handleSubmit} className={styles.trackerForm}>
           <label className={styles.formLabel}>
-            Period start date
+            {t("cyc.startDate")}
             <input
               type="date"
               value={startDate}
@@ -143,7 +154,7 @@ export default function CycleTracker({ onEntriesChange }) {
           </label>
 
           <label className={styles.formLabel}>
-            Period end date (optional)
+            {t("cyc.endDate")}
             <input
               type="date"
               value={endDate}
@@ -155,7 +166,7 @@ export default function CycleTracker({ onEntriesChange }) {
           </label>
 
           <fieldset className={styles.symptomFieldset}>
-            <legend className={styles.formLabel}>Symptoms (optional)</legend>
+            <legend className={styles.formLabel}>{t("cyc.symptoms")}</legend>
             <div className={styles.symptomGrid}>
               {SYMPTOM_OPTIONS.map((symptom) => (
                 <label key={symptom} className={styles.symptomOption}>
@@ -164,46 +175,46 @@ export default function CycleTracker({ onEntriesChange }) {
                     checked={symptoms.includes(symptom)}
                     onChange={() => toggleSymptom(symptom)}
                   />
-                  {SYMPTOM_LABELS[symptom]}
+                  {symptomLabel(symptom, lang)}
                 </label>
               ))}
             </div>
           </fieldset>
 
           <label className={styles.formLabel}>
-            Private note (optional)
+            {t("cyc.note")}
             <textarea
               value={note}
               onChange={(e) => setNote(e.target.value)}
               maxLength={500}
               rows={3}
               className={styles.formTextarea}
-              placeholder="Anything you'd like to remember about this cycle."
+              placeholder={t("cyc.notePh")}
             />
           </label>
 
           {submitError && <p className={styles.formError}>{submitError}</p>}
 
           <button type="submit" className={styles.primaryBtn} disabled={submitting}>
-            {submitting ? "Saving..." : "Save Entry"}
+            {submitting ? t("cyc.saving") : t("cyc.save")}
           </button>
         </form>
       </div>
 
       <div className={styles.trackerColumn}>
-        <h3 className={styles.trackerColumnTitle}>Cycle History</h3>
+        <h3 className={styles.trackerColumnTitle}>{t("cyc.historyTitle")}</h3>
 
         <div className={styles.statsRow}>
           <div className={styles.statPill}>
             <span className={styles.statValue}>{cycleCount}</span>
-            <span className={styles.statLabel}>logged cycles</span>
+            <span className={styles.statLabel}>{t("cyc.loggedCycles")}</span>
           </div>
           <div className={styles.statPill}>
             <span className={styles.statValue}>
               {averageCycleLengthDays ?? "—"}
             </span>
             <span className={styles.statLabel}>
-              {averageCycleLengthDays ? "avg. days between cycles" : "log 2+ cycles for an average"}
+              {averageCycleLengthDays ? t("cyc.avgDays") : t("cyc.needTwo")}
             </span>
           </div>
         </div>
@@ -212,24 +223,24 @@ export default function CycleTracker({ onEntriesChange }) {
           <button
             type="button"
             onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1))}
-            aria-label="Previous month"
+            aria-label={t("cyc.prevMonth")}
           >
             &#8592;
           </button>
           <span>
-            {viewDate.toLocaleString("default", { month: "long" })} {viewDate.getFullYear()}
+            {viewDate.toLocaleString(locale, { month: "long" })} {viewDate.getFullYear()}
           </span>
           <button
             type="button"
             onClick={() => setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1))}
-            aria-label="Next month"
+            aria-label={t("cyc.nextMonth")}
           >
             &#8594;
           </button>
         </div>
 
         <div className={styles.calendarGrid}>
-          {WEEKDAY_LABELS.map((label) => (
+          {weekdays.map((label) => (
             <div key={label} className={styles.calendarWeekday}>
               {label}
             </div>
@@ -258,7 +269,7 @@ export default function CycleTracker({ onEntriesChange }) {
                 </span>
                 {entry.symptoms?.length > 0 && (
                   <span className={styles.entrySymptoms}>
-                    {entry.symptoms.map((s) => SYMPTOM_LABELS[s] ?? s).join(", ")}
+                    {entry.symptoms.map((s) => symptomLabel(s, lang)).join(", ")}
                   </span>
                 )}
               </li>
@@ -268,14 +279,12 @@ export default function CycleTracker({ onEntriesChange }) {
 
         {entries.length === 0 && !loadError && (
           <p className={styles.trackerNote}>
-            No cycles logged yet. Use &ldquo;Log Period&rdquo; to add your first entry.
+            {t("cyc.empty")}
           </p>
         )}
 
         <p className={styles.trackerDisclaimer}>
-          This tracker does not predict future periods, ovulation or fertile
-          windows, and makes no medical claims. It only reflects what
-          you&apos;ve logged.
+          {t("cyc.disclaimer")}
         </p>
       </div>
     </div>

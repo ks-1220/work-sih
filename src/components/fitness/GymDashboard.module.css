@@ -1019,3 +1019,19 @@
     transform: none;
   }
 }
+
+/* Overflow hardening: long titles, badges and bullets must wrap INSIDE their boxes. */
+.threeColGrid > * { min-width: 0; }
+.card { min-width: 0; overflow: hidden; }
+.cardHeader { gap: 10px; }
+.cardHeaderLeft { min-width: 0; flex: 1 1 auto; }
+.cardTitle { overflow-wrap: break-word; min-width: 0; }
+.cardLink { flex: none; white-space: nowrap; }
+.fitChallengeItem { flex-wrap: wrap; gap: 4px 8px; }
+.fitChallengeItem > span:first-child { flex: 1 1 110px; min-width: 0; }
+.fitBadge { flex: none; white-space: nowrap; }
+.nBullet { align-items: flex-start; }
+.nBullet > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.fitIndiaBtn, .nutritionBtn { box-sizing: border-box; max-width: 100%; }
+.gymItem { min-width: 0; }
+.gymInfo { min-width: 0; }

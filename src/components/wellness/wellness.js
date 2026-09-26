@@ -2,6 +2,8 @@
 
 import React from "react";
 import Link from "next/link";
+import { useTranslation } from "react-i18next";
+import PageHeader from "../layout/PageHeader";
 import styles from "./wellness.module.css";
 
 // The two functional assessments this section links out to. Their
@@ -37,14 +39,12 @@ const COMING_SOON = [
 // Top of the wellness page: purple banner, then the two assessment models
 // in the original card look. Ayurveda follows below in the hub.
 export function SeniorModels() {
+  const { t } = useTranslation();
   return (
     <div className={styles.topFlow}>
-      <header className={styles.modelsBanner}>
-        <h1 className={styles.modelsBannerTitle}>Wellness</h1>
-        <p className={styles.modelsBannerLead}>
-          Inclusive wellness support designed for seniors and every stage of life.
-        </p>
-      </header>
+      <div className={styles.topBarWrap}>
+        <PageHeader title={t('wellness.title')} subtitle={t('wellness.heroSub')} />
+      </div>
 
       <section className={styles.modelsSection} aria-labelledby="senior-wellness-check">
         <div className={styles.modelsSectionHead}>

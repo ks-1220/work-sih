@@ -4,6 +4,8 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import StreakCalendar from '../streakcalender/streakcalender';
+import BadgesGrid from '../badges/BadgesGrid';
+import { awardBadges, currentStreak } from '../../utils/badges';
 import { useAuth } from '../../store/auth';
 import SampleDataBadge from '../shared/SampleDataBadge';
 import Avatar from '../shared/Avatar';
@@ -44,8 +46,42 @@ const Profile = () => {
         new Date(date).toISOString().split("T")[0] // Convert to YYYY-MM-DD
       );
       setStreakData(formattedDates); // Assuming `lastLoginDates` is an array of streak dates in `YYYY-MM-DD` format
+      const run = currentStreak(formattedDates);
+      if (run >= 30) awardBadges(user, ["streak_30", "streak_7"]);
+      else if (run >= 7) awardBadges(user, ["streak_7"]);
     }
   }, [user]);
+
+  // Personal analysis from this browser's per-user data (tracker activity,
+  // badges). Backend identity fields (streak, last login) come from `user`.
+  const analysis = (() => {
+    let activeDays = 0;
+    let perfectDays = 0;
+    let cycleCount = 0;
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (!k || !k.startsWith("swasth.tracker.v1::")) continue;
+        const all = JSON.parse(localStorage.getItem(k) || "{}");
+        Object.values(all).forEach((month) => {
+          Object.values(month || {}).forEach((d) => {
+            const n = Object.values(d || {}).filter(Boolean).length;
+            if (n > 0) activeDays++;
+            if (n === 4) perfectDays++;
+          });
+        });
+      }
+      for (let i = 0; i < localStorage.length; i++) {
+        const k = localStorage.key(i);
+        if (!k || !k.startsWith("shefit.cycleEntries")) continue;
+        const entries = JSON.parse(localStorage.getItem(k) || "[]");
+        if (Array.isArray(entries)) cycleCount += entries.length;
+      }
+    } catch {
+      /* ignore */
+    }
+    return { activeDays, perfectDays, cycleCount };
+  })();
 
   const formattedLastLogin = user.lastLoginDate
             ? new Date(user.lastLoginDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
@@ -232,6 +268,29 @@ const Profile = () => {
       </div>
       <StreakCalendar streakData={streakData} year={currentYear} month={currentMonth} />
     </div>
+        </div>
+        <div className="side-wrapper">
+          <div style={{ padding: "20px" }}>
+            <div className="project-title">Your Analysis</div>
+            <div className="task-status">
+              <div className="task-stat">
+                <div className="task-number">{analysis.activeDays}</div>
+                <div className="task-condition">Active days</div>
+                <div className="task-tasks">tracker (this browser)</div>
+              </div>
+              <div className="task-stat">
+                <div className="task-number">{analysis.perfectDays}</div>
+                <div className="task-condition">Perfect 4/4</div>
+                <div className="task-tasks">all logged months</div>
+              </div>
+              <div className="task-stat">
+                <div className="task-number">{analysis.cycleCount}</div>
+                <div className="task-condition">Cycle logs</div>
+                <div className="task-tasks">SheFit (this browser)</div>
+              </div>
+            </div>
+            <BadgesGrid user={user} />
+          </div>
         </div>
       </div>
       <div className="main-area">
