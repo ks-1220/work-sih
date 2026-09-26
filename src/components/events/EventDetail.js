@@ -221,10 +221,10 @@ export default function EventDetail({ event }) {
         <aside className={styles.ticketCard}>
           <h2>{t('ev.tickets')}</h2>
           <ul className={styles.tiers}>
-            {event.price.tiers.map((t) => (
-              <li key={t.label}>
-                <span>{t.label}</span>
-                <strong>{t.amount === 0 ? t('ev.free') : `₹${t.amount.toLocaleString('en-IN')}`}</strong>
+            {event.price.tiers.map((tier) => (
+              <li key={tier.label}>
+                <span>{tier.label}</span>
+                <strong>{tier.amount === 0 ? t('ev.free') : `₹${tier.amount.toLocaleString('en-IN')}`}</strong>
               </li>
             ))}
           </ul>
