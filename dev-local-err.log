@@ -1,0 +1,1630 @@
+⚠ Warning: Next.js ignored package-lock.json in C:\Users\Kritika Singh because it is outside the current Git repository (C:\Users\Kritika Singh\Downloads\work-sih).
+ To use this directory, set `turbopack.root` in your Next.js config.
+
+[browser] A tree hydrated but some attributes of the server rendered HTML didn't match the client properties. This won't be patched up. This can happen if a SSR-ed Client Component used:
+
+- A server/client branch `if (typeof window !== 'undefined')`.
+- Variable input such as `Date.now()` or `Math.random()` which changes each time it's called.
+- Date formatting in a user's locale which doesn't match the server.
+- External changing data without sending a snapshot of it along with the HTML.
+- Invalid HTML tag nesting.
+
+It can also happen if the client has a browser extension installed which messes with the HTML before React loaded.
+
+https://react.dev/link/hydration-mismatch
+
+  ...
+    <HotReload globalError={[...]} webSocket={WebSocket} staticIndicatorState={{pathname:null, ...}}>
+      <AppDevOverlayErrorBoundary globalError={[...]}>
+        <ReplaySsrOnlyErrors>
+        <DevRootHTTPAccessFallbackBoundary>
+          <HTTPAccessFallbackBoundary notFound={<NotAllowedRootHTTPFallbackError>}>
+            <HTTPAccessFallbackErrorBoundary pathname="/" notFound={<NotAllowedRootHTTPFallbackError>} ...>
+              <RedirectBoundary>
+                <RedirectErrorBoundary router={{...}}>
+                  <Head>
+                  <LoadingBoundaryProvider loading={[...]}>
+                    <SegmentViewNode type="layout" pagePath="layout.js">
+                      <SegmentTrieNode>
+                      <link>
+                      <script>
+                      <script>
+                      <RootLayout>
+                        <html lang="en">
+                          <body
+-                           data-new-gr-c-s-check-loaded="14.1330.0"
+-                           data-gr-ext-installed=""
+                          >
+                  ...
+ 
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] The tag <main1> is unrecognized in this browser. If you meant to render a React component, start its name with an uppercase letter. 
+⨯ ./src/app/api/auth/google/complete/route.js:2:1
+Error: Module not found: Can't resolve '../google/bridge'
+  [90m 1 |[0m [36mimport[0m { [33mNextResponse[0m } [36mfrom[0m [32m"next/server"[0m;
+[31m[1m>[0m [90m 2 |[0m [36mimport[0m {
+  [90m   |[0m [31m[1m^^^^^^^[0m
+[31m[1m>[0m [90m 3 |[0m   bridgeConfigured,
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 4 |[0m   bridgePassword,
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 5 |[0m   extractLegacyToken,
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 6 |[0m   legacyPost,
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 7 |[0m   looksLikeDuplicate,
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 8 |[0m   verifyGoogleCredential,
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+[31m[1m>[0m [90m 9 |[0m } [36mfrom[0m [32m"../google/bridge"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m10 |[0m
+  [90m11 |[0m [36mexport[0m [36mconst[0m dynamic = [32m"force-dynamic"[0m;
+  [90m12 |[0m
+
+
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] [GSI_LOGGER]: google.accounts.id.initialize() is called multiple times. This could cause unexpected behavior and only the last initialized instance will be used. (https://accounts.google.com/gsi/client:87:460)
+[browser] ./src/app/api/auth/google/complete/route.js:2:1
+Error: Module not found: Can't resolve '../google/bridge'
+   1 | import { NextResponse } from "next/server";
+>  2 | import {
+     | ^^^^^^^
+>  3 |   bridgeConfigured,
+     | ^^^^^^^^^^^^^^^^^^^
+>  4 |   bridgePassword,
+     | ^^^^^^^^^^^^^^^^^
+>  5 |   extractLegacyToken,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  6 |   legacyPost,
+     | ^^^^^^^^^^^^^
+>  7 |   looksLikeDuplicate,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  8 |   verifyGoogleCredential,
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  9 | } from "../google/bridge";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  10 |
+  11 | export const dynamic = "force-dynamic";
+  12 |
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/api/auth/google/complete/route.js:2:1
+Error: Module not found: Can't resolve '../google/bridge'
+   1 | import { NextResponse } from "next/server";
+>  2 | import {
+     | ^^^^^^^
+>  3 |   bridgeConfigured,
+     | ^^^^^^^^^^^^^^^^^^^
+>  4 |   bridgePassword,
+     | ^^^^^^^^^^^^^^^^^
+>  5 |   extractLegacyToken,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  6 |   legacyPost,
+     | ^^^^^^^^^^^^^
+>  7 |   looksLikeDuplicate,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  8 |   verifyGoogleCredential,
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  9 | } from "../google/bridge";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  10 |
+  11 | export const dynamic = "force-dynamic";
+  12 |
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/api/auth/google/complete/route.js:2:1
+Error: Module not found: Can't resolve '../google/bridge'
+   1 | import { NextResponse } from "next/server";
+>  2 | import {
+     | ^^^^^^^
+>  3 |   bridgeConfigured,
+     | ^^^^^^^^^^^^^^^^^^^
+>  4 |   bridgePassword,
+     | ^^^^^^^^^^^^^^^^^
+>  5 |   extractLegacyToken,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  6 |   legacyPost,
+     | ^^^^^^^^^^^^^
+>  7 |   looksLikeDuplicate,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  8 |   verifyGoogleCredential,
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  9 | } from "../google/bridge";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  10 |
+  11 | export const dynamic = "force-dynamic";
+  12 |
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/api/auth/google/complete/route.js:2:1
+Error: Module not found: Can't resolve '../google/bridge'
+   1 | import { NextResponse } from "next/server";
+>  2 | import {
+     | ^^^^^^^
+>  3 |   bridgeConfigured,
+     | ^^^^^^^^^^^^^^^^^^^
+>  4 |   bridgePassword,
+     | ^^^^^^^^^^^^^^^^^
+>  5 |   extractLegacyToken,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  6 |   legacyPost,
+     | ^^^^^^^^^^^^^
+>  7 |   looksLikeDuplicate,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  8 |   verifyGoogleCredential,
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  9 | } from "../google/bridge";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  10 |
+  11 | export const dynamic = "force-dynamic";
+  12 |
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/api/auth/google/complete/route.js:2:1
+Error: Module not found: Can't resolve '../google/bridge'
+   1 | import { NextResponse } from "next/server";
+>  2 | import {
+     | ^^^^^^^
+>  3 |   bridgeConfigured,
+     | ^^^^^^^^^^^^^^^^^^^
+>  4 |   bridgePassword,
+     | ^^^^^^^^^^^^^^^^^
+>  5 |   extractLegacyToken,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  6 |   legacyPost,
+     | ^^^^^^^^^^^^^
+>  7 |   looksLikeDuplicate,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  8 |   verifyGoogleCredential,
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  9 | } from "../google/bridge";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  10 |
+  11 | export const dynamic = "force-dynamic";
+  12 |
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/api/auth/google/complete/route.js:2:1
+Error: Module not found: Can't resolve '../google/bridge'
+   1 | import { NextResponse } from "next/server";
+>  2 | import {
+     | ^^^^^^^
+>  3 |   bridgeConfigured,
+     | ^^^^^^^^^^^^^^^^^^^
+>  4 |   bridgePassword,
+     | ^^^^^^^^^^^^^^^^^
+>  5 |   extractLegacyToken,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  6 |   legacyPost,
+     | ^^^^^^^^^^^^^
+>  7 |   looksLikeDuplicate,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  8 |   verifyGoogleCredential,
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  9 | } from "../google/bridge";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  10 |
+  11 | export const dynamic = "force-dynamic";
+  12 |
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/api/auth/google/complete/route.js:2:1
+Error: Module not found: Can't resolve '../google/bridge'
+   1 | import { NextResponse } from "next/server";
+>  2 | import {
+     | ^^^^^^^
+>  3 |   bridgeConfigured,
+     | ^^^^^^^^^^^^^^^^^^^
+>  4 |   bridgePassword,
+     | ^^^^^^^^^^^^^^^^^
+>  5 |   extractLegacyToken,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  6 |   legacyPost,
+     | ^^^^^^^^^^^^^
+>  7 |   looksLikeDuplicate,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  8 |   verifyGoogleCredential,
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  9 | } from "../google/bridge";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  10 |
+  11 | export const dynamic = "force-dynamic";
+  12 |
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/api/auth/google/complete/route.js:2:1
+Error: Module not found: Can't resolve '../google/bridge'
+   1 | import { NextResponse } from "next/server";
+>  2 | import {
+     | ^^^^^^^
+>  3 |   bridgeConfigured,
+     | ^^^^^^^^^^^^^^^^^^^
+>  4 |   bridgePassword,
+     | ^^^^^^^^^^^^^^^^^
+>  5 |   extractLegacyToken,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  6 |   legacyPost,
+     | ^^^^^^^^^^^^^
+>  7 |   looksLikeDuplicate,
+     | ^^^^^^^^^^^^^^^^^^^^^
+>  8 |   verifyGoogleCredential,
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^
+>  9 | } from "../google/bridge";
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  10 |
+  11 | export const dynamic = "force-dynamic";
+  12 |
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/locales/hi/translation.json:271:5
+Error: Unable to make a module from invalid JSON
+  269 |     "perfectDays": "परफेक्ट 4/4 दिन",
+  270 |     "totalChecks": "कुल चेक-इन",
+> 271 |     "bestDay": "सबसे अच्छा दिन"
+      |     ^
+  272 |     "footer": "निरंतरता महारत बनाती है — एक बार में एक निशान"
+  273 |   },
+  274 |   "wellness": {
+
+expected `,` or `}` at line 271 column 5 
+[browser] ./src/locales/hi/translation.json:271:5
+Error: Unable to make a module from invalid JSON
+  269 |     "perfectDays": "परफेक्ट 4/4 दिन",
+  270 |     "totalChecks": "कुल चेक-इन",
+> 271 |     "bestDay": "सबसे अच्छा दिन"
+      |     ^
+  272 |     "footer": "निरंतरता महारत बनाती है — एक बार में एक निशान"
+  273 |   },
+  274 |   "wellness": {
+
+expected `,` or `}` at line 271 column 5 
+[browser] ./src/locales/hi/translation.json:257:3
+Error: Unable to make a module from invalid JSON
+  255 |     "prevMonth": "पिछला",
+  256 |     "nextMonth": "अगला",
+> 257 |     "todayMonth": "इस महीना",
+      |   ^
+  258 |   },
+  259 |   "progress": {
+  260 |     "complete": "पूर्ण"
+
+trailing comma at line 257 column 3 
+[browser] ./src/locales/hi/translation.json:257:3
+Error: Unable to make a module from invalid JSON
+  255 |     "prevMonth": "पिछला",
+  256 |     "nextMonth": "अगला",
+> 257 |     "todayMonth": "इस महीना",
+      |   ^
+  258 |   },
+  259 |   "progress": {
+  260 |     "complete": "पूर्ण"
+
+trailing comma at line 257 column 3 
+[browser] ./src/locales/hi/translation.json:257:3
+Error: Unable to make a module from invalid JSON
+  255 |     "prevMonth": "पिछला",
+  256 |     "nextMonth": "अगला",
+> 257 |     "todayMonth": "इस महीना",
+      |   ^
+  258 |   },
+  259 |   "progress": {
+  260 |     "complete": "पूर्ण"
+
+trailing comma at line 257 column 3 
+[browser] ./src/locales/hi/translation.json:257:3
+Error: Unable to make a module from invalid JSON
+  255 |     "prevMonth": "पिछला",
+  256 |     "nextMonth": "अगला",
+> 257 |     "todayMonth": "इस महीना",
+      |   ^
+  258 |   },
+  259 |   "progress": {
+  260 |     "complete": "पूर्ण"
+
+trailing comma at line 257 column 3 
+[browser] ./src/locales/hi/translation.json:11:3
+Error: Unable to make a module from invalid JSON
+   9 |     "successMessage": "लॉग इन सफल!",
+  10 |     "errorMessage": "एक त्रुटि हुई",
+> 11 |   },
+     |   ^
+  12 |   "register": {
+  13 |     "heading": "रजिस्टर करें",
+  14 |     "firstNamePlaceholder": "पहला नाम",
+
+trailing comma at line 11 column 3 
+[browser] ./src/locales/hi/translation.json:11:3
+Error: Unable to make a module from invalid JSON
+   9 |     "successMessage": "लॉग इन सफल!",
+  10 |     "errorMessage": "एक त्रुटि हुई",
+> 11 |   },
+     |   ^
+  12 |   "register": {
+  13 |     "heading": "रजिस्टर करें",
+  14 |     "firstNamePlaceholder": "पहला नाम",
+
+trailing comma at line 11 column 3 
+[browser] ./src/locales/hi/translation.json:380:5
+Error: Unable to make a module from invalid JSON
+  378 |   "badges": {
+  379 |     "title": "बैज और लेवल"
+> 380 |     "newUnlocked": "नया बैज अनलॉक हुआ"
+      |     ^
+  381 |     "level_newcomer": "नवागंतुक"
+  382 |     "level_starter": "शुरुआत"
+  383 |     "level_achiever": "सिद्ध"
+
+expected `,` or `}` at line 380 column 5 
+[browser] ./src/locales/hi/translation.json:380:5
+Error: Unable to make a module from invalid JSON
+  378 |   "badges": {
+  379 |     "title": "बैज और लेवल"
+> 380 |     "newUnlocked": "नया बैज अनलॉक हुआ"
+      |     ^
+  381 |     "level_newcomer": "नवागंतुक"
+  382 |     "level_starter": "शुरुआत"
+  383 |     "level_achiever": "सिद्ध"
+
+expected `,` or `}` at line 380 column 5 
+[browser] Invalid DOM property `stroke-miterlimit`. Did you mean `strokeMiterlimit`? 
+[browser] Invalid DOM property `stroke-width`. Did you mean `strokeWidth`? 
+[browser] Invalid DOM property `enable-background`. Did you mean `enableBackground`? 
+[browser] Invalid DOM property `stroke-miterlimit`. Did you mean `strokeMiterlimit`? 
+[browser] Invalid DOM property `stroke-width`. Did you mean `strokeWidth`? 
+[browser] Invalid DOM property `enable-background`. Did you mean `enableBackground`? 
+[browser] The tag <sectionarthub> is unrecognized in this browser. If you meant to render a React component, start its name with an uppercase letter. 
+[browser] The tag <main1> is unrecognized in this browser. If you meant to render a React component, start its name with an uppercase letter. 
+[browser] Invalid DOM property `stroke-miterlimit`. Did you mean `strokeMiterlimit`? 
+[browser] Invalid DOM property `stroke-miterlimit`. Did you mean `strokeMiterlimit`? 
+[browser] Invalid DOM property `stroke-width`. Did you mean `strokeWidth`? 
+[browser] Invalid DOM property `enable-background`. Did you mean `enableBackground`? 
+[browser] ./src/locales/hi/translation.json:271:5
+Error: Unable to make a module from invalid JSON
+  269 |     "perfectDays": "परफेक्ट 4/4 दिन",
+  270 |     "totalChecks": "कुल चेक-इन",
+> 271 |     "bestDay": "सबसे अच्छा दिन"
+      |     ^
+  272 |     "footer": "निरंतरता महारत बनाती है — एक बार में एक निशान"
+  273 |   },
+  274 |   "wellness": {
+
+expected `,` or `}` at line 271 column 5 
+[browser] ./src/locales/hi/translation.json:271:5
+Error: Unable to make a module from invalid JSON
+  269 |     "perfectDays": "परफेक्ट 4/4 दिन",
+  270 |     "totalChecks": "कुल चेक-इन",
+> 271 |     "bestDay": "सबसे अच्छा दिन"
+      |     ^
+  272 |     "footer": "निरंतरता महारत बनाती है — एक बार में एक निशान"
+  273 |   },
+  274 |   "wellness": {
+
+expected `,` or `}` at line 271 column 5 
+[browser] ./src/locales/hi/translation.json:257:3
+Error: Unable to make a module from invalid JSON
+  255 |     "prevMonth": "पिछला",
+  256 |     "nextMonth": "अगला",
+> 257 |     "todayMonth": "इस महीना",
+      |   ^
+  258 |   },
+  259 |   "progress": {
+  260 |     "complete": "पूर्ण"
+
+trailing comma at line 257 column 3 
+[browser] ./src/locales/hi/translation.json:257:3
+Error: Unable to make a module from invalid JSON
+  255 |     "prevMonth": "पिछला",
+  256 |     "nextMonth": "अगला",
+> 257 |     "todayMonth": "इस महीना",
+      |   ^
+  258 |   },
+  259 |   "progress": {
+  260 |     "complete": "पूर्ण"
+
+trailing comma at line 257 column 3 
+[browser] ./src/locales/hi/translation.json:257:3
+Error: Unable to make a module from invalid JSON
+  255 |     "prevMonth": "पिछला",
+  256 |     "nextMonth": "अगला",
+> 257 |     "todayMonth": "इस महीना",
+      |   ^
+  258 |   },
+  259 |   "progress": {
+  260 |     "complete": "पूर्ण"
+
+trailing comma at line 257 column 3 
+[browser] ./src/locales/hi/translation.json:257:3
+Error: Unable to make a module from invalid JSON
+  255 |     "prevMonth": "पिछला",
+  256 |     "nextMonth": "अगला",
+> 257 |     "todayMonth": "इस महीना",
+      |   ^
+  258 |   },
+  259 |   "progress": {
+  260 |     "complete": "पूर्ण"
+
+trailing comma at line 257 column 3 
+[browser] ./src/locales/hi/translation.json:11:3
+Error: Unable to make a module from invalid JSON
+   9 |     "successMessage": "लॉग इन सफल!",
+  10 |     "errorMessage": "एक त्रुटि हुई",
+> 11 |   },
+     |   ^
+  12 |   "register": {
+  13 |     "heading": "रजिस्टर करें",
+  14 |     "firstNamePlaceholder": "पहला नाम",
+
+trailing comma at line 11 column 3 
+[browser] ./src/locales/hi/translation.json:11:3
+Error: Unable to make a module from invalid JSON
+   9 |     "successMessage": "लॉग इन सफल!",
+  10 |     "errorMessage": "एक त्रुटि हुई",
+> 11 |   },
+     |   ^
+  12 |   "register": {
+  13 |     "heading": "रजिस्टर करें",
+  14 |     "firstNamePlaceholder": "पहला नाम",
+
+trailing comma at line 11 column 3 
+[browser] ./src/locales/hi/translation.json:380:5
+Error: Unable to make a module from invalid JSON
+  378 |   "badges": {
+  379 |     "title": "बैज और लेवल"
+> 380 |     "newUnlocked": "नया बैज अनलॉक हुआ"
+      |     ^
+  381 |     "level_newcomer": "नवागंतुक"
+  382 |     "level_starter": "शुरुआत"
+  383 |     "level_achiever": "सिद्ध"
+
+expected `,` or `}` at line 380 column 5 
+[browser] ./src/locales/hi/translation.json:380:5
+Error: Unable to make a module from invalid JSON
+  378 |   "badges": {
+  379 |     "title": "बैज और लेवल"
+> 380 |     "newUnlocked": "नया बैज अनलॉक हुआ"
+      |     ^
+  381 |     "level_newcomer": "नवागंतुक"
+  382 |     "level_starter": "शुरुआत"
+  383 |     "level_achiever": "सिद्ध"
+
+expected `,` or `}` at line 380 column 5 
+[browser] Invalid DOM property `stroke-miterlimit`. Did you mean `strokeMiterlimit`? 
+[browser] Invalid DOM property `stroke-width`. Did you mean `strokeWidth`? 
+[browser] Invalid DOM property `enable-background`. Did you mean `enableBackground`? 
+[browser] The tag <main1> is unrecognized in this browser. If you meant to render a React component, start its name with an uppercase letter. 
+[browser] Invalid DOM property `stroke-miterlimit`. Did you mean `strokeMiterlimit`? 
+[browser] Invalid DOM property `stroke-width`. Did you mean `strokeWidth`? 
+[browser] Invalid DOM property `enable-background`. Did you mean `enableBackground`? 
+[browser] ./src/components/fitness/FitnessLanding.js:114:10
+Error: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+  112 |             {active === "yoga" ? <YogaDashboard /> : <GymDashboard />}
+  113 |           </div>
+> 114 |         )}
+      |          ^
+  115 |       </div>
+  116 |     </div>
+  117 |   );
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./src/components/fitness/FitnessLanding.js
+    ./src/app/start/page.js 
+[browser] The tag <main1> is unrecognized in this browser. If you meant to render a React component, start its name with an uppercase letter. 
+[browser] Invalid DOM property `stroke-miterlimit`. Did you mean `strokeMiterlimit`? 
+[browser] Invalid DOM property `stroke-width`. Did you mean `strokeWidth`? 
+[browser] Invalid DOM property `enable-background`. Did you mean `enableBackground`? 
+[browser] The tag <main1> is unrecognized in this browser. If you meant to render a React component, start its name with an uppercase letter. 
+[browser] Invalid DOM property `stroke-miterlimit`. Did you mean `strokeMiterlimit`? 
+[browser] Invalid DOM property `stroke-width`. Did you mean `strokeWidth`? 
+[browser] Invalid DOM property `enable-background`. Did you mean `enableBackground`? 
+[Server HMR] Update failed, full reload needed: SyntaxError: Identifier 'locale' has already been declared
+    at eval (<anonymous>)
+[browser] ./src/views/trackersheet/Tracker.js:143:9
+Error: the name `locale` is defined multiple times
+  141 |     { labelKey: 'pillars.creative', label: t('pillars.creative'), icon: 'fa-solid fa-pen-...
+  142 |   ];
+> 143 |   const locale = i18n?.language?.startsWith('hi') ? 'hi-IN' : 'en-US';
+      |         ^^^^^^
+  144 |   const pillarMonth = new Date(viewYear, viewMonth - 1, 1).toLocaleString(locale, { month...
+  145 |
+  146 |   return (
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/views/trackersheet/Tracker.js
+    ./src/app/tracker/page.js 
+[browser] ./src/views/trackersheet/Tracker.js:143:9
+Error: the name `locale` is defined multiple times
+  141 |     { labelKey: 'pillars.creative', label: t('pillars.creative'), icon: 'fa-solid fa-pen-...
+  142 |   ];
+> 143 |   const locale = i18n?.language?.startsWith('hi') ? 'hi-IN' : 'en-US';
+      |         ^^^^^^
+  144 |   const pillarMonth = new Date(viewYear, viewMonth - 1, 1).toLocaleString(locale, { month...
+  145 |
+  146 |   return (
+
+Ecmascript file had an error
+
+Import trace:
+  Server Component:
+    ./src/views/trackersheet/Tracker.js
+    ./src/app/tracker/page.js 
+[browser] ./src/locales/hi/translation.json:396:5
+Error: Unable to make a module from invalid JSON
+  394 |     "noLastMonth": "पिछले महीने कुछ लॉग नहीं — स्ट्रीक हेतु ऊपर कोई दिन दबाएँ।",
+  395 |     "topPillar": "शीर्ष पिलर"
+> 396 |     "footer": "निरंतरता महारत बनाती है — एक बार में एक निशान"
+      |     ^
+  397 |   },
+  398 |   "wellness": {
+  399 |     "heroSub": "हर उम्र हेतु समावेशी वेलनेस सहायता — वरिष्ठों और जीवन के हर चरण के लिए।",
+
+expected `,` or `}` at line 396 column 5 
+[browser] ./src/locales/hi/translation.json:396:5
+Error: Unable to make a module from invalid JSON
+  394 |     "noLastMonth": "पिछले महीने कुछ लॉग नहीं — स्ट्रीक हेतु ऊपर कोई दिन दबाएँ।",
+  395 |     "topPillar": "शीर्ष पिलर"
+> 396 |     "footer": "निरंतरता महारत बनाती है — एक बार में एक निशान"
+      |     ^
+  397 |   },
+  398 |   "wellness": {
+  399 |     "heroSub": "हर उम्र हेतु समावेशी वेलनेस सहायता — वरिष्ठों और जीवन के हर चरण के लिए।",
+
+expected `,` or `}` at line 396 column 5 
+[browser] ./src/locales/hi/translation.json:396:5
+Error: Unable to make a module from invalid JSON
+  394 |     "noLastMonth": "पिछले महीने कुछ लॉग नहीं — स्ट्रीक हेतु ऊपर कोई दिन दबाएँ।",
+  395 |     "topPillar": "शीर्ष पिलर"
+> 396 |     "footer": "निरंतरता महारत बनाती है — एक बार में एक निशान"
+      |     ^
+  397 |   },
+  398 |   "wellness": {
+  399 |     "heroSub": "हर उम्र हेतु समावेशी वेलनेस सहायता — वरिष्ठों और जीवन के हर चरण के लिए।",
+
+expected `,` or `}` at line 396 column 5 
+[browser] ./src/locales/hi/translation.json:396:5
+Error: Unable to make a module from invalid JSON
+  394 |     "noLastMonth": "पिछले महीने कुछ लॉग नहीं — स्ट्रीक हेतु ऊपर कोई दिन दबाएँ।",
+  395 |     "topPillar": "शीर्ष पिलर"
+> 396 |     "footer": "निरंतरता महारत बनाती है — एक बार में एक निशान"
+      |     ^
+  397 |   },
+  398 |   "wellness": {
+  399 |     "heroSub": "हर उम्र हेतु समावेशी वेलनेस सहायता — वरिष्ठों और जीवन के हर चरण के लिए।",
+
+expected `,` or `}` at line 396 column 5 
+[browser] ./src/components/community/CommunityHub.js:204:1
+Error: Unexpected token. Did you mean `{'}'}` or `&rbrace;`?
+  202 |     </div>
+  203 |   );
+> 204 | }
+      | ^
+  205 |
+
+Parsing ecmascript source code failed
+
+Import trace:
+  Server Component:
+    ./src/components/community/CommunityHub.js
+    ./src/app/community/page.js 
+[browser] The tag <main1> is unrecognized in this browser. If you meant to render a React component, start its name with an uppercase letter. 
+[browser] Invalid DOM property `stroke-miterlimit`. Did you mean `strokeMiterlimit`? 
+[browser] Invalid DOM property `stroke-width`. Did you mean `strokeWidth`? 
+[browser] Invalid DOM property `enable-background`. Did you mean `enableBackground`? 
+⨯ ./src/app/challenges/page.js:10:1
+Error: Module not found: Can't resolve '../../../components/challenges/CategoryFilters'
+  [90m 8 |[0m [36mimport[0m [33mChallengesHero[0m [36mfrom[0m [32m"../../../components/challenges/ChallengesHero"[0m;
+  [90m 9 |[0m [36mimport[0m [33mFeaturedChallenge[0m [36mfrom[0m [32m"../../../components/challenges/FeaturedChallenge"[0m;
+[31m[1m>[0m [90m10 |[0m [36mimport[0m [33mCategoryFilters[0m [36mfrom[0m [32m"../../../components/challenges/CategoryFilters"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m11 |[0m [36mimport[0m [33mCommunityChallenges[0m [36mfrom[0m [32m"../../../components/challenges/CommunityChallenges"[0m;
+  [90m12 |[0m [36mimport[0m [33mInviteFriends[0m [36mfrom[0m [32m"../../../components/challenges/InviteFriends"[0m;
+  [90m13 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:13:1
+Error: Module not found: Can't resolve '../../../components/challenges/Challenges.css'
+  [90m11 |[0m [36mimport[0m [33mCommunityChallenges[0m [36mfrom[0m [32m"../../../components/challenges/CommunityChallenges"[0m;
+  [90m12 |[0m [36mimport[0m [33mInviteFriends[0m [36mfrom[0m [32m"../../../components/challenges/InviteFriends"[0m;
+[31m[1m>[0m [90m13 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m14 |[0m
+  [90m15 |[0m [36mconst[0m [33mJOIN_KEY[0m = [32m"swasth.joinedChallenges.v1"[0m;
+  [90m16 |[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:8:1
+Error: Module not found: Can't resolve '../../../components/challenges/ChallengesHero'
+  [90m 6 |[0m [36mimport[0m { loadForUser, saveForUser } [36mfrom[0m [32m"../../../utils/userScopedStorage"[0m;
+  [90m 7 |[0m [36mimport[0m { [33mCHALLENGES[0m, featuredChallenge } [36mfrom[0m [32m"../../../data/challenges"[0m;
+[31m[1m>[0m [90m 8 |[0m [36mimport[0m [33mChallengesHero[0m [36mfrom[0m [32m"../../../components/challenges/ChallengesHero"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 9 |[0m [36mimport[0m [33mFeaturedChallenge[0m [36mfrom[0m [32m"../../../components/challenges/FeaturedChallenge"[0m;
+  [90m10 |[0m [36mimport[0m [33mCategoryFilters[0m [36mfrom[0m [32m"../../../components/challenges/CategoryFilters"[0m;
+  [90m11 |[0m [36mimport[0m [33mCommunityChallenges[0m [36mfrom[0m [32m"../../../components/challenges/CommunityChallenges"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:11:1
+Error: Module not found: Can't resolve '../../../components/challenges/CommunityChallenges'
+  [90m 9 |[0m [36mimport[0m [33mFeaturedChallenge[0m [36mfrom[0m [32m"../../../components/challenges/FeaturedChallenge"[0m;
+  [90m10 |[0m [36mimport[0m [33mCategoryFilters[0m [36mfrom[0m [32m"../../../components/challenges/CategoryFilters"[0m;
+[31m[1m>[0m [90m11 |[0m [36mimport[0m [33mCommunityChallenges[0m [36mfrom[0m [32m"../../../components/challenges/CommunityChallenges"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m12 |[0m [36mimport[0m [33mInviteFriends[0m [36mfrom[0m [32m"../../../components/challenges/InviteFriends"[0m;
+  [90m13 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+  [90m14 |[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:9:1
+Error: Module not found: Can't resolve '../../../components/challenges/FeaturedChallenge'
+  [90m 7 |[0m [36mimport[0m { [33mCHALLENGES[0m, featuredChallenge } [36mfrom[0m [32m"../../../data/challenges"[0m;
+  [90m 8 |[0m [36mimport[0m [33mChallengesHero[0m [36mfrom[0m [32m"../../../components/challenges/ChallengesHero"[0m;
+[31m[1m>[0m [90m 9 |[0m [36mimport[0m [33mFeaturedChallenge[0m [36mfrom[0m [32m"../../../components/challenges/FeaturedChallenge"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m10 |[0m [36mimport[0m [33mCategoryFilters[0m [36mfrom[0m [32m"../../../components/challenges/CategoryFilters"[0m;
+  [90m11 |[0m [36mimport[0m [33mCommunityChallenges[0m [36mfrom[0m [32m"../../../components/challenges/CommunityChallenges"[0m;
+  [90m12 |[0m [36mimport[0m [33mInviteFriends[0m [36mfrom[0m [32m"../../../components/challenges/InviteFriends"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:12:1
+Error: Module not found: Can't resolve '../../../components/challenges/InviteFriends'
+  [90m10 |[0m [36mimport[0m [33mCategoryFilters[0m [36mfrom[0m [32m"../../../components/challenges/CategoryFilters"[0m;
+  [90m11 |[0m [36mimport[0m [33mCommunityChallenges[0m [36mfrom[0m [32m"../../../components/challenges/CommunityChallenges"[0m;
+[31m[1m>[0m [90m12 |[0m [36mimport[0m [33mInviteFriends[0m [36mfrom[0m [32m"../../../components/challenges/InviteFriends"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+  [90m14 |[0m
+  [90m15 |[0m [36mconst[0m [33mJOIN_KEY[0m = [32m"swasth.joinedChallenges.v1"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:5:1
+Error: Module not found: Can't resolve '../../../components/layout/WithNavbar'
+  [90m3 |[0m [36mimport[0m { useEffect, useState } [36mfrom[0m [32m"react"[0m;
+  [90m4 |[0m [36mimport[0m { useAuth } [36mfrom[0m [32m"../../../store/auth"[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m [33mWithNavbar[0m [36mfrom[0m [32m"../../../components/layout/WithNavbar"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m [36mimport[0m { loadForUser, saveForUser } [36mfrom[0m [32m"../../../utils/userScopedStorage"[0m;
+  [90m7 |[0m [36mimport[0m { [33mCHALLENGES[0m, featuredChallenge } [36mfrom[0m [32m"../../../data/challenges"[0m;
+  [90m8 |[0m [36mimport[0m [33mChallengesHero[0m [36mfrom[0m [32m"../../../components/challenges/ChallengesHero"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:7:1
+Error: Module not found: Can't resolve '../../../data/challenges'
+  [90m 5 |[0m [36mimport[0m [33mWithNavbar[0m [36mfrom[0m [32m"../../../components/layout/WithNavbar"[0m;
+  [90m 6 |[0m [36mimport[0m { loadForUser, saveForUser } [36mfrom[0m [32m"../../../utils/userScopedStorage"[0m;
+[31m[1m>[0m [90m 7 |[0m [36mimport[0m { [33mCHALLENGES[0m, featuredChallenge } [36mfrom[0m [32m"../../../data/challenges"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 8 |[0m [36mimport[0m [33mChallengesHero[0m [36mfrom[0m [32m"../../../components/challenges/ChallengesHero"[0m;
+  [90m 9 |[0m [36mimport[0m [33mFeaturedChallenge[0m [36mfrom[0m [32m"../../../components/challenges/FeaturedChallenge"[0m;
+  [90m10 |[0m [36mimport[0m [33mCategoryFilters[0m [36mfrom[0m [32m"../../../components/challenges/CategoryFilters"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:4:1
+Error: Module not found: Can't resolve '../../../store/auth'
+  [90m2 |[0m
+  [90m3 |[0m [36mimport[0m { useEffect, useState } [36mfrom[0m [32m"react"[0m;
+[31m[1m>[0m [90m4 |[0m [36mimport[0m { useAuth } [36mfrom[0m [32m"../../../store/auth"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m5 |[0m [36mimport[0m [33mWithNavbar[0m [36mfrom[0m [32m"../../../components/layout/WithNavbar"[0m;
+  [90m6 |[0m [36mimport[0m { loadForUser, saveForUser } [36mfrom[0m [32m"../../../utils/userScopedStorage"[0m;
+  [90m7 |[0m [36mimport[0m { [33mCHALLENGES[0m, featuredChallenge } [36mfrom[0m [32m"../../../data/challenges"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:6:1
+Error: Module not found: Can't resolve '../../../utils/userScopedStorage'
+  [90m4 |[0m [36mimport[0m { useAuth } [36mfrom[0m [32m"../../../store/auth"[0m;
+  [90m5 |[0m [36mimport[0m [33mWithNavbar[0m [36mfrom[0m [32m"../../../components/layout/WithNavbar"[0m;
+[31m[1m>[0m [90m6 |[0m [36mimport[0m { loadForUser, saveForUser } [36mfrom[0m [32m"../../../utils/userScopedStorage"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m7 |[0m [36mimport[0m { [33mCHALLENGES[0m, featuredChallenge } [36mfrom[0m [32m"../../../data/challenges"[0m;
+  [90m8 |[0m [36mimport[0m [33mChallengesHero[0m [36mfrom[0m [32m"../../../components/challenges/ChallengesHero"[0m;
+  [90m9 |[0m [36mimport[0m [33mFeaturedChallenge[0m [36mfrom[0m [32m"../../../components/challenges/FeaturedChallenge"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/store/page.js:12:1
+Error: Module not found: Can't resolve '../../../components/challenges/Challenges.css'
+  [90m10 |[0m [36mimport[0m [33mCuratedRecommendations[0m [36mfrom[0m [32m"../../../components/store/CuratedRecommendations"[0m;
+  [90m11 |[0m [36mimport[0m { [33mPRODUCTS[0m } [36mfrom[0m [32m"../../../data/products"[0m;
+[31m[1m>[0m [90m12 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m [36mimport[0m [32m"../../../components/store/Store.css"[0m;
+  [90m14 |[0m
+  [90m15 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mStorePage[0m() {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:5:1
+Error: Module not found: Can't resolve '../../../components/layout/WithNavbar'
+  [90m3 |[0m [36mimport[0m { useMemo, useState } [36mfrom[0m [32m"react"[0m;
+  [90m4 |[0m [36mimport[0m { useTranslation } [36mfrom[0m [32m"react-i18next"[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m [33mWithNavbar[0m [36mfrom[0m [32m"../../../components/layout/WithNavbar"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m [36mimport[0m [33mStoreHero[0m [36mfrom[0m [32m"../../../components/store/StoreHero"[0m;
+  [90m7 |[0m [36mimport[0m [33mPromoBanner[0m [36mfrom[0m [32m"../../../components/store/PromoBanner"[0m;
+  [90m8 |[0m [36mimport[0m [33mProductCategories[0m [36mfrom[0m [32m"../../../components/store/ProductCategories"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:10:1
+Error: Module not found: Can't resolve '../../../components/store/CuratedRecommendations'
+  [90m 8 |[0m [36mimport[0m [33mProductCategories[0m [36mfrom[0m [32m"../../../components/store/ProductCategories"[0m;
+  [90m 9 |[0m [36mimport[0m [33mFeaturedProducts[0m [36mfrom[0m [32m"../../../components/store/FeaturedProducts"[0m;
+[31m[1m>[0m [90m10 |[0m [36mimport[0m [33mCuratedRecommendations[0m [36mfrom[0m [32m"../../../components/store/CuratedRecommendations"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m11 |[0m [36mimport[0m { [33mPRODUCTS[0m } [36mfrom[0m [32m"../../../data/products"[0m;
+  [90m12 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+  [90m13 |[0m [36mimport[0m [32m"../../../components/store/Store.css"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:9:1
+Error: Module not found: Can't resolve '../../../components/store/FeaturedProducts'
+  [90m 7 |[0m [36mimport[0m [33mPromoBanner[0m [36mfrom[0m [32m"../../../components/store/PromoBanner"[0m;
+  [90m 8 |[0m [36mimport[0m [33mProductCategories[0m [36mfrom[0m [32m"../../../components/store/ProductCategories"[0m;
+[31m[1m>[0m [90m 9 |[0m [36mimport[0m [33mFeaturedProducts[0m [36mfrom[0m [32m"../../../components/store/FeaturedProducts"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m10 |[0m [36mimport[0m [33mCuratedRecommendations[0m [36mfrom[0m [32m"../../../components/store/CuratedRecommendations"[0m;
+  [90m11 |[0m [36mimport[0m { [33mPRODUCTS[0m } [36mfrom[0m [32m"../../../data/products"[0m;
+  [90m12 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:8:1
+Error: Module not found: Can't resolve '../../../components/store/ProductCategories'
+  [90m 6 |[0m [36mimport[0m [33mStoreHero[0m [36mfrom[0m [32m"../../../components/store/StoreHero"[0m;
+  [90m 7 |[0m [36mimport[0m [33mPromoBanner[0m [36mfrom[0m [32m"../../../components/store/PromoBanner"[0m;
+[31m[1m>[0m [90m 8 |[0m [36mimport[0m [33mProductCategories[0m [36mfrom[0m [32m"../../../components/store/ProductCategories"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 9 |[0m [36mimport[0m [33mFeaturedProducts[0m [36mfrom[0m [32m"../../../components/store/FeaturedProducts"[0m;
+  [90m10 |[0m [36mimport[0m [33mCuratedRecommendations[0m [36mfrom[0m [32m"../../../components/store/CuratedRecommendations"[0m;
+  [90m11 |[0m [36mimport[0m { [33mPRODUCTS[0m } [36mfrom[0m [32m"../../../data/products"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:7:1
+Error: Module not found: Can't resolve '../../../components/store/PromoBanner'
+  [90m 5 |[0m [36mimport[0m [33mWithNavbar[0m [36mfrom[0m [32m"../../../components/layout/WithNavbar"[0m;
+  [90m 6 |[0m [36mimport[0m [33mStoreHero[0m [36mfrom[0m [32m"../../../components/store/StoreHero"[0m;
+[31m[1m>[0m [90m 7 |[0m [36mimport[0m [33mPromoBanner[0m [36mfrom[0m [32m"../../../components/store/PromoBanner"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 8 |[0m [36mimport[0m [33mProductCategories[0m [36mfrom[0m [32m"../../../components/store/ProductCategories"[0m;
+  [90m 9 |[0m [36mimport[0m [33mFeaturedProducts[0m [36mfrom[0m [32m"../../../components/store/FeaturedProducts"[0m;
+  [90m10 |[0m [36mimport[0m [33mCuratedRecommendations[0m [36mfrom[0m [32m"../../../components/store/CuratedRecommendations"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:13:1
+Error: Module not found: Can't resolve '../../../components/store/Store.css'
+  [90m11 |[0m [36mimport[0m { [33mPRODUCTS[0m } [36mfrom[0m [32m"../../../data/products"[0m;
+  [90m12 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+[31m[1m>[0m [90m13 |[0m [36mimport[0m [32m"../../../components/store/Store.css"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m14 |[0m
+  [90m15 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mStorePage[0m() {
+  [90m16 |[0m   [36mconst[0m { t } = useTranslation();
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:6:1
+Error: Module not found: Can't resolve '../../../components/store/StoreHero'
+  [90m4 |[0m [36mimport[0m { useTranslation } [36mfrom[0m [32m"react-i18next"[0m;
+  [90m5 |[0m [36mimport[0m [33mWithNavbar[0m [36mfrom[0m [32m"../../../components/layout/WithNavbar"[0m;
+[31m[1m>[0m [90m6 |[0m [36mimport[0m [33mStoreHero[0m [36mfrom[0m [32m"../../../components/store/StoreHero"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m7 |[0m [36mimport[0m [33mPromoBanner[0m [36mfrom[0m [32m"../../../components/store/PromoBanner"[0m;
+  [90m8 |[0m [36mimport[0m [33mProductCategories[0m [36mfrom[0m [32m"../../../components/store/ProductCategories"[0m;
+  [90m9 |[0m [36mimport[0m [33mFeaturedProducts[0m [36mfrom[0m [32m"../../../components/store/FeaturedProducts"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:11:1
+Error: Module not found: Can't resolve '../../../data/products'
+  [90m 9 |[0m [36mimport[0m [33mFeaturedProducts[0m [36mfrom[0m [32m"../../../components/store/FeaturedProducts"[0m;
+  [90m10 |[0m [36mimport[0m [33mCuratedRecommendations[0m [36mfrom[0m [32m"../../../components/store/CuratedRecommendations"[0m;
+[31m[1m>[0m [90m11 |[0m [36mimport[0m { [33mPRODUCTS[0m } [36mfrom[0m [32m"../../../data/products"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m12 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+  [90m13 |[0m [36mimport[0m [32m"../../../components/store/Store.css"[0m;
+  [90m14 |[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/challenges/page.js:10:1
+Error: Module not found: Can't resolve '../../../components/challenges/CategoryFilters'
+  [90m 8 |[0m [36mimport[0m [33mChallengesHero[0m [36mfrom[0m [32m"../../../components/challenges/ChallengesHero"[0m;
+  [90m 9 |[0m [36mimport[0m [33mFeaturedChallenge[0m [36mfrom[0m [32m"../../../components/challenges/FeaturedChallenge"[0m;
+[31m[1m>[0m [90m10 |[0m [36mimport[0m [33mCategoryFilters[0m [36mfrom[0m [32m"../../../components/challenges/CategoryFilters"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m11 |[0m [36mimport[0m [33mCommunityChallenges[0m [36mfrom[0m [32m"../../../components/challenges/CommunityChallenges"[0m;
+  [90m12 |[0m [36mimport[0m [33mInviteFriends[0m [36mfrom[0m [32m"../../../components/challenges/InviteFriends"[0m;
+  [90m13 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:13:1
+Error: Module not found: Can't resolve '../../../components/challenges/Challenges.css'
+  [90m11 |[0m [36mimport[0m [33mCommunityChallenges[0m [36mfrom[0m [32m"../../../components/challenges/CommunityChallenges"[0m;
+  [90m12 |[0m [36mimport[0m [33mInviteFriends[0m [36mfrom[0m [32m"../../../components/challenges/InviteFriends"[0m;
+[31m[1m>[0m [90m13 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m14 |[0m
+  [90m15 |[0m [36mconst[0m [33mJOIN_KEY[0m = [32m"swasth.joinedChallenges.v1"[0m;
+  [90m16 |[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:8:1
+Error: Module not found: Can't resolve '../../../components/challenges/ChallengesHero'
+  [90m 6 |[0m [36mimport[0m { loadForUser, saveForUser } [36mfrom[0m [32m"../../../utils/userScopedStorage"[0m;
+  [90m 7 |[0m [36mimport[0m { [33mCHALLENGES[0m, featuredChallenge } [36mfrom[0m [32m"../../../data/challenges"[0m;
+[31m[1m>[0m [90m 8 |[0m [36mimport[0m [33mChallengesHero[0m [36mfrom[0m [32m"../../../components/challenges/ChallengesHero"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 9 |[0m [36mimport[0m [33mFeaturedChallenge[0m [36mfrom[0m [32m"../../../components/challenges/FeaturedChallenge"[0m;
+  [90m10 |[0m [36mimport[0m [33mCategoryFilters[0m [36mfrom[0m [32m"../../../components/challenges/CategoryFilters"[0m;
+  [90m11 |[0m [36mimport[0m [33mCommunityChallenges[0m [36mfrom[0m [32m"../../../components/challenges/CommunityChallenges"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:11:1
+Error: Module not found: Can't resolve '../../../components/challenges/CommunityChallenges'
+  [90m 9 |[0m [36mimport[0m [33mFeaturedChallenge[0m [36mfrom[0m [32m"../../../components/challenges/FeaturedChallenge"[0m;
+  [90m10 |[0m [36mimport[0m [33mCategoryFilters[0m [36mfrom[0m [32m"../../../components/challenges/CategoryFilters"[0m;
+[31m[1m>[0m [90m11 |[0m [36mimport[0m [33mCommunityChallenges[0m [36mfrom[0m [32m"../../../components/challenges/CommunityChallenges"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m12 |[0m [36mimport[0m [33mInviteFriends[0m [36mfrom[0m [32m"../../../components/challenges/InviteFriends"[0m;
+  [90m13 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+  [90m14 |[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:9:1
+Error: Module not found: Can't resolve '../../../components/challenges/FeaturedChallenge'
+  [90m 7 |[0m [36mimport[0m { [33mCHALLENGES[0m, featuredChallenge } [36mfrom[0m [32m"../../../data/challenges"[0m;
+  [90m 8 |[0m [36mimport[0m [33mChallengesHero[0m [36mfrom[0m [32m"../../../components/challenges/ChallengesHero"[0m;
+[31m[1m>[0m [90m 9 |[0m [36mimport[0m [33mFeaturedChallenge[0m [36mfrom[0m [32m"../../../components/challenges/FeaturedChallenge"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m10 |[0m [36mimport[0m [33mCategoryFilters[0m [36mfrom[0m [32m"../../../components/challenges/CategoryFilters"[0m;
+  [90m11 |[0m [36mimport[0m [33mCommunityChallenges[0m [36mfrom[0m [32m"../../../components/challenges/CommunityChallenges"[0m;
+  [90m12 |[0m [36mimport[0m [33mInviteFriends[0m [36mfrom[0m [32m"../../../components/challenges/InviteFriends"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:12:1
+Error: Module not found: Can't resolve '../../../components/challenges/InviteFriends'
+  [90m10 |[0m [36mimport[0m [33mCategoryFilters[0m [36mfrom[0m [32m"../../../components/challenges/CategoryFilters"[0m;
+  [90m11 |[0m [36mimport[0m [33mCommunityChallenges[0m [36mfrom[0m [32m"../../../components/challenges/CommunityChallenges"[0m;
+[31m[1m>[0m [90m12 |[0m [36mimport[0m [33mInviteFriends[0m [36mfrom[0m [32m"../../../components/challenges/InviteFriends"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+  [90m14 |[0m
+  [90m15 |[0m [36mconst[0m [33mJOIN_KEY[0m = [32m"swasth.joinedChallenges.v1"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:5:1
+Error: Module not found: Can't resolve '../../../components/layout/WithNavbar'
+  [90m3 |[0m [36mimport[0m { useEffect, useState } [36mfrom[0m [32m"react"[0m;
+  [90m4 |[0m [36mimport[0m { useAuth } [36mfrom[0m [32m"../../../store/auth"[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m [33mWithNavbar[0m [36mfrom[0m [32m"../../../components/layout/WithNavbar"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m [36mimport[0m { loadForUser, saveForUser } [36mfrom[0m [32m"../../../utils/userScopedStorage"[0m;
+  [90m7 |[0m [36mimport[0m { [33mCHALLENGES[0m, featuredChallenge } [36mfrom[0m [32m"../../../data/challenges"[0m;
+  [90m8 |[0m [36mimport[0m [33mChallengesHero[0m [36mfrom[0m [32m"../../../components/challenges/ChallengesHero"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:7:1
+Error: Module not found: Can't resolve '../../../data/challenges'
+  [90m 5 |[0m [36mimport[0m [33mWithNavbar[0m [36mfrom[0m [32m"../../../components/layout/WithNavbar"[0m;
+  [90m 6 |[0m [36mimport[0m { loadForUser, saveForUser } [36mfrom[0m [32m"../../../utils/userScopedStorage"[0m;
+[31m[1m>[0m [90m 7 |[0m [36mimport[0m { [33mCHALLENGES[0m, featuredChallenge } [36mfrom[0m [32m"../../../data/challenges"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 8 |[0m [36mimport[0m [33mChallengesHero[0m [36mfrom[0m [32m"../../../components/challenges/ChallengesHero"[0m;
+  [90m 9 |[0m [36mimport[0m [33mFeaturedChallenge[0m [36mfrom[0m [32m"../../../components/challenges/FeaturedChallenge"[0m;
+  [90m10 |[0m [36mimport[0m [33mCategoryFilters[0m [36mfrom[0m [32m"../../../components/challenges/CategoryFilters"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:4:1
+Error: Module not found: Can't resolve '../../../store/auth'
+  [90m2 |[0m
+  [90m3 |[0m [36mimport[0m { useEffect, useState } [36mfrom[0m [32m"react"[0m;
+[31m[1m>[0m [90m4 |[0m [36mimport[0m { useAuth } [36mfrom[0m [32m"../../../store/auth"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m5 |[0m [36mimport[0m [33mWithNavbar[0m [36mfrom[0m [32m"../../../components/layout/WithNavbar"[0m;
+  [90m6 |[0m [36mimport[0m { loadForUser, saveForUser } [36mfrom[0m [32m"../../../utils/userScopedStorage"[0m;
+  [90m7 |[0m [36mimport[0m { [33mCHALLENGES[0m, featuredChallenge } [36mfrom[0m [32m"../../../data/challenges"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/challenges/page.js:6:1
+Error: Module not found: Can't resolve '../../../utils/userScopedStorage'
+  [90m4 |[0m [36mimport[0m { useAuth } [36mfrom[0m [32m"../../../store/auth"[0m;
+  [90m5 |[0m [36mimport[0m [33mWithNavbar[0m [36mfrom[0m [32m"../../../components/layout/WithNavbar"[0m;
+[31m[1m>[0m [90m6 |[0m [36mimport[0m { loadForUser, saveForUser } [36mfrom[0m [32m"../../../utils/userScopedStorage"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m7 |[0m [36mimport[0m { [33mCHALLENGES[0m, featuredChallenge } [36mfrom[0m [32m"../../../data/challenges"[0m;
+  [90m8 |[0m [36mimport[0m [33mChallengesHero[0m [36mfrom[0m [32m"../../../components/challenges/ChallengesHero"[0m;
+  [90m9 |[0m [36mimport[0m [33mFeaturedChallenge[0m [36mfrom[0m [32m"../../../components/challenges/FeaturedChallenge"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/challenges/page.js [Client Component Browser]
+    ./src/app/challenges/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/challenges/page.js [Client Component SSR]
+    ./src/app/challenges/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/store/page.js:12:1
+Error: Module not found: Can't resolve '../../../components/challenges/Challenges.css'
+  [90m10 |[0m [36mimport[0m [33mCuratedRecommendations[0m [36mfrom[0m [32m"../../../components/store/CuratedRecommendations"[0m;
+  [90m11 |[0m [36mimport[0m { [33mPRODUCTS[0m } [36mfrom[0m [32m"../../../data/products"[0m;
+[31m[1m>[0m [90m12 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m13 |[0m [36mimport[0m [32m"../../../components/store/Store.css"[0m;
+  [90m14 |[0m
+  [90m15 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mStorePage[0m() {
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:5:1
+Error: Module not found: Can't resolve '../../../components/layout/WithNavbar'
+  [90m3 |[0m [36mimport[0m { useMemo, useState } [36mfrom[0m [32m"react"[0m;
+  [90m4 |[0m [36mimport[0m { useTranslation } [36mfrom[0m [32m"react-i18next"[0m;
+[31m[1m>[0m [90m5 |[0m [36mimport[0m [33mWithNavbar[0m [36mfrom[0m [32m"../../../components/layout/WithNavbar"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m6 |[0m [36mimport[0m [33mStoreHero[0m [36mfrom[0m [32m"../../../components/store/StoreHero"[0m;
+  [90m7 |[0m [36mimport[0m [33mPromoBanner[0m [36mfrom[0m [32m"../../../components/store/PromoBanner"[0m;
+  [90m8 |[0m [36mimport[0m [33mProductCategories[0m [36mfrom[0m [32m"../../../components/store/ProductCategories"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:10:1
+Error: Module not found: Can't resolve '../../../components/store/CuratedRecommendations'
+  [90m 8 |[0m [36mimport[0m [33mProductCategories[0m [36mfrom[0m [32m"../../../components/store/ProductCategories"[0m;
+  [90m 9 |[0m [36mimport[0m [33mFeaturedProducts[0m [36mfrom[0m [32m"../../../components/store/FeaturedProducts"[0m;
+[31m[1m>[0m [90m10 |[0m [36mimport[0m [33mCuratedRecommendations[0m [36mfrom[0m [32m"../../../components/store/CuratedRecommendations"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m11 |[0m [36mimport[0m { [33mPRODUCTS[0m } [36mfrom[0m [32m"../../../data/products"[0m;
+  [90m12 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+  [90m13 |[0m [36mimport[0m [32m"../../../components/store/Store.css"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:9:1
+Error: Module not found: Can't resolve '../../../components/store/FeaturedProducts'
+  [90m 7 |[0m [36mimport[0m [33mPromoBanner[0m [36mfrom[0m [32m"../../../components/store/PromoBanner"[0m;
+  [90m 8 |[0m [36mimport[0m [33mProductCategories[0m [36mfrom[0m [32m"../../../components/store/ProductCategories"[0m;
+[31m[1m>[0m [90m 9 |[0m [36mimport[0m [33mFeaturedProducts[0m [36mfrom[0m [32m"../../../components/store/FeaturedProducts"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m10 |[0m [36mimport[0m [33mCuratedRecommendations[0m [36mfrom[0m [32m"../../../components/store/CuratedRecommendations"[0m;
+  [90m11 |[0m [36mimport[0m { [33mPRODUCTS[0m } [36mfrom[0m [32m"../../../data/products"[0m;
+  [90m12 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:8:1
+Error: Module not found: Can't resolve '../../../components/store/ProductCategories'
+  [90m 6 |[0m [36mimport[0m [33mStoreHero[0m [36mfrom[0m [32m"../../../components/store/StoreHero"[0m;
+  [90m 7 |[0m [36mimport[0m [33mPromoBanner[0m [36mfrom[0m [32m"../../../components/store/PromoBanner"[0m;
+[31m[1m>[0m [90m 8 |[0m [36mimport[0m [33mProductCategories[0m [36mfrom[0m [32m"../../../components/store/ProductCategories"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 9 |[0m [36mimport[0m [33mFeaturedProducts[0m [36mfrom[0m [32m"../../../components/store/FeaturedProducts"[0m;
+  [90m10 |[0m [36mimport[0m [33mCuratedRecommendations[0m [36mfrom[0m [32m"../../../components/store/CuratedRecommendations"[0m;
+  [90m11 |[0m [36mimport[0m { [33mPRODUCTS[0m } [36mfrom[0m [32m"../../../data/products"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:7:1
+Error: Module not found: Can't resolve '../../../components/store/PromoBanner'
+  [90m 5 |[0m [36mimport[0m [33mWithNavbar[0m [36mfrom[0m [32m"../../../components/layout/WithNavbar"[0m;
+  [90m 6 |[0m [36mimport[0m [33mStoreHero[0m [36mfrom[0m [32m"../../../components/store/StoreHero"[0m;
+[31m[1m>[0m [90m 7 |[0m [36mimport[0m [33mPromoBanner[0m [36mfrom[0m [32m"../../../components/store/PromoBanner"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m 8 |[0m [36mimport[0m [33mProductCategories[0m [36mfrom[0m [32m"../../../components/store/ProductCategories"[0m;
+  [90m 9 |[0m [36mimport[0m [33mFeaturedProducts[0m [36mfrom[0m [32m"../../../components/store/FeaturedProducts"[0m;
+  [90m10 |[0m [36mimport[0m [33mCuratedRecommendations[0m [36mfrom[0m [32m"../../../components/store/CuratedRecommendations"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:13:1
+Error: Module not found: Can't resolve '../../../components/store/Store.css'
+  [90m11 |[0m [36mimport[0m { [33mPRODUCTS[0m } [36mfrom[0m [32m"../../../data/products"[0m;
+  [90m12 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+[31m[1m>[0m [90m13 |[0m [36mimport[0m [32m"../../../components/store/Store.css"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m14 |[0m
+  [90m15 |[0m [36mexport[0m [36mdefault[0m [36mfunction[0m [33mStorePage[0m() {
+  [90m16 |[0m   [36mconst[0m { t } = useTranslation();
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:6:1
+Error: Module not found: Can't resolve '../../../components/store/StoreHero'
+  [90m4 |[0m [36mimport[0m { useTranslation } [36mfrom[0m [32m"react-i18next"[0m;
+  [90m5 |[0m [36mimport[0m [33mWithNavbar[0m [36mfrom[0m [32m"../../../components/layout/WithNavbar"[0m;
+[31m[1m>[0m [90m6 |[0m [36mimport[0m [33mStoreHero[0m [36mfrom[0m [32m"../../../components/store/StoreHero"[0m;
+  [90m  |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m7 |[0m [36mimport[0m [33mPromoBanner[0m [36mfrom[0m [32m"../../../components/store/PromoBanner"[0m;
+  [90m8 |[0m [36mimport[0m [33mProductCategories[0m [36mfrom[0m [32m"../../../components/store/ProductCategories"[0m;
+  [90m9 |[0m [36mimport[0m [33mFeaturedProducts[0m [36mfrom[0m [32m"../../../components/store/FeaturedProducts"[0m;
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+
+./src/app/store/page.js:11:1
+Error: Module not found: Can't resolve '../../../data/products'
+  [90m 9 |[0m [36mimport[0m [33mFeaturedProducts[0m [36mfrom[0m [32m"../../../components/store/FeaturedProducts"[0m;
+  [90m10 |[0m [36mimport[0m [33mCuratedRecommendations[0m [36mfrom[0m [32m"../../../components/store/CuratedRecommendations"[0m;
+[31m[1m>[0m [90m11 |[0m [36mimport[0m { [33mPRODUCTS[0m } [36mfrom[0m [32m"../../../data/products"[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m12 |[0m [36mimport[0m [32m"../../../components/challenges/Challenges.css"[0m;
+  [90m13 |[0m [36mimport[0m [32m"../../../components/store/Store.css"[0m;
+  [90m14 |[0m
+
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/store/page.js [Client Component Browser]
+    ./src/app/store/page.js [Server Component]
+
+  Client Component SSR:
+    ./src/app/store/page.js [Client Component SSR]
+    ./src/app/store/page.js [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+[browser] Invalid DOM property `stroke-miterlimit`. Did you mean `strokeMiterlimit`? 
+[browser] Invalid DOM property `stroke-width`. Did you mean `strokeWidth`? 
+[browser] Invalid DOM property `enable-background`. Did you mean `enableBackground`? 
+[browser] Invalid DOM property `stroke-miterlimit`. Did you mean `strokeMiterlimit`? 
+[browser] Invalid DOM property `stroke-width`. Did you mean `strokeWidth`? 
+[browser] Invalid DOM property `enable-background`. Did you mean `enableBackground`? 
+[browser] The tag <main1> is unrecognized in this browser. If you meant to render a React component, start its name with an uppercase letter. 
