@@ -344,6 +344,7 @@
   },
   "nav": {
     "home": "Home",
+    "profile": "Profile",
     "fitness": "Fitness",
     "wellness": "Wellness",
     "dietary": "Dietary",
@@ -765,7 +766,13 @@
   "common": {
     "sampleData": "Sample data",
     "sampleTitle": "Placeholder figures, not your recorded data",
-    "whatsapp": "Chat with us on WhatsApp"
+    "whatsapp": "Chat with us on WhatsApp",
+    "localOnly": "This browser only",
+    "localOnlyTitle": "Saved in this browser under this account. Not synced."
+  },
+  "profile": {
+    "guestTitle": "Guest mode — no login needed",
+    "xpPreviewNote": "Preview only — not server-validated"
   },
   "fitness": {
     "badge": "SWASTH∞ FITNESS",

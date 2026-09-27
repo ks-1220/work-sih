@@ -7,26 +7,12 @@ import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../store/auth';
 import WhatsAppFloat from '../shared/WhatsAppFloat';
 import ChatbotFloat from '../shared/ChatbotFloat';
+import { ORIGINAL_NAV_ITEMS } from '../../config/navItems';
 const audio2 = "/media/audio2.mp3";
 import './navbar.css';
 
-// Sidebar order: Home, Fitness, Wellness, Dietary, Tracker, Community,
-// Challenges, Store, SheFit.
-// Sustain (/sus) and About (/about) stay reachable by URL and via
-// the Terms/Privacy footer links. Logout is appended for signed-in users.
-// Labels are i18n keys resolved at render time.
-const ORIGINAL_NAV_ITEMS = [
-  { href: '/', icon: 'fa-solid fa-house', labelKey: 'nav.home' },
-  { href: '/start', icon: 'fa-solid fa-dumbbell', labelKey: 'nav.fitness' },
-  { href: '/wellness', icon: 'fa-solid fa-spa', labelKey: 'nav.wellness' },
-  { href: '/cards', icon: 'fa-solid fa-apple-whole', labelKey: 'nav.dietary' },
-  { href: '/tracker', icon: 'fa-solid fa-chart-line', labelKey: 'nav.tracker' },
-  { href: '/community', icon: 'fa-solid fa-users', labelKey: 'nav.community' },
-  { href: '/challenges', icon: 'fa-solid fa-trophy', labelKey: 'nav.challenges' },
-  { href: '/store', icon: 'fa-solid fa-bag-shopping', labelKey: 'nav.store' },
-  { href: '/she', icon: 'fa-solid fa-venus', labelKey: 'nav.shefit' },
-];
-
+// Base items (incl. Profile) render for everyone, including Guest Mode.
+// Logout is appended for signed-in users only. See src/config/navItems.js.
 export default function Navbar() {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const pathname = usePathname();

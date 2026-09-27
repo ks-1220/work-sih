@@ -1,17 +1,50 @@
 "use client";
 
 // TaskManager.js
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useMemo, useState, useEffect, useSyncExternalStore } from 'react';
 import Link from 'next/link';
 import StreakCalendar from '../streakcalender/streakcalender';
+import {
+  CALENDAR_MONTH_LABEL,
+  CALENDAR_YEAR_LABEL,
+  PROFILE_CALENDAR_CELLS,
+  chunkIntoWeeks,
+  clampWeekIndex,
+  columnCount,
+  hideWeekendsInWeeks,
+  visibleHeaders,
+} from '../../lib/profileCalendar';
 import BadgesGrid from '../badges/BadgesGrid';
+import ActivityHeatmap from './ActivityHeatmap';
+import WeeklyGoals from './WeeklyGoals';
+import InsightsPanel from './InsightsPanel';
+import XpPreview from './XpPreview';
+import GuestBanner from './GuestBanner';
+import ContinueJourney from './ContinueJourney';
+import ProfilePreferences from './ProfilePreferences';
 import { awardBadges, currentStreak } from '../../utils/badges';
 import { useAuth } from '../../store/auth';
+import { userKey } from '../../utils/userScopedStorage';
+import {
+  aggregateByDay,
+  localTodayISO,
+  summarizeEvents,
+  trackerStoreToEvents,
+} from '../../lib/activityModel';
+import {
+  getTrackerServerSnapshot,
+  getTrackerSnapshot,
+  subscribeToTrackerStore,
+} from '../../lib/trackerStore';
 import SampleDataBadge from '../shared/SampleDataBadge';
 import Avatar from '../shared/Avatar';
 import { demoProfileStats } from '../../data/demoStats';
 import { INBOX, NOTIFICATIONS } from '../../data/profileInbox';
 import './profile.scss'; // Import your CSS file here
+
+// Tracker store key (same key the Tracker writes per-user). Y=Yoga,
+// M=Meditation, E=Healthy Diet, C=Creative Hub — checked boxes only.
+const TRACKER_STORE_KEY = 'swasth.tracker.v1';
 
 const Profile = () => {
   const [selectedMail, setSelectedMail] = useState([]);
@@ -31,61 +64,101 @@ const Profile = () => {
   };
   const [color, setColor] = useState('#493971');
   const [calendarVisible, setCalendarVisible] = useState(false);
+  // Appointment-calendar controls. The grid below used to be static markup
+  // with dead buttons; the cells/events are unchanged (see
+  // src/lib/profileCalendar.js) and these three pieces of state only switch
+  // which slice of the EXISTING calendar is shown.
+  // No behaviour is defined anywhere in the codebase for "Cheat Days", so
+  // that button is intentionally left untouched (see report).
+  const [calendarView, setCalendarView] = useState('month'); // 'week' | 'month'
+  const [showWeekends, setShowWeekends] = useState(true);
+  const [weekIndex, setWeekIndex] = useState(0);
+  const calendarWeeks = useMemo(() => chunkIntoWeeks(PROFILE_CALENDAR_CELLS), []);
+  const safeWeekIndex = clampWeekIndex(weekIndex, calendarWeeks.length);
+  const calendarRows = useMemo(
+    () => (showWeekends ? calendarWeeks : hideWeekendsInWeeks(calendarWeeks)),
+    [calendarWeeks, showWeekends]
+  );
+  const visibleRows = calendarView === 'week' ? [calendarRows[safeWeekIndex]] : calendarRows;
+  const calendarColumns = columnCount(showWeekends);
+  // The stylesheet fixes the grid to 7 columns; only override it when
+  // weekends are hidden, leaving the existing month styling byte-identical
+  // otherwise.
+  const calendarGridStyle =
+    calendarColumns === 7
+      ? undefined
+      : { gridTemplateColumns: `repeat(${calendarColumns}, minmax(195px, 1fr))` };
 
-  const [streakData, setStreakData] = useState([]); // Stores the user's login streak dates
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1); // Current month (1-12)
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear()); // Current year
 
-  const { user } = useAuth(); // Fetch user data from the auth context or store
-  const { isLoggedIN } = useAuth();
+  const { user, isLoggedIN, isAuthReady } = useAuth();
+  const safeUser = user && typeof user === "object" ? user : null;
 
-  // Update streak data when the user data changes
-  useEffect(() => {
-    if (user && user.lastLoginDates) {
-      const formattedDates = user.lastLoginDates.map(date =>
-        new Date(date).toISOString().split("T")[0] // Convert to YYYY-MM-DD
-      );
-      setStreakData(formattedDates); // Assuming `lastLoginDates` is an array of streak dates in `YYYY-MM-DD` format
-      const run = currentStreak(formattedDates);
-      if (run >= 30) awardBadges(user, ["streak_30", "streak_7"]);
-      else if (run >= 7) awardBadges(user, ["streak_7"]);
-    }
-  }, [user]);
+  // This account's tracker store only (guest namespace when logged out).
+  // Never merged across accounts. useSyncExternalStore keeps the server
+  // snapshot empty (SSR-safe) and syncs per-account without setState-in-effect.
+  // Snapshots are cached per key (see src/lib/trackerStore.js): returning a
+  // fresh object on every getSnapshot/getServerSnapshot call makes React loop
+  // ("getServerSnapshot should be cached" -> "Maximum update depth exceeded").
+  const trackerKey = userKey(TRACKER_STORE_KEY, user);
+  const getTrackerSnapshotForKey = useCallback(
+    () => getTrackerSnapshot(trackerKey),
+    [trackerKey]
+  );
+  const allMonths = useSyncExternalStore(
+    subscribeToTrackerStore,
+    getTrackerSnapshotForKey,
+    getTrackerServerSnapshot
+  );
 
-  // Personal analysis from this browser's per-user data (tracker activity,
-  // badges). Backend identity fields (streak, last login) come from `user`.
-  const analysis = (() => {
-    let activeDays = 0;
-    let perfectDays = 0;
-    let cycleCount = 0;
+  // Qualifying events: checked Y/M/E/C boxes on real dates, no future dates.
+  // Page visits, logins, cycle/medical data are never included (see
+  // src/lib/activityModel.js).
+  const activityEvents = useMemo(() => {
+    let today = null;
     try {
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (!k || !k.startsWith("swasth.tracker.v1::")) continue;
-        const all = JSON.parse(localStorage.getItem(k) || "{}");
-        Object.values(all).forEach((month) => {
-          Object.values(month || {}).forEach((d) => {
-            const n = Object.values(d || {}).filter(Boolean).length;
-            if (n > 0) activeDays++;
-            if (n === 4) perfectDays++;
-          });
-        });
-      }
-      for (let i = 0; i < localStorage.length; i++) {
-        const k = localStorage.key(i);
-        if (!k || !k.startsWith("shefit.cycleEntries")) continue;
-        const entries = JSON.parse(localStorage.getItem(k) || "[]");
-        if (Array.isArray(entries)) cycleCount += entries.length;
-      }
+      today = localTodayISO(new Date());
     } catch {
-      /* ignore */
+      today = null;
     }
-    return { activeDays, perfectDays, cycleCount };
-  })();
+    return trackerStoreToEvents(allMonths, today);
+  }, [allMonths]);
+  const eventsByDay = useMemo(() => aggregateByDay(activityEvents), [activityEvents]);
+  const activitySummary = useMemo(() => summarizeEvents(activityEvents), [activityEvents]);
 
-  const formattedLastLogin = user.lastLoginDate
-            ? new Date(user.lastLoginDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
+  // Sign-in streak dates from the backend (verified identity field), derived
+  // rather than copied into state. Kept separate from the local activity
+  // streak so server vs local stays honest.
+  const streakData = useMemo(() => {
+    if (safeUser && Array.isArray(safeUser.lastLoginDates)) {
+      try {
+        return safeUser.lastLoginDates.map((date) =>
+          new Date(date).toISOString().split("T")[0]
+        );
+      } catch {
+        return [];
+      }
+    }
+    return [];
+  }, [safeUser]);
+
+  // Badge awards write to per-user browser storage (external system sync),
+  // not React state, so no cascading render is involved.
+  useEffect(() => {
+    if (!streakData.length) return;
+    const run = currentStreak(streakData);
+    if (run >= 30) awardBadges(user, ["streak_30", "streak_7"]);
+    else if (run >= 7) awardBadges(user, ["streak_7"]);
+  }, [streakData, user]);
+
+  const formattedLastLogin = safeUser?.lastLoginDate
+            ? new Date(safeUser.lastLoginDate).toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })
             : "Never";
+  const displayName = safeUser
+    ? `${safeUser.firstName || ""} ${safeUser.lastName || ""}`.trim() || "Member"
+    : "Guest";
+  const displayEmail = safeUser?.email || "Browsing without login — data stays on this device";
 
   // Browser sniffing moved out of the render body: `window` and `navigator` do
   // not exist during the server render, and mutating document.body while
@@ -136,9 +209,16 @@ const Profile = () => {
     }
   };
 
+  if (!isAuthReady) {
+    return (
+      <div style={{ padding: 24 }} role="status" aria-label="Loading profile">
+        Loading your profile…
+      </div>
+    );
+  }
+
   return (
     <div>
-    {isLoggedIN ? (
       <div className="container">
       <div className="user-profile-area">
         <div className='home-heading'>
@@ -147,11 +227,20 @@ const Profile = () => {
             </Link>
         <div className="task-manager">Back to Home</div>
         </div>
+        {!isLoggedIN && (
+          <div className="side-wrapper">
+            <GuestBanner />
+          </div>
+        )}
         <div className="side-wrapper">
           <div className="user-profile">
-            <img src="https://akm-img-a-in.tosshub.com/indiatoday/images/story/202212/afp_000_9cq7ux_shilpa_shetty_yoga-one_one.jpg?VersionId=DeAg8M98aY9OSz3Z3gVSU84uySM4f245" alt="" className="user-photo" />
-            <div className="user-name">{user.firstName} {user.lastName}</div>
-            <div className="user-mail">{user.email}</div>
+            {isLoggedIN ? (
+              <img src="https://akm-img-a-in.tosshub.com/indiatoday/images/story/202212/afp_000_9cq7ux_shilpa_shetty_yoga-one_one.jpg?VersionId=DeAg8M98aY9OSz3Z3gVSU84uySM4f245" alt="" className="user-photo" />
+            ) : (
+              <Avatar seed="guest" size={70} title="Guest avatar" />
+            )}
+            <div className="user-name">{displayName}</div>
+            <div className="user-mail">{displayEmail}</div>
           </div>
           <div className="user-notification">
             <div className="notify">
@@ -220,9 +309,14 @@ const Profile = () => {
           </div>
           <div className="task-status">
             <div className="task-stat">
-              <div className="task-number">{user.streak}</div>
-              <div className="task-condition">Streaks</div>
-              <div className="task-tasks">{formattedLastLogin}</div>
+              <div className="task-number">{safeUser?.streak ?? "—"}</div>
+              <div className="task-condition">Sign-in streak</div>
+              <div className="task-tasks">{isLoggedIN ? formattedLastLogin : "login for server streak"}</div>
+            </div>
+            <div className="task-stat">
+              <div className="task-number">{activitySummary.currentStreak}</div>
+              <div className="task-condition">Activity streak</div>
+              <div className="task-tasks">this browser · {activitySummary.activeDays} active days</div>
             </div>
             {/* Streak above is a real backend field. These two are not, so
                 each carries its own marker rather than one on the row. */}
@@ -256,8 +350,9 @@ const Profile = () => {
         <div className="side-wrapper">
           <div style={{ padding: "20px", textAlign: "center" }}>
       <h3>
-        Your Streak for {currentMonth < 10 ? `0${currentMonth}` : currentMonth}-{currentYear}
+        Sign-in streak for {currentMonth < 10 ? `0${currentMonth}` : currentMonth}-{currentYear}
       </h3>
+      <p className="profile-muted">{isLoggedIN ? "Server sign-in dates." : "Log in to see server sign-in dates."}</p>
       <div className="streak-nav">
         <button type="button" onClick={() => handleMonthChange("prev")}>
           Previous Month
@@ -271,25 +366,66 @@ const Profile = () => {
         </div>
         <div className="side-wrapper">
           <div style={{ padding: "20px" }}>
-            <div className="project-title">Your Analysis</div>
+            <div className="project-title">Activity heatmap · ~12 months</div>
+            <p className="profile-muted">Completed Tracker check-ins only (Yoga, Meditation, Diet, Creative Hub). This browser only.</p>
+            <ActivityHeatmap eventsByDay={eventsByDay} months={12} />
+          </div>
+        </div>
+        <div className="side-wrapper">
+          <div style={{ padding: "20px" }}>
+            <div className="project-title">Your Analysis · this browser</div>
             <div className="task-status">
               <div className="task-stat">
-                <div className="task-number">{analysis.activeDays}</div>
+                <div className="task-number">{activitySummary.activeDays}</div>
                 <div className="task-condition">Active days</div>
-                <div className="task-tasks">tracker (this browser)</div>
+                <div className="task-tasks">qualifying check-ins</div>
               </div>
               <div className="task-stat">
-                <div className="task-number">{analysis.perfectDays}</div>
+                <div className="task-number">{activitySummary.perfectDays}</div>
                 <div className="task-condition">Perfect 4/4</div>
                 <div className="task-tasks">all logged months</div>
               </div>
               <div className="task-stat">
-                <div className="task-number">{analysis.cycleCount}</div>
-                <div className="task-condition">Cycle logs</div>
-                <div className="task-tasks">SheFit (this browser)</div>
+                <div className="task-number">{activitySummary.totalChecks}</div>
+                <div className="task-condition">Total check-ins</div>
+                <div className="task-tasks">Y/M/E/C combined</div>
               </div>
             </div>
+            <p className="profile-muted">
+              Activity streak {activitySummary.currentStreak}d · longest {activitySummary.longestStreak}d
+              {activitySummary.bestDay ? ` · best ${activitySummary.bestDay} (${activitySummary.bestScore}/4)` : ""}
+            </p>
             <BadgesGrid user={user} />
+          </div>
+        </div>
+        <div className="side-wrapper">
+          <div style={{ padding: "20px" }}>
+            <div className="project-title">Continue Your Journey</div>
+            <ContinueJourney summary={activitySummary} />
+          </div>
+        </div>
+        <div className="side-wrapper">
+          <div style={{ padding: "20px" }}>
+            <div className="project-title">Weekly goals</div>
+            <WeeklyGoals user={user} isLoggedIN={isLoggedIN} events={activityEvents} />
+          </div>
+        </div>
+        <div className="side-wrapper">
+          <div style={{ padding: "20px" }}>
+            <div className="project-title">XP preview</div>
+            <XpPreview events={activityEvents} />
+          </div>
+        </div>
+        <div className="side-wrapper">
+          <div style={{ padding: "20px" }}>
+            <div className="project-title">Insights &amp; recent activity</div>
+            <InsightsPanel summary={activitySummary} events={activityEvents} />
+          </div>
+        </div>
+        <div className="side-wrapper">
+          <div style={{ padding: "20px" }}>
+            <div className="project-title">Preferences</div>
+            <ProfilePreferences user={user} />
           </div>
         </div>
       </div>
@@ -422,167 +558,122 @@ const Profile = () => {
           
    <div className={`calendar-container ${calendarVisible ? 'calendar-show' : ''}`}>
       <div className="calender-tab anim-y">
-        <div className="week-month">
-          <button className="button active">Week</button>
-          <button className="button button-month">Month</button>
+        <div className="week-month" role="group" aria-label="Calendar view">
+          <button
+            type="button"
+            className={`button${calendarView === 'week' ? ' active' : ''}`}
+            aria-pressed={calendarView === 'week'}
+            onClick={() => setCalendarView('week')}
+          >
+            Week
+          </button>
+          <button
+            type="button"
+            className={`button button-month${calendarView === 'month' ? ' active' : ''}`}
+            aria-pressed={calendarView === 'month'}
+            onClick={() => setCalendarView('month')}
+          >
+            Month
+          </button>
         </div>
         <div className="month-change" style={{display:'flex', flexDirection:'row'}}>
           <div>
-          <div className="current-month">September</div>
-          <div className="current-year">2024</div>
+          <div className="current-month">{CALENDAR_MONTH_LABEL}</div>
+          <div className="current-year">{CALENDAR_YEAR_LABEL}</div>
           </div>
           <img alt="" src='https://png.pngtree.com/png-vector/20231017/ourmid/pngtree-fresh-apple-fruit-red-png-image_10203073.png' style={{width:'50px', height:'50px'
           }}></img>
         </div>
-        <div className="week-month">
-          <button className="button button-weekends">Weekends</button>
+        <div className="week-month" role="group" aria-label="Calendar display options">
+          <button
+            type="button"
+            className={`button button-weekends${showWeekends ? ' active' : ''}`}
+            aria-pressed={showWeekends}
+            onClick={() => setShowWeekends((v) => !v)}
+          >
+            Weekends
+          </button>
           <button className="button button-task active">Cheat Days</button>
         </div>
       </div>
+      {calendarView === 'week' && (
+        <div
+          className="week-pager anim-y"
+          style={{ display: 'flex', alignItems: 'center', gap: '12px', justifyContent: 'center', paddingBottom: '16px' }}
+        >
+          <button
+            type="button"
+            className="button button-weekends"
+            disabled={safeWeekIndex === 0}
+            onClick={() => setWeekIndex(safeWeekIndex - 1)}
+          >
+            Previous week
+          </button>
+          <span aria-live="polite">Week {safeWeekIndex + 1} of {calendarRows.length}</span>
+          <button
+            type="button"
+            className="button button-weekends"
+            disabled={safeWeekIndex === calendarRows.length - 1}
+            onClick={() => setWeekIndex(safeWeekIndex + 1)}
+          >
+            Next week
+          </button>
+        </div>
+      )}
       <div className="calendar-wrapper anim-y">
-        <div className="calendar">
-          <div className="days">Monday</div>
-          <div className="days">Tuesday</div>
-          <div className="days">Wednesday</div>
-          <div className="days">Thursday</div>
-          <div className="days">Friday</div>
-          <div className="days">Saturday</div>
-          <div className="days">Sunday</div>
-          <div className="day not-work">31</div>
-          <div className="day project-market">
-            1
-            <div className="hover-title">Appointment 1</div>
-            <div className="project-detail">Appointment with Dr. Neetu</div>
-            <div className="project-detail">Appointment to ask about sports Nutritions</div>
-            <div className="popup-check">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-check-square"
-              >
-                <path d="M9 11l3 3L22 4" />
-                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
-              </svg>
-            </div>
-          </div>
-          <div className="day">2</div>
-          <div className="day project-design">
-            3
-            <div className="project-detail design">Create 3 illustrations for blog post about last global fitness event</div>
-          </div>
-          <div className="day">4</div>
-          <div className="day">5</div>
-          <div className="day">6</div>
-          <div className="day project-develop">
-            7
-            <div className="project-detail develop">Take a sustainable step towards environment.</div>
-          </div>
-          <div className="day">8</div>
-          <div className="day">9</div>
-          <div className="day">10</div>
-          <div className="day">11</div>
-          <div className="day">12</div>
-          <div className="day">13</div>
-          <div className="day">14</div>
-          <div className="day project-market">
-            15
-            <div className="hover-title">Cycle Marathon</div>
-            <div className="project-detail">Need to attend the cycle marathon.</div>
-            <div className="popup-check">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-check-square"
-              >
-                <path d="M9 11l3 3L22 4" />
-                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
-              </svg>
-            </div>
-          </div>
-          <div className="day">16</div>
-          <div className="day project-market">
-            17
-            <div className="hover-title">Half Marathon Noida</div>
-            <div className="project-detail">Create Banners for sustainability</div>
-            <div className="project-detail">Increase the score to gain sustain points</div>
-            <div className="popup-check">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-check-square"
-              >
-                <path d="M9 11l3 3L22 4" />
-                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
-              </svg>
-            </div>
-          </div>
-          <div className="day">18</div>
-          <div className="day">19</div>
-          <div className="day">20</div>
-          <div className="day">21</div>
-          <div className="day">22</div>
-          <div className="day project-finance">
-            23
-            <div className="hover-title">Period Reminder</div>
-            <div className="project-detail finance">Prediction of current month period date.</div>
-            <div className="popup-check">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="feather feather-check-square"
-              >
-                <path d="M9 11l3 3L22 4" />
-                <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
-              </svg>
-            </div>
-          </div>
-          <div className="day">24</div>
-          <div className="day">25</div>
-          <div className="day">26</div>
-          <div className="day">27</div>
-          <div className="day">28</div>
-          <div className="day">29</div>
-          <div className="day">30</div>
-          <div className="day not-work">1</div>
-          <div className="day not-work">2</div>
-          <div className="day not-work">3</div>
-          <div className="day not-work">4</div>
+        <div className="calendar" style={calendarGridStyle}>
+          {visibleHeaders(showWeekends).map((header) => (
+            <div key={header} className="days">{header}</div>
+          ))}
+          {visibleRows.map((week, wi) =>
+            week.map((cell, ci) => {
+              const key = `${wi}-${ci}-${cell.day}${cell.adjacent ? '-adj' : ''}`;
+              const className = `day${cell.adjacent ? ' not-work' : ''}${cell.tone ? ` ${cell.tone}` : ''}`;
+              return (
+                <div key={key} className={className}>
+                  {cell.day}
+                  {cell.hoverTitle && <div className="hover-title">{cell.hoverTitle}</div>}
+                  {(cell.details || []).map((detail) => (
+                    <div
+                      key={detail.text}
+                      className={detail.tone ? `project-detail ${detail.tone}` : 'project-detail'}
+                    >
+                      {detail.text}
+                    </div>
+                  ))}
+                  {cell.check && (
+                    <div className="popup-check">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        className="feather feather-check-square"
+                      >
+                        <path d="M9 11l3 3L22 4" />
+                        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" />
+                      </svg>
+                    </div>
+                  )}
+                </div>
+              );
+            })
+          )}
         </div>
       </div>
     </div>
         </div>
       </div>
-    </div>) : (<div style={{ 
-  display: 'flex',
-  flexDirection:'column', 
-  justifyContent: 'center', 
-  alignItems: 'center', 
-  height: '100vh',
-  width: '100vh', 
-}}>
-      <h1>Login to your profile</h1>
-      <Link href='/login'><button style={{fontSize:'1rem'}}>Login</button></Link>
-    </div>)}
+      </div>
+      {!isLoggedIN && (
+        <div className="profile-bottom-login">
+          <Link href="/login">Log in to sync across devices</Link>
+          <span> · Guest data stays in this browser and is never merged automatically.</span>
+        </div>
+      )}
     </div>
   );
 };
