@@ -845,6 +845,7 @@
     "liveScore": "लाइव पोश्चर स्कोर"
   },
   "gym": {
-    "holdTime": "होल्ड समय"
+    "holdTime": "होल्ड समय",
+    "estKcal": "अनुमानित kcal"
   }
 }

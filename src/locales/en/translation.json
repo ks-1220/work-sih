@@ -843,6 +843,7 @@
     "liveScore": "Live posture score"
   },
   "gym": {
-    "holdTime": "Hold time"
+    "holdTime": "Hold time",
+    "estKcal": "Estimated kcal"
   }
 }

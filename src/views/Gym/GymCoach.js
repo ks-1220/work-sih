@@ -166,6 +166,16 @@ export default function GymCoach() {
 
         // FitVisionAI frame processing
         const result = trackerRef.current.processFrame(keypointMap);
+        setAngles(result.angles);
+        if (result.visible === false) {
+          // The body left the frame: keep the skeleton white and freeze
+          // the counters until the user steps back in.
+          skeletonColor = "rgb(255,255,255)";
+          setFormScore(null);
+          setFormStatus(result.status);
+          setFeedbackTip(result.tip);
+          return;
+        }
         setReps(result.reps);
         setHoldSeconds(result.holdSeconds || 0);
         setStage(result.stage);
@@ -251,10 +261,10 @@ export default function GymCoach() {
               <span
                 className="gym-hud-value"
                 style={{
-                  color: formScore >= 80 ? "#2e7d32" : formScore >= 60 ? "#e65100" : "#c62828",
+                  color: formScore == null ? "#64748b" : formScore >= 80 ? "#2e7d32" : formScore >= 60 ? "#e65100" : "#c62828",
                 }}
               >
-                {formStatus} ({formScore}%)
+                {formStatus} ({formScore === null ? "–" : `${formScore}%`})
               </span>
             </div>
           </div>
@@ -262,7 +272,7 @@ export default function GymCoach() {
           <div className="gym-hud-card">
             <div className="gym-hud-icon">🔥</div>
             <div className="gym-hud-content">
-              <span className="gym-hud-label">Calories Burned</span>
+              <span className="gym-hud-label">{t("gym.estKcal")}</span>
               <span className="gym-hud-value">{calories} <small style={{ fontSize: "0.75rem", opacity: 0.6 }}>kcal</small></span>
             </div>
           </div>
@@ -329,19 +339,19 @@ export default function GymCoach() {
             <div className="gym-angle-grid">
               <div className="angle-stat">
                 <span className="angle-name">Knee Angle</span>
-                <span className="angle-val">{angles.avgKnee}°</span>
+                <span className="angle-val">{angles.avgKnee ?? "–"}°</span>
               </div>
               <div className="angle-stat">
                 <span className="angle-name">Hip Angle</span>
-                <span className="angle-val">{angles.avgHip}°</span>
+                <span className="angle-val">{angles.avgHip ?? "–"}°</span>
               </div>
               <div className="angle-stat">
                 <span className="angle-name">Elbow Angle</span>
-                <span className="angle-val">{angles.avgElbow}°</span>
+                <span className="angle-val">{angles.avgElbow ?? "–"}°</span>
               </div>
               <div className="angle-stat">
                 <span className="angle-name">Spine Alignment</span>
-                <span className="angle-val">{angles.avgBody}°</span>
+                <span className="angle-val">{angles.avgBody ?? "–"}°</span>
               </div>
             </div>
 

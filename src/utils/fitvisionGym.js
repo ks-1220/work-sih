@@ -20,70 +20,105 @@ export const START_STAGE = {
 // Rep target shown next to the counter for rep-based exercises.
 export const REP_TARGET = 15;
 
+export const MIN_JOINT_SCORE = 0.35;
+
+// Joints each exercise must see, per side. A side counts as visible only
+// when every joint in its chain scores above MIN_JOINT_SCORE.
+const EXERCISE_CHAINS = {
+  Squat: ["SHOULDER", "HIP", "KNEE", "ANKLE"],
+  "Push-up": ["SHOULDER", "ELBOW", "WRIST", "HIP", "ANKLE"],
+  "Bicep Curl": ["SHOULDER", "ELBOW", "WRIST", "HIP"],
+  Plank: ["SHOULDER", "HIP", "ANKLE"],
+};
+
+export const NOT_VISIBLE_TIP = "Step back so your whole body is in frame";
+
+function jointVisible(keypoints, side, name) {
+  const p = keypoints[POINTS[`${side}_${name}`]];
+  return !!p && p.score > MIN_JOINT_SCORE;
+}
+
+function sideVisible(keypoints, exercise, side) {
+  const chain = EXERCISE_CHAINS[exercise] || EXERCISE_CHAINS.Squat;
+  return chain.every((name) => jointVisible(keypoints, side, name));
+}
+
+// Angle from one side's joints, or null when that side lacks any joint
+// the angle needs. Missing keypoints never default to (0,0).
+function angleIf(keypoints, side, joints, a, b, c) {
+  if (!joints.every((name) => jointVisible(keypoints, side, name))) return null;
+  const P = POINTS;
+  return Math.round(
+    calculateAngle(
+      keypoints[P[`${side}_${a}`]],
+      keypoints[P[`${side}_${b}`]],
+      keypoints[P[`${side}_${c}`]]
+    )
+  );
+}
+
 /**
- * Extracts gym-specific angles from keypoints
+ * Extracts gym-specific angles from keypoints.
+ * Each angle is averaged when both sides are visible, taken from the one
+ * visible side otherwise, and null when neither side is visible.
  */
 export function extractGymAngles(keypoints) {
-  const kp = (idx) => keypoints[idx] || { x: 0, y: 0 };
+  const knee = (s) => angleIf(keypoints, s, ["HIP", "KNEE", "ANKLE"], "HIP", "KNEE", "ANKLE");
+  const hip = (s) => angleIf(keypoints, s, ["SHOULDER", "HIP", "KNEE"], "SHOULDER", "HIP", "KNEE");
+  const elbow = (s) => angleIf(keypoints, s, ["SHOULDER", "ELBOW", "WRIST"], "SHOULDER", "ELBOW", "WRIST");
+  const shoulder = (s) => angleIf(keypoints, s, ["ELBOW", "SHOULDER", "HIP"], "ELBOW", "SHOULDER", "HIP");
+  const body = (s) => angleIf(keypoints, s, ["SHOULDER", "HIP", "ANKLE"], "SHOULDER", "HIP", "ANKLE");
 
-  const rs = kp(POINTS.RIGHT_SHOULDER);
-  const re = kp(POINTS.RIGHT_ELBOW);
-  const rw = kp(POINTS.RIGHT_WRIST);
+  const leftKnee = knee("LEFT");
+  const rightKnee = knee("RIGHT");
+  const leftHip = hip("LEFT");
+  const rightHip = hip("RIGHT");
+  const leftElbow = elbow("LEFT");
+  const rightElbow = elbow("RIGHT");
+  const leftShoulder = shoulder("LEFT");
+  const rightShoulder = shoulder("RIGHT");
+  const leftBody = body("LEFT");
+  const rightBody = body("RIGHT");
 
-  const ls = kp(POINTS.LEFT_SHOULDER);
-  const le = kp(POINTS.LEFT_ELBOW);
-  const lw = kp(POINTS.LEFT_WRIST);
-
-  const rh = kp(POINTS.RIGHT_HIP);
-  const lh = kp(POINTS.LEFT_HIP);
-
-  const rk = kp(POINTS.RIGHT_KNEE);
-  const lk = kp(POINTS.LEFT_KNEE);
-
-  const ra = kp(POINTS.RIGHT_ANKLE);
-  const la = kp(POINTS.LEFT_ANKLE);
-
-  // Knee angles (Hip -> Knee -> Ankle)
-  const leftKnee = calculateAngle(lh, lk, la);
-  const rightKnee = calculateAngle(rh, rk, ra);
-  const avgKnee = Math.round((leftKnee + rightKnee) / 2);
-
-  // Hip angles (Shoulder -> Hip -> Knee)
-  const leftHip = calculateAngle(ls, lh, lk);
-  const rightHip = calculateAngle(rs, rh, rk);
-  const avgHip = Math.round((leftHip + rightHip) / 2);
-
-  // Elbow angles (Shoulder -> Elbow -> Wrist)
-  const leftElbow = calculateAngle(ls, le, lw);
-  const rightElbow = calculateAngle(rs, re, rw);
-  const avgElbow = Math.round((leftElbow + rightElbow) / 2);
-
-  // Shoulder angles (Elbow -> Shoulder -> Hip)
-  const leftShoulder = calculateAngle(le, ls, lh);
-  const rightShoulder = calculateAngle(re, rs, rh);
-  const avgShoulder = Math.round((leftShoulder + rightShoulder) / 2);
-
-  // Body alignment angle (Shoulder -> Hip -> Ankle)
-  const leftBody = calculateAngle(ls, lh, la);
-  const rightBody = calculateAngle(rs, rh, ra);
-  const avgBody = Math.round((leftBody + rightBody) / 2);
+  const avg = (l, r) =>
+    l != null && r != null ? Math.round((l + r) / 2) : (l ?? r ?? null);
 
   return {
     leftKnee,
     rightKnee,
-    avgKnee,
+    avgKnee: avg(leftKnee, rightKnee),
     leftHip,
     rightHip,
-    avgHip,
+    avgHip: avg(leftHip, rightHip),
     leftElbow,
     rightElbow,
-    avgElbow,
+    avgElbow: avg(leftElbow, rightElbow),
     leftShoulder,
     rightShoulder,
-    avgShoulder,
+    avgShoulder: avg(leftShoulder, rightShoulder),
     leftBody,
     rightBody,
-    avgBody,
+    avgBody: avg(leftBody, rightBody),
+  };
+}
+
+function emptyAngles() {
+  return {
+    leftKnee: null,
+    rightKnee: null,
+    avgKnee: null,
+    leftHip: null,
+    rightHip: null,
+    avgHip: null,
+    leftElbow: null,
+    rightElbow: null,
+    avgElbow: null,
+    leftShoulder: null,
+    rightShoulder: null,
+    avgShoulder: null,
+    leftBody: null,
+    rightBody: null,
+    avgBody: null,
   };
 }
 
@@ -117,6 +152,26 @@ export class FitVisionWorkoutTracker {
   }
 
   processFrame(keypoints) {
+    // Neither side shows the joints this exercise needs: freeze the state
+    // machine (no stage or rep change) and say so.
+    const leftOk = sideVisible(keypoints, this.exercise, "LEFT");
+    const rightOk = sideVisible(keypoints, this.exercise, "RIGHT");
+    if (!leftOk && !rightOk) {
+      return {
+        exercise: this.exercise,
+        reps: this.repCount,
+        stage: this.stage,
+        holdSeconds: Math.round(this.holdSeconds * 10) / 10,
+        formScore: null,
+        status: "Not visible",
+        tip: NOT_VISIBLE_TIP,
+        angles: emptyAngles(),
+        calories: Math.round(this.caloriesBurned * 10) / 10,
+        stateChanged: false,
+        visible: false,
+      };
+    }
+
     const angles = extractGymAngles(keypoints);
     let formScore = 100;
     let feedback = [];
@@ -236,6 +291,7 @@ export class FitVisionWorkoutTracker {
       angles,
       calories: Math.round(this.caloriesBurned * 10) / 10,
       stateChanged,
+      visible: true,
     };
   }
 }
