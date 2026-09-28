@@ -1,6 +1,6 @@
 /* WithNavbar: sidebar + content shell. Desktop look is unchanged from the
-   previous inline styles; the top bar and collapsing behaviour below only
-   apply on phones/tablets (max-width: 768px). */
+   previous inline styles. The mobile hamburger strip + drawer come from the
+   site-wide MobileMenu, so this file only collapses the sidebar wrapper. */
 
 .withnav {
   display: flex;
@@ -27,17 +27,7 @@
   min-width: 0;
 }
 
-/* Hidden on desktop — the sidebar rail is always visible there. */
-.withnav-topbar {
-  display: none;
-}
-
 @media (max-width: 768px) {
-  /* Top bar with the hamburger becomes the menu opener on phones. */
-  .withnav-topbar {
-    display: block;
-  }
-
   /* The sidebar turns into a fixed overlay (see navbar.css), so its flex
      wrapper must not reserve any width. */
   .withnav-sidebar {

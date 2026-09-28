@@ -5,8 +5,6 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useAuth } from '../../store/auth';
-import WhatsAppFloat from '../shared/WhatsAppFloat';
-import ChatbotFloat from '../shared/ChatbotFloat';
 import { ORIGINAL_NAV_ITEMS } from '../../config/navItems';
 const audio2 = "/media/audio2.mp3";
 import './navbar.css';
@@ -15,9 +13,9 @@ import './navbar.css';
 // Logout is appended for signed-in users only. See src/config/navItems.js.
 //
 // Mobile behaviour: on phones (max-width: 768px, see navbar.css) the sidebar
-// is an off-canvas drawer. When used with `mobileOpen`/`onClose` (e.g. from
-// WithNavbar + TopBar) it is controlled from outside; when rendered bare
-// (home, diet, profile, sustain views) it manages its own floating opener.
+// is an off-canvas drawer controlled from outside via `mobileOpen`/`onClose`
+// (the site-wide MobileMenu in the root layout). Without those props it
+// stays shut on phones and renders the normal rail on desktop.
 export default function Navbar({ mobileOpen, onClose }) {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
   const [internalOpen, setInternalOpen] = useState(false);
@@ -82,20 +80,6 @@ export default function Navbar({ mobileOpen, onClose }) {
 
   return (
     <>
-      {/* Floating opener for pages that render a bare <Navbar/> with no
-          top bar (home, diet, profile, sustain). Hidden on desktop and on
-          pages where a parent controls the drawer. */}
-      {!controlled && (
-        <button
-          type="button"
-          className="sidebar-fab"
-          onClick={() => setInternalOpen(true)}
-          aria-label={t('nav.menu')}
-          aria-expanded={open}
-        >
-          <i className="fa-solid fa-bars"></i>
-        </button>
-      )}
       {/* Dimmed backdrop behind the open drawer (phones only, see CSS). */}
       {open && (
         <button
@@ -163,10 +147,6 @@ export default function Navbar({ mobileOpen, onClose }) {
           </div>
         </div>
       </nav>
-
-        {/* Floating buttons (bottom-right, site-wide): chatbot above WhatsApp */}
-        <ChatbotFloat />
-        <WhatsAppFloat />
-      </>
-    );
-  }
+    </>
+  );
+}

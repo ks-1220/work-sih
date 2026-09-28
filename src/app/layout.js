@@ -10,6 +10,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import "leaflet/dist/leaflet.css";
 
 import Providers from "./providers";
+import MobileMenu from "../components/layout/MobileMenu";
 
 export const metadata = {
   title: "SaathiSync",
@@ -31,7 +32,10 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <MobileMenu />
+          {children}
+        </Providers>
       </body>
     </html>
   );
