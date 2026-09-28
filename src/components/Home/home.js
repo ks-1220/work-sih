@@ -8,17 +8,19 @@ import Navbar from '../Navbar/navbar';
 import { useTranslation } from "react-i18next";
 import FitnessEventsMap from '../map/FitnessEventsMap';
 import SampleDataBadge from '../shared/SampleDataBadge';
-import GoogleAuthButton from '../auth/GoogleAuthButton';
 import GovBanner from '../gov/GovBanner';
-import { stashPendingGoogleProfile } from '../../services/googleAuth';
+import Avatar from '../shared/Avatar';
 import { demoHomeStats } from '../../data/demoStats';
 import './home.css';
 
 export default function Homesection() {
   const { t } = useTranslation();
-  const { isLoggedIN, isAuthReady, LogoutUser, storetokenInLS } = useAuth();
+  const { isLoggedIN, isAuthReady, LogoutUser, user } = useAuth();
   const pathname = usePathname();
-  const router = useRouter();
+  const avatarSeed =
+    user && typeof user === "object"
+      ? `${user.firstName || ""} ${user.lastName || ""}`.trim() || user.email || "member"
+      : "member";
 
   const activities = [
     {
@@ -90,18 +92,6 @@ export default function Homesection() {
               <p>{t('home.welcomeSub')}</p>
             </div>
             <div className="home-hero-actions">
-              <div className="home-google-wrap">
-                <GoogleAuthButton
-                  mode="continue"
-                  variant="hero"
-                  onSuccess={(token) => storetokenInLS(token)}
-                  onNeedsProfile={(pending) => {
-                    stashPendingGoogleProfile(pending);
-                    router.push(`/register?next=${encodeURIComponent(pathname || '/')}`);
-                  }}
-                  onError={() => {}}
-                />
-              </div>
               <Link href={`/login?next=${encodeURIComponent(pathname || '/')}`} className="home-email-btn">{t('home.emailBtn')}</Link>
             </div>
           </div>
@@ -210,10 +200,7 @@ export default function Homesection() {
                   <i className="fa-solid fa-right-from-bracket"></i> {t('nav.logout')}
                 </button>
                 <Link href="/profile" title={t('home.viewProfile')}>
-                  <img
-                    src="https://akm-img-a-in.tosshub.com/indiatoday/images/story/202212/afp_000_9cq7ux_shilpa_shetty_yoga-one_one.jpg?VersionId=DeAg8M98aY9OSz3Z3gVSU84uySM4f245"
-                    alt={t('home.avatarAlt')}
-                  />
+                  <Avatar seed={avatarSeed} size={40} title={t('home.viewProfile')} />
                 </Link>
               </div>
             ) : null}

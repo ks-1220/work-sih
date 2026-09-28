@@ -235,7 +235,7 @@ const Profile = () => {
         <div className="side-wrapper">
           <div className="user-profile">
             {isLoggedIN ? (
-              <img src="https://akm-img-a-in.tosshub.com/indiatoday/images/story/202212/afp_000_9cq7ux_shilpa_shetty_yoga-one_one.jpg?VersionId=DeAg8M98aY9OSz3Z3gVSU84uySM4f245" alt="" className="user-photo" />
+              <Avatar seed={displayName} size={70} title={displayName} />
             ) : (
               <Avatar seed="guest" size={70} title="Guest avatar" />
             )}

@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 /**
- * Guest-mode notice: profile works without login/Google, data stays local.
+ * Guest-mode notice: profile works without login, data stays local.
  */
 export default function GuestBanner() {
   return (

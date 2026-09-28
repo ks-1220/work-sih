@@ -517,25 +517,6 @@
     "viewProfile": "View Profile",
     "avatarAlt": "user"
   },
-  "google": {
-    "failed": "Google sign-in failed.",
-    "needClientId": "Google sign-in needs a Client ID. Add",
-    "needClientId2": "to",
-    "needClientId3": "see",
-    "loading": "Loading Google sign-in…",
-    "verifying": "Verifying with Google — signing you in…",
-    "lastAccount": "Last signed in as",
-    "needsProfile": "Google verified you, but your profile is incomplete. Please finish it below.",
-    "completeTitle": "Complete your profile",
-    "completeSub": "Google verified {{email}}. Add the remaining details to finish signup — no password needed.",
-    "completing": "Finishing your profile…",
-    "finishBtn": "Finish signup",
-    "backToOptions": "Back to sign-in options",
-    "blocked": "Google sign-in could not start —",
-    "blocked2": "did not load. This is usually an ad-blocker, tracking protection, or no internet.",
-    "retry": "Try again",
-    "orEmail": "or use email login below."
-  },
   "dietarySub": "Simple Indian food guidance, healthy swaps and regional recipes.",
   "cal": {
     "title": "Indian Food Calorie Tracker",    "age": "Age",
