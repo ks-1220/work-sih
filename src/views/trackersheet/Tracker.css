@@ -43,7 +43,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1.35fr) 380px;
   gap: 16px;
-  align-items: start;
+  align-items: stretch;
   margin-bottom: 16px;
 }
 
@@ -205,7 +205,11 @@
 .tracker-stat strong { font-size: 1.5rem; color: #2d1b4e; }
 .tracker-stat span { font-size: 0.75rem; color: #6b6480; text-align: center; }
 
-.lastmonth-rows { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; }
+.lastmonth-rows { display: flex; flex-direction: column; gap: 8px; margin-top: 12px; flex: 1; justify-content: space-evenly; }
+
+/* Last-month side panel fills the row height so it always matches the
+   gauges box on its left. */
+.lastmonth-panel { display: flex; flex-direction: column; }
 .lastmonth-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px; border-radius: 10px; background: #f6f2fd; border: 1px solid #e3ddf2; font-size: 0.82rem; }
 .lastmonth-row span { display: inline-flex; align-items: center; gap: 8px; color: #5c5470; font-weight: 600; }
 .lastmonth-row span i { color: #7e57c2; }
