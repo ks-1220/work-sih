@@ -8,6 +8,18 @@
 import { calculateAngle } from "./mediapipeYoga";
 import { POINTS } from "./data";
 
+// The stage a set starts from. Curls start hanging (DOWN) so a straight
+// arm at the start never counts a rep; Plank holds instead of repping.
+export const START_STAGE = {
+  Squat: "UP",
+  "Push-up": "UP",
+  "Bicep Curl": "DOWN",
+  Plank: "HOLD",
+};
+
+// Rep target shown next to the counter for rep-based exercises.
+export const REP_TARGET = 15;
+
 /**
  * Extracts gym-specific angles from keypoints
  */
@@ -82,20 +94,26 @@ export class FitVisionWorkoutTracker {
   constructor(exercise = "Squat") {
     this.exercise = exercise;
     this.repCount = 0;
-    this.stage = "UP"; // "UP" or "DOWN"
+    this.stage = START_STAGE[exercise] || "UP";
     this.caloriesBurned = 0;
+    this.holdSeconds = 0;
+    this.lastFrameAt = null;
   }
 
   setExercise(exercise) {
     this.exercise = exercise;
     this.repCount = 0;
-    this.stage = "UP";
+    this.stage = START_STAGE[exercise] || "UP";
+    this.holdSeconds = 0;
+    this.lastFrameAt = null;
   }
 
   reset() {
     this.repCount = 0;
-    this.stage = "UP";
+    this.stage = START_STAGE[this.exercise] || "UP";
     this.caloriesBurned = 0;
+    this.holdSeconds = 0;
+    this.lastFrameAt = null;
   }
 
   processFrame(keypoints) {
@@ -189,7 +207,8 @@ export class FitVisionWorkoutTracker {
         );
       }
     } else {
-      // Plank / Static Core
+      // Plank / Static Core: reps are never counted. Hold time accrues
+      // only while form stays good.
       if (angles.avgBody >= 160) {
         formScore = 95;
         feedback.push("Excellent plank alignment! Keep breathing");
@@ -197,6 +216,11 @@ export class FitVisionWorkoutTracker {
         formScore = 65;
         feedback.push("Flatten spine — align shoulders, hips and ankles");
       }
+      const now = Date.now();
+      if (this.lastFrameAt != null && formScore >= 80) {
+        this.holdSeconds += (now - this.lastFrameAt) / 1000;
+      }
+      this.lastFrameAt = now;
     }
 
     formScore = Math.max(20, Math.min(100, formScore));
@@ -205,6 +229,7 @@ export class FitVisionWorkoutTracker {
       exercise: this.exercise,
       reps: this.repCount,
       stage: this.stage,
+      holdSeconds: Math.round(this.holdSeconds * 10) / 10,
       formScore,
       status: formScore >= 80 ? "Good" : formScore >= 60 ? "Fair" : "Needs Correction",
       tip: feedback[0] || "Maintain controlled tempo",

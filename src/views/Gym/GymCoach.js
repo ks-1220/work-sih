@@ -5,6 +5,7 @@ import * as tf from "@tensorflow/tfjs";
 import React, { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import Navbar from "../../components/Navbar/navbar";
+import { useTranslation } from "react-i18next";
 import Webcam from "react-webcam";
 
 // WebGL backend
@@ -14,7 +15,7 @@ import "./GymCoach.css";
 
 import { POINTS, keypointConnections } from "../../utils/data";
 import { drawPoint, drawSegment } from "../../utils/helper";
-import { FitVisionWorkoutTracker } from "../../utils/fitvisionGym";
+import { FitVisionWorkoutTracker, REP_TARGET, START_STAGE } from "../../utils/fitvisionGym";
 
 const count = "/media/count.wav";
 let skeletonColor = "rgb(255,255,255)";
@@ -23,13 +24,15 @@ let interval;
 const EXERCISES = ["Squat", "Push-up", "Bicep Curl", "Plank"];
 
 export default function GymCoach() {
+  const { t } = useTranslation();
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
   const trackerRef = useRef(new FitVisionWorkoutTracker("Squat"));
 
   const [currentExercise, setCurrentExercise] = useState("Squat");
   const [reps, setReps] = useState(0);
-  const [stage, setStage] = useState("UP");
+  const [holdSeconds, setHoldSeconds] = useState(0);
+  const [stage, setStage] = useState(START_STAGE.Squat);
   const [formScore, setFormScore] = useState(100);
   const [formStatus, setFormStatus] = useState("Good");
   const [feedbackTip, setFeedbackTip] = useState("Stand upright in front of the camera");
@@ -43,7 +46,8 @@ export default function GymCoach() {
     setCurrentExercise(ex);
     trackerRef.current.setExercise(ex);
     setReps(0);
-    setStage("UP");
+    setHoldSeconds(0);
+    setStage(START_STAGE[ex] || "UP");
     setFormScore(100);
     setFormStatus("Good");
     setFeedbackTip(`Ready for ${ex}. Position yourself in frame.`);
@@ -52,8 +56,9 @@ export default function GymCoach() {
   const handleReset = () => {
     trackerRef.current.reset();
     setReps(0);
+    setHoldSeconds(0);
     setCalories(0);
-    setStage("UP");
+    setStage(START_STAGE[currentExercise] || "UP");
     setFormScore(100);
   };
 
@@ -162,6 +167,7 @@ export default function GymCoach() {
         // FitVisionAI frame processing
         const result = trackerRef.current.processFrame(keypointMap);
         setReps(result.reps);
+        setHoldSeconds(result.holdSeconds || 0);
         setStage(result.stage);
         setFormScore(result.formScore);
         setFormStatus(result.status);
@@ -224,8 +230,17 @@ export default function GymCoach() {
           <div className="gym-hud-card">
             <div className="gym-hud-icon">🔢</div>
             <div className="gym-hud-content">
-              <span className="gym-hud-label">Reps Completed</span>
-              <span className="gym-hud-value">{reps} <small style={{ fontSize: "0.75rem", opacity: 0.6 }}>/ 15</small></span>
+              {currentExercise === "Plank" ? (
+                <>
+                  <span className="gym-hud-label">{t("gym.holdTime")}</span>
+                  <span className="gym-hud-value">{holdSeconds} <small style={{ fontSize: "0.75rem", opacity: 0.6 }}>s</small></span>
+                </>
+              ) : (
+                <>
+                  <span className="gym-hud-label">Reps Completed</span>
+                  <span className="gym-hud-value">{reps} <small style={{ fontSize: "0.75rem", opacity: 0.6 }}>/ {REP_TARGET}</small></span>
+                </>
+              )}
             </div>
           </div>
 

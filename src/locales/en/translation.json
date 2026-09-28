@@ -841,5 +841,8 @@
     "visibility": "Visibility",
     "stepIntoFrame": "Step into the frame so your whole body is visible",
     "liveScore": "Live posture score"
+  },
+  "gym": {
+    "holdTime": "Hold time"
   }
 }
