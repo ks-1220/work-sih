@@ -186,6 +186,9 @@ export const POSE_TARGET_RULES = {
 
   Warrior: {
     evaluate: (keypoints) => {
+      // Warrior III (matches warrior.jpg and the instructions): standing
+      // knee straight, torso hinged to horizontal, lifted leg straight
+      // back, arms reaching forward in a "T".
       if (
         !legSideVisible(keypoints, "RIGHT") ||
         !legSideVisible(keypoints, "LEFT") ||
@@ -195,46 +198,55 @@ export const POSE_TARGET_RULES = {
         return offFrame();
       }
       const angles = extractMediaPipeAngles(keypoints);
-      // Warrior II: One knee ~90 (75-110), other knee straight (160-180), arms extended (~85-110 shoulder, ~165-180 elbow)
       let score = 0;
       let tips = [];
 
-      const rKneeBent = angles.rightKnee >= 75 && angles.rightKnee <= 115;
-      const lKneeBent = angles.leftKnee >= 75 && angles.leftKnee <= 115;
-      const rKneeStraight = angles.rightKnee >= 155;
-      const lKneeStraight = angles.leftKnee >= 155;
-
-      if ((rKneeBent && lKneeStraight) || (lKneeBent && rKneeStraight)) {
-        score += 45;
-      } else if (rKneeBent || lKneeBent) {
-        score += 25;
-        tips.push("Straighten back leg completely");
-      } else {
-        tips.push("Bend front knee to 90° over ankle");
+      // Either leg can be the standing one; score the better side.
+      const sides = ["RIGHT", "LEFT"];
+      let stanceScore = 0;
+      let stanceTip = "";
+      for (const side of sides) {
+        const other = side === "RIGHT" ? "LEFT" : "RIGHT";
+        const kneeKey = side === "RIGHT" ? "rightKnee" : "leftKnee";
+        const hipKey = side === "RIGHT" ? "rightHip" : "leftHip";
+        const otherKneeKey = other === "RIGHT" ? "rightKnee" : "leftKnee";
+        let s = 0;
+        // Standing knee straight: one knee at or past 160 degrees
+        if (angles[kneeKey] >= 160) {
+          s += 30;
+        }
+        // Torso hinged to horizontal: the standing-side hip between 70 and 115
+        if (angles[hipKey] >= 70 && angles[hipKey] <= 115) {
+          s += 30;
+        }
+        // Lifted leg straight: the other knee at or past 155 degrees
+        if (angles[otherKneeKey] >= 155) {
+          s += 20;
+        }
+        if (s > stanceScore) {
+          stanceScore = s;
+          stanceTip =
+            angles[kneeKey] < 160
+              ? "Straighten your standing leg without locking it"
+              : angles[hipKey] < 70 || angles[hipKey] > 115
+                ? "Hinge forward until your torso is horizontal"
+                : "Extend the lifted leg straight back";
+        }
       }
+      score += stanceScore;
+      if (stanceScore < 80) tips.push(stanceTip);
 
-      // Arms horizontal
-      const rArmExt = angles.rightShoulder >= 70 && angles.rightShoulder <= 115;
-      const lArmExt = angles.leftShoulder >= 70 && angles.leftShoulder <= 115;
-      const rElbowExt = angles.rightElbow >= 150;
-      const lElbowExt = angles.leftElbow >= 150;
-
-      if (rArmExt && lArmExt && rElbowExt && lElbowExt) {
-        score += 40;
-      } else if (rArmExt || lArmExt) {
-        score += 25;
-        tips.push("Extend both arms parallel to the floor");
+      // Arms reaching forward: both elbows extended past 150 degrees
+      if (angles.rightElbow >= 150 && angles.leftElbow >= 150) {
+        score += 20;
       } else {
-        tips.push("Raise arms to shoulder level");
+        tips.push("Reach both arms forward past your ears");
       }
-
-      // Torso vertical
-      score += 15;
 
       return {
-        accuracy: Math.min(99, score),
+        accuracy: score,
         isAligned: score >= 80,
-        tip: tips[0] || "Powerful Warrior II stance! Hold and breathe",
+        tip: tips[0] || "Strong Warrior III! Hold the T shape and breathe",
       };
     },
   },
@@ -381,7 +393,7 @@ export const POSE_TARGET_RULES = {
     },
   },
 
-  Traingle: {
+  Triangle: {
     evaluate: (keypoints) => {
       if (
         !legSideVisible(keypoints, "RIGHT") ||

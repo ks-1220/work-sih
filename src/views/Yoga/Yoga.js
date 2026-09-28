@@ -27,7 +27,7 @@ const poseList = [
   "Warrior",
   "Dog",
   "Shoulderstand",
-  "Traingle",
+  "Triangle",
 ];
 
 const DETECTION_INTERVAL_MS = 100;

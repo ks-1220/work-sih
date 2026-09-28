@@ -3,7 +3,7 @@ import cobra from './cobra.jpg'
 import dog from './dog.jpg'
 import tree from './tree.jpg'
 import warrior from './warrior.jpg'
-import traingle from './traingle.jpg'
+import triangle from './triangle.jpg'
 import shoulderstand from './shoulderstand.jpg'
 
 // Next resolves an image import to a StaticImageData object rather than the
@@ -15,6 +15,6 @@ export const poseImages = {
     Dog: dog.src,
     Warrior: warrior.src,
     Chair: chair.src,
-    Traingle: traingle.src,
+    Triangle: triangle.src,
     Shoulderstand: shoulderstand.src
 }
