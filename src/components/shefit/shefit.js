@@ -7,7 +7,27 @@ import MythOrFact from "./MythOrFact";
 import { HydrationTracker, CoachCards, PhaseGuide, CycleRingCard } from "./SheFitExtra";
 import { SavePin, useSavedPins } from "./SavedPins";
 import { getWellnessInsights } from "../../utils/wellnessInsights";
+import { photo } from "../../data/fitnessPhotos";
+import PhotoCredit from "../shared/PhotoCredit";
 import styles from "./shefit.module.css";
+
+// Local licensed cover photo per pin/education cover class — no external
+// image URLs by policy.
+const COVER_PHOTOS = {
+  coverTrack: "yoga-1",
+  coverInsight: "yoga-2",
+  coverWater: "swimming-1",
+  coverQuiz: "dancing-2",
+  coverPhase: "yoga-3",
+  coverCoach: "yoga-4",
+  coverLearn: "gardening-2",
+  eduCoverA: "meditation-1",
+  eduCoverB: "swimming-2",
+  eduCoverC: "hiking-2",
+  eduCoverD: "gardening-1",
+};
+
+const coverImg = (cover) => photo(COVER_PHOTOS[cover] || "running-1");
 
 // Educational content only - phrased to inform rather than diagnose, per
 // the "PCOS can involve..." / "some people experience..." guidance. Kept as
@@ -81,11 +101,18 @@ const JUMP_LINKS = [
 
 function PinCover({ cover, art, tag, pinId, tall }) {
   const { t } = useTranslation();
+  const img = coverImg(cover);
   return (
     <div className={`${styles.pinCover} ${styles[cover] || ""} ${tall ? styles.pinCoverTall : ""}`}>
+      <img className={styles.coverImg} src={img.src} alt="" aria-hidden="true" loading="lazy" />
+      <span className={styles.coverShade} aria-hidden="true" />
       <span className={styles.pinCoverArt} aria-hidden="true">
         <i className={art}></i>
       </span>
+      <PhotoCredit
+        photo={img}
+        style={{ position: "absolute", top: 8, left: 10, zIndex: 2, fontSize: "0.58rem", color: "#fff", background: "rgba(0,0,0,0.35)", padding: "1px 7px", borderRadius: 999 }}
+      />
       <span className={styles.pinTag}>{t(tag)}</span>
       <SavePin id={pinId} />
     </div>
@@ -234,9 +261,15 @@ function Shefit() {
                     className={`${styles.educationCard} ${isOpen ? styles.educationCardOpen : ""}`}
                   >
                     <div className={`${styles.eduCover} ${styles[topic.cover]}`}>
+                      <img className={styles.coverImg} src={coverImg(topic.cover).src} alt="" aria-hidden="true" loading="lazy" />
+                      <span className={styles.coverShade} aria-hidden="true" />
                       <span className={styles.eduCoverArt} aria-hidden="true">
                         <i className={topic.art}></i>
                       </span>
+                      <PhotoCredit
+                        photo={coverImg(topic.cover)}
+                        style={{ position: "absolute", top: 6, left: 8, zIndex: 2, fontSize: "0.58rem", color: "#fff", background: "rgba(0,0,0,0.35)", padding: "1px 7px", borderRadius: 999 }}
+                      />
                       <span className={styles.eduCoverTag}>{t(topic.tagKey)}</span>
                       <SavePin id={`pin-edu-${ti}`} />
                     </div>
