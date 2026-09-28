@@ -1,15 +1,16 @@
 // Mock challenge catalogue for the Challenges Hub (/challenges).
 // Static demo data (like communityFeed/fitnessEvents): daysRemaining counts
 // down from a fixed launch offset so cards never rot into "ended".
-// Cover art is CSS (gradient + icon) — no external images by policy.
+// Cover art is a local licensed photo (see src/data/fitnessPhotos.js) over
+// the category gradient — no external image URLs by policy.
 
 export const CHALLENGE_CATEGORIES = ["steps", "workout", "yoga", "nutrition"];
 
 export const CATEGORY_META = {
-  steps: { icon: "fa-solid fa-shoe-prints", color: "#0288d1", labelKey: "chal.catSteps" },
-  workout: { icon: "fa-solid fa-dumbbell", color: "#e65100", labelKey: "chal.catWorkout" },
-  yoga: { icon: "fa-solid fa-spa", color: "#7e57c2", labelKey: "chal.catYoga" },
-  nutrition: { icon: "fa-solid fa-apple-whole", color: "#2e7d32", labelKey: "chal.catNutrition" },
+  steps: { icon: "fa-solid fa-shoe-prints", color: "#0288d1", labelKey: "chal.catSteps", photo: "walkathon-1" },
+  workout: { icon: "fa-solid fa-dumbbell", color: "#e65100", labelKey: "chal.catWorkout", photo: "strength-1" },
+  yoga: { icon: "fa-solid fa-spa", color: "#7e57c2", labelKey: "chal.catYoga", photo: "yoga-1" },
+  nutrition: { icon: "fa-solid fa-apple-whole", color: "#2e7d32", labelKey: "chal.catNutrition", photo: "gardening-1" },
 };
 
 export const CHALLENGES = [

@@ -1,14 +1,17 @@
 // Mock product catalogue for the Wellness Store prototype (/store).
 // No payments: Buy Now opens the brand/retailer page in a new tab.
-// Images are CSS art (icon + gradient) — no external image URLs by policy.
+// Card art is a local licensed photo (see src/data/fitnessPhotos.js) over
+// the product gradient — no external image URLs by policy.
+
+import { photo } from "./fitnessPhotos";
 
 export const PRODUCT_CATEGORIES = ["accessories", "equipment", "lifestyle", "nutrition"];
 
 export const PRODUCT_CATEGORY_META = {
-  accessories: { icon: "fa-solid fa-headphones", labelKey: "store.catAccessories" },
-  equipment: { icon: "fa-solid fa-dumbbell", labelKey: "store.catEquipment" },
-  lifestyle: { icon: "fa-solid fa-bag-shopping", labelKey: "store.catLifestyle" },
-  nutrition: { icon: "fa-solid fa-jar-wheat", labelKey: "store.catNutrition" },
+  accessories: { icon: "fa-solid fa-headphones", labelKey: "store.catAccessories", coverPool: ["yoga-2", "meditation-1", "cycling-3"] },
+  equipment: { icon: "fa-solid fa-dumbbell", labelKey: "store.catEquipment", coverPool: ["strength-2", "strength-3", "hyrox-1"] },
+  lifestyle: { icon: "fa-solid fa-bag-shopping", labelKey: "store.catLifestyle", coverPool: ["hiking-1", "running-2", "swimming-1"] },
+  nutrition: { icon: "fa-solid fa-jar-wheat", labelKey: "store.catNutrition", coverPool: ["gardening-1", "gardening-2", "gardening-3"] },
 };
 
 export const FEATURED_TAGS = ["yoga-mats", "smartwatches", "snacks", "bands", "bottles"];
@@ -139,4 +142,14 @@ export function formatINR(n) {
 
 export function topRated(count = 4) {
   return [...PRODUCTS].sort((a, b) => b.rating - a.rating).slice(0, count);
+}
+
+// Stable cover photo per product: hashed from the id so every card shows a
+// different photo without flickering between renders (no Math.random here,
+// which would also break server/client hydration).
+export function productCover(product) {
+  const pool = PRODUCT_CATEGORY_META[product.category]?.coverPool || ["running-1"];
+  let h = 0;
+  for (const ch of String(product.id)) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  return photo(pool[h % pool.length]);
 }

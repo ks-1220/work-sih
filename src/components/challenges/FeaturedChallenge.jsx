@@ -2,11 +2,14 @@
 
 import { useTranslation } from "react-i18next";
 import { CATEGORY_META, formatParticipants } from "../../data/challenges";
+import { photo } from "../../data/fitnessPhotos";
+import PhotoCredit from "../shared/PhotoCredit";
 
 /** Big featured card with stats, progress (when joined) and Start button. */
 export default function FeaturedChallenge({ challenge, joined, joinedAt, onJoin }) {
   const { t } = useTranslation();
   const meta = CATEGORY_META[challenge.category];
+  const img = photo(meta.photo);
   const elapsed = joinedAt
     ? Math.min(Math.floor((Date.now() - new Date(joinedAt).getTime()) / 86400000), challenge.durationDays)
     : 0;
@@ -14,9 +17,15 @@ export default function FeaturedChallenge({ challenge, joined, joinedAt, onJoin 
   return (
     <article className="chal-featured">
       <div className="chal-featured-cover" style={{ background: `linear-gradient(135deg, ${meta.color}, #2d1b4e)` }}>
+        <img className="chal-cover-img" src={img.src} alt="" aria-hidden="true" loading="lazy" />
+        <span className="chal-shade" aria-hidden="true" />
         <span className="chal-featured-art" aria-hidden="true">
           <i className={meta.icon}></i>
         </span>
+        <PhotoCredit
+          photo={img}
+          style={{ position: "absolute", top: 8, left: 10, zIndex: 2, fontSize: "0.58rem", color: "#fff", background: "rgba(0,0,0,0.35)", padding: "1px 7px", borderRadius: 999 }}
+        />
         <span className="chal-cat">{t("chal.featuredTag")}</span>
       </div>
       <div className="chal-featured-body">
