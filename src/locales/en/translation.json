@@ -834,5 +834,12 @@
     "tagCertified": "Certified Instructors",
     "tagMorning": "Morning Batches",
     "view": "View"
+  },
+  "yoga": {
+    "poseReady": "Pose model ready",
+    "poseLoading": "Initializing AI Model...",
+    "visibility": "Visibility",
+    "stepIntoFrame": "Step into the frame so your whole body is visible",
+    "liveScore": "Live posture score"
   }
 }

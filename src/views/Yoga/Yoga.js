@@ -20,8 +20,7 @@ import { POINTS, keypointConnections, poseInstructions } from "../../utils/data"
 import { drawPoint, drawSegment } from "../../utils/helper";
 import { evaluateMediaPipePose } from "../../utils/mediapipeYoga";
 
-let skeletonColor = "rgb(255,255,255)";
-let poseList = [
+const poseList = [
   "Tree",
   "Chair",
   "Cobra",
@@ -32,122 +31,97 @@ let poseList = [
   "Pose",
 ];
 
-let interval;
-let flag = false;
+const DETECTION_INTERVAL_MS = 100;
+const TOTAL_JOINTS = 17;
+const MIN_KEYPOINT_SCORE = 0.35;
 
 function Yogacv() {
   const { t } = useTranslation();
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
 
-  const [startingTime, setStartingTime] = useState(0);
-  const [currentTime, setCurrentTime] = useState(0);
   const [poseTime, setPoseTime] = useState(0);
   const [bestPerform, setBestPerform] = useState(0);
   const [currentPose, setCurrentPose] = useState("Tree");
-  const [accuracy, setAccuracy] = useState(0);
+  const [accuracy, setAccuracy] = useState(null);
+  const [visibility, setVisibility] = useState(null);
   const [liveFeedback, setLiveFeedback] = useState("");
   const [isModelReady, setIsModelReady] = useState(false);
   const [cameraError, setCameraError] = useState(false);
 
-  useEffect(() => {
-    const timeDiff = (currentTime - startingTime) / 1000;
-    if (flag) {
-      setPoseTime(Math.round(timeDiff));
-    }
-    if ((currentTime - startingTime) / 1000 > bestPerform) {
-      setBestPerform(Math.round(timeDiff));
-    }
-  }, [currentTime]);
+  // All mutable detection-loop state lives in refs, so the 100 ms interval
+  // always reads the latest pose and hold state without being re-created.
+  const poseRef = useRef(currentPose);
+  const intervalRef = useRef(null);
+  const detectorRef = useRef(null);
+  const audioRef = useRef(null);
+  const skeletonColorRef = useRef("rgb(255,255,255)");
+  const holdActiveRef = useRef(false);
+  const holdStartRef = useRef(0);
+  // Guards against overlapping async frames: while one detectPose() is still
+  // awaiting estimatePoses, interval ticks are skipped instead of piling up.
+  const frameInFlightRef = useRef(false);
+  const warmupPromiseRef = useRef(null);
+  const mountedRef = useRef(true);
 
-  useEffect(() => {
-    setCurrentTime(0);
+  // Pose changes come through this handler (not an effect) so the hold
+  // timer, best time, score and feedback reset in the same user gesture.
+  const handleSelectPose = (pose) => {
+    poseRef.current = pose;
+    setCurrentPose(pose);
+    holdActiveRef.current = false;
+    holdStartRef.current = 0;
+    skeletonColorRef.current = "rgb(255,255,255)";
+    if (audioRef.current) {
+      try {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      } catch (e) {}
+    }
     setPoseTime(0);
     setBestPerform(0);
-    setAccuracy(0);
+    setAccuracy(null);
+    setVisibility(null);
     setLiveFeedback("");
-  }, [currentPose]);
+  };
 
   useEffect(() => {
-    let active = true;
+    mountedRef.current = true;
 
-    async function setupVision() {
-      try {
-        await tf.ready();
-        const detectorConfig = {
-          modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER,
-        };
-        const detector = await poseDetection.createDetector(
-          poseDetection.SupportedModels.MoveNet,
-          detectorConfig
-        );
-        
-        let countAudio = null;
-        try {
-          countAudio = new Audio(count);
-          countAudio.loop = true;
-        } catch (e) {
-          console.warn("Audio not supported or blocked", e);
-        }
-
-        if (active) {
-          setIsModelReady(true);
-          if (interval) clearInterval(interval);
-          interval = setInterval(() => {
-            detectPose(detector, countAudio);
-          }, 100);
-        }
-      } catch (err) {
-        console.warn("MoveNet Thunder fallback to Lightning:", err);
-        try {
-          const detector = await poseDetection.createDetector(
-            poseDetection.SupportedModels.MoveNet,
-            { modelType: poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING }
-          );
-          if (active) {
-            setIsModelReady(true);
-            if (interval) clearInterval(interval);
-            interval = setInterval(() => {
-              detectPose(detector, null);
-            }, 100);
-          }
-        } catch (fallbackErr) {
-          console.error("Pose detector load error:", fallbackErr);
-        }
+    const detectPose = async () => {
+      const detector = detectorRef.current;
+      const countAudio = audioRef.current;
+      if (
+        !detector ||
+        typeof webcamRef.current === "undefined" ||
+        webcamRef.current === null ||
+        !webcamRef.current.video ||
+        webcamRef.current.video.readyState !== 4 ||
+        canvasRef.current === null
+      ) {
+        return;
       }
-    }
-
-    setupVision();
-
-    return () => {
-      active = false;
-      if (interval) clearInterval(interval);
-    };
-  }, []);
-
-  const detectPose = async (detector, countAudio) => {
-    if (
-      typeof webcamRef.current !== "undefined" &&
-      webcamRef.current !== null &&
-      webcamRef.current.video &&
-      webcamRef.current.video.readyState === 4 &&
-      canvasRef.current !== null
-    ) {
-      let notDetected = 0;
-      const video = webcamRef.current.video;
-      const pose = await detector.estimatePoses(video);
-      const ctx = canvasRef.current.getContext("2d");
-      ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
+      if (frameInFlightRef.current) return;
+      frameInFlightRef.current = true;
 
       try {
+        const video = webcamRef.current.video;
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        const pose = await detector.estimatePoses(video);
+        if (!mountedRef.current) return;
         if (!pose || pose.length === 0) return;
         const keypoints = pose[0].keypoints;
 
-        // Extract keypoint coordinate map for MediaPipe angle engine
+        let notDetected = 0;
+        // Score travels with each joint so the scoring rules can require
+        // confidently-seen joints instead of defaulting missing ones to (0,0).
         let keypointMap = {};
         keypoints.forEach((keypoint, idx) => {
-          if (keypoint.score > 0.35) {
-            keypointMap[idx] = { x: keypoint.x, y: keypoint.y };
+          if (keypoint.score > MIN_KEYPOINT_SCORE) {
+            keypointMap[idx] = { x: keypoint.x, y: keypoint.y, score: keypoint.score };
             if (
               !(keypoint.name === "left_eye" || keypoint.name === "right_eye")
             ) {
@@ -165,7 +139,7 @@ function Yogacv() {
                           keypoints[POINTS[conName]].x,
                           keypoints[POINTS[conName]].y,
                         ],
-                        skeletonColor
+                        skeletonColorRef.current
                       );
                     }
                   });
@@ -177,41 +151,145 @@ function Yogacv() {
           }
         });
 
+        setVisibility(Math.round(((TOTAL_JOINTS - notDetected) / TOTAL_JOINTS) * 100));
+
         if (notDetected > 6) {
-          skeletonColor = "rgb(255,255,255)";
-          setAccuracy(Math.max(10, Math.round((1 - notDetected / 17) * 100)));
+          skeletonColorRef.current = "rgb(255,255,255)";
+          holdActiveRef.current = false;
+          if (countAudio) {
+            try {
+              countAudio.pause();
+              countAudio.currentTime = 0;
+            } catch (e) {}
+          }
+          setAccuracy(null);
           setLiveFeedback("Step into the camera frame so your full body is visible");
           return;
         }
 
-        // Run MediaPipe 8-joint angle calculation & posture evaluation
-        const evalResult = evaluateMediaPipePose(keypointMap, currentPose);
+        // Reads poseRef.current, so selecting another pose takes effect on
+        // the very next tick instead of staying stuck on the first pose.
+        const evalResult = evaluateMediaPipePose(keypointMap, poseRef.current);
         setAccuracy(evalResult.accuracy);
         setLiveFeedback(evalResult.tip);
 
         if (evalResult.isAligned) {
-          skeletonColor = "rgb(0,230,118)"; // Bright neon green for correct posture
-          if (!flag) {
+          skeletonColorRef.current = "rgb(0,230,118)"; // Bright neon green for correct posture
+          const now = Date.now();
+          if (!holdActiveRef.current) {
             if (countAudio) countAudio.play().catch(() => {});
-            setStartingTime(new Date().getTime());
-            flag = true;
+            holdStartRef.current = now;
+            holdActiveRef.current = true;
           }
-          setCurrentTime(new Date().getTime());
+          const held = Math.round((now - holdStartRef.current) / 1000);
+          setPoseTime(held);
+          setBestPerform((prev) => Math.max(prev, held));
         } else {
-          skeletonColor = "rgb(255,255,255)"; // White when adjusting
-          flag = false;
+          skeletonColorRef.current = "rgb(255,255,255)"; // White when adjusting
+          holdActiveRef.current = false;
           if (countAudio) {
-            countAudio.pause();
-            countAudio.currentTime = 0;
+            try {
+              countAudio.pause();
+              countAudio.currentTime = 0;
+            } catch (e) {}
           }
         }
       } catch (err) {
         console.error("Detection loop error:", err);
+      } finally {
+        frameInFlightRef.current = false;
       }
+    };
+
+    const startLoop = () => {
+      if (intervalRef.current) clearInterval(intervalRef.current);
+      intervalRef.current = setInterval(() => {
+        detectPose();
+      }, DETECTION_INTERVAL_MS);
+    };
+
+    const releaseAudio = () => {
+      if (audioRef.current) {
+        try {
+          audioRef.current.pause();
+          audioRef.current.src = "";
+        } catch (e) {}
+        audioRef.current = null;
+      }
+    };
+
+    const releaseDetector = () => {
+      if (detectorRef.current) {
+        detectorRef.current.dispose();
+        detectorRef.current = null;
+      }
+    };
+
+    async function setupVision() {
+      const makeDetector = (modelType) =>
+        poseDetection.createDetector(poseDetection.SupportedModels.MoveNet, {
+          modelType,
+        });
+      let detector = null;
+      try {
+        await tf.ready();
+        detector = await makeDetector(
+          poseDetection.movenet.modelType.SINGLEPOSE_THUNDER
+        );
+      } catch (err) {
+        console.warn("MoveNet Thunder fallback to Lightning:", err);
+        try {
+          detector = await makeDetector(
+            poseDetection.movenet.modelType.SINGLEPOSE_LIGHTNING
+          );
+        } catch (fallbackErr) {
+          console.error("Pose detector load error:", fallbackErr);
+        }
+      }
+      if (!detector) return;
+      // Unmounted while the model was loading: release it, never cache it.
+      if (!mountedRef.current) {
+        detector.dispose();
+        return;
+      }
+      detectorRef.current = detector;
+      try {
+        const countAudio = new Audio(count);
+        countAudio.loop = true;
+        audioRef.current = countAudio;
+      } catch (e) {
+        console.warn("Audio not supported or blocked", e);
+      }
+      if (!mountedRef.current) {
+        releaseAudio();
+        releaseDetector();
+        return;
+      }
+      setIsModelReady(true);
+      startLoop();
     }
-  };
+
+    warmupPromiseRef.current = setupVision();
+
+    return () => {
+      mountedRef.current = false;
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+      releaseAudio();
+      frameInFlightRef.current = false;
+      // The detector may still be loading; dispose whenever setup settles.
+      if (warmupPromiseRef.current) {
+        warmupPromiseRef.current.then(() => releaseDetector());
+      } else {
+        releaseDetector();
+      }
+    };
+  }, []);
 
   const instructions = poseInstructions[currentPose] || [];
+  const scoreTone = (accuracy ?? 0) >= 80 ? "#2e7d32" : "#e65100";
 
   return (
     <div className="practice-page">
@@ -237,7 +315,7 @@ function Yogacv() {
             <DropDown
               poseList={poseList}
               currentPose={currentPose}
-              setCurrentPose={setCurrentPose}
+              setCurrentPose={handleSelectPose}
             />
           </div>
         </div>
@@ -266,9 +344,19 @@ function Yogacv() {
               <span className="hud-label">Posture Accuracy</span>
               <span
                 className="hud-value"
-                style={{ color: accuracy >= 80 ? "#2e7d32" : "#e65100" }}
+                style={{ color: scoreTone }}
               >
-                {accuracy}%
+                {accuracy === null ? "–" : `${accuracy}%`}
+              </span>
+            </div>
+          </div>
+
+          <div className="hud-stat-card">
+            <div className="hud-icon">👁️</div>
+            <div className="hud-content">
+              <span className="hud-label">{t("yoga.visibility")}</span>
+              <span className="hud-value">
+                {visibility === null ? "–" : `${visibility}%`}
               </span>
             </div>
           </div>
@@ -340,7 +428,7 @@ function Yogacv() {
               <h4 className="pose-tips-title">
                 💡 Real-Time Feedback
               </h4>
-              <p style={{ margin: "0 0 0.5rem", fontSize: "0.82rem", fontWeight: "700", color: accuracy >= 80 ? "#2e7d32" : "#e65100" }}>
+              <p style={{ margin: "0 0 0.5rem", fontSize: "0.82rem", fontWeight: "700", color: scoreTone }}>
                 {liveFeedback || "Position yourself in front of the camera"}
               </p>
               <h4 className="pose-tips-title" style={{ marginTop: "0.6rem" }}>
