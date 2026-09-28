@@ -28,7 +28,6 @@ const poseList = [
   "Dog",
   "Shoulderstand",
   "Traingle",
-  "Pose",
 ];
 
 const DETECTION_INTERVAL_MS = 100;

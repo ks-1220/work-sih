@@ -3,9 +3,20 @@
  * Ported & adapted from abhishekjani08/Yoga-Posture-Detection-using-Mediapipe
  * Computes 8 canonical joint angles, compares with target pose vectors,
  * and provides real-time posture accuracy scoring and corrective feedback.
+ *
+ * Scoring rules: every check is a real angle measurement worth a fixed
+ * share, each rule totals 100, and there are no unconditional bonuses or
+ * caps, so a fully aligned pose scores 100. A rule only scores when every
+ * joint it needs is confidently visible (score > MIN_KEYPOINT_SCORE);
+ * otherwise it returns accuracy null so the UI shows "–" instead of a
+ * number made up from defaulted (0,0) joints.
  */
 
 import { POINTS } from "./data";
+
+export const MIN_KEYPOINT_SCORE = 0.35;
+export const TOTAL_KEYPOINTS = 17;
+export const OFF_FRAME_TIP = "Step into the frame so your whole body is visible";
 
 /**
  * Calculates 2D joint angle between three points (A -> B -> C)
@@ -28,8 +39,57 @@ export function calculateAngle(a, b, c) {
   return angle;
 }
 
+// A joint counts as visible only with a confident detection. Missing joints
+// must never default to {x:0, y:0} for scoring.
+function isVisible(keypoints, name) {
+  const p = keypoints[POINTS[name]];
+  return !!p && p.score > MIN_KEYPOINT_SCORE;
+}
+
+function needAll(keypoints, names) {
+  return names.every((name) => isVisible(keypoints, name));
+}
+
+// Full arm chain (shoulder, elbow, wrist) plus the hip the shoulder angle
+// is measured against.
+function armSideVisible(keypoints, side) {
+  return needAll(keypoints, [
+    `${side}_SHOULDER`,
+    `${side}_ELBOW`,
+    `${side}_WRIST`,
+    `${side}_HIP`,
+  ]);
+}
+
+// Full leg chain plus the shoulder the hip angle is measured against.
+function legSideVisible(keypoints, side) {
+  return needAll(keypoints, [
+    `${side}_SHOULDER`,
+    `${side}_HIP`,
+    `${side}_KNEE`,
+    `${side}_ANKLE`,
+  ]);
+}
+
+function angleAt(keypoints, a, b, c) {
+  return calculateAngle(keypoints[POINTS[a]], keypoints[POINTS[b]], keypoints[POINTS[c]]);
+}
+
+// First fully-visible arm side, or null when neither arm is in frame.
+function firstVisibleArm(keypoints) {
+  if (armSideVisible(keypoints, "RIGHT")) return "RIGHT";
+  if (armSideVisible(keypoints, "LEFT")) return "LEFT";
+  return null;
+}
+
+function offFrame() {
+  return { accuracy: null, isAligned: false, tip: OFF_FRAME_TIP };
+}
+
 /**
- * Extracts 8 key joint angles from detected landmarks
+ * Extracts 8 key joint angles from detected landmarks.
+ * Joints without a confident detection contribute 0 and must only be read
+ * after the rule's visibility gate has passed.
  */
 export function extractMediaPipeAngles(keypoints) {
   const kp = (idx) => keypoints[idx] || { x: 0, y: 0 };
@@ -69,7 +129,16 @@ export function extractMediaPipeAngles(keypoints) {
  */
 export const POSE_TARGET_RULES = {
   Tree: {
-    evaluate: (angles) => {
+    evaluate: (keypoints) => {
+      if (
+        !legSideVisible(keypoints, "RIGHT") ||
+        !legSideVisible(keypoints, "LEFT") ||
+        !armSideVisible(keypoints, "RIGHT") ||
+        !armSideVisible(keypoints, "LEFT")
+      ) {
+        return offFrame();
+      }
+      const angles = extractMediaPipeAngles(keypoints);
       // Tree: One leg straight (~170-180), other leg bent (~30-65)
       const rKneeStraight = angles.rightKnee > 155;
       const lKneeStraight = angles.leftKnee > 155;
@@ -108,7 +177,7 @@ export const POSE_TARGET_RULES = {
       }
 
       return {
-        accuracy: Math.min(98, score),
+        accuracy: score,
         isAligned: score >= 80,
         tip: tips[0] || "Perfect Tree alignment! Hold steady",
       };
@@ -116,7 +185,16 @@ export const POSE_TARGET_RULES = {
   },
 
   Warrior: {
-    evaluate: (angles) => {
+    evaluate: (keypoints) => {
+      if (
+        !legSideVisible(keypoints, "RIGHT") ||
+        !legSideVisible(keypoints, "LEFT") ||
+        !armSideVisible(keypoints, "RIGHT") ||
+        !armSideVisible(keypoints, "LEFT")
+      ) {
+        return offFrame();
+      }
+      const angles = extractMediaPipeAngles(keypoints);
       // Warrior II: One knee ~90 (75-110), other knee straight (160-180), arms extended (~85-110 shoulder, ~165-180 elbow)
       let score = 0;
       let tips = [];
@@ -162,7 +240,16 @@ export const POSE_TARGET_RULES = {
   },
 
   Chair: {
-    evaluate: (angles) => {
+    evaluate: (keypoints) => {
+      if (
+        !legSideVisible(keypoints, "RIGHT") ||
+        !legSideVisible(keypoints, "LEFT")
+      ) {
+        return offFrame();
+      }
+      const arm = firstVisibleArm(keypoints);
+      if (!arm) return offFrame();
+      const angles = extractMediaPipeAngles(keypoints);
       let score = 0;
       let tips = [];
 
@@ -181,7 +268,9 @@ export const POSE_TARGET_RULES = {
       }
 
       // Arms raised high (140-180)
-      if (angles.rightShoulder >= 135 || angles.leftShoulder >= 135) {
+      const shoulderUp =
+        angleAt(keypoints, `${arm}_ELBOW`, `${arm}_SHOULDER`, `${arm}_HIP`) >= 135;
+      if (shoulderUp) {
         score += 30;
       } else {
         score += 15;
@@ -189,7 +278,7 @@ export const POSE_TARGET_RULES = {
       }
 
       return {
-        accuracy: Math.min(98, score),
+        accuracy: score,
         isAligned: score >= 80,
         tip: tips[0] || "Excellent Chair alignment! Keep chest high",
       };
@@ -197,28 +286,51 @@ export const POSE_TARGET_RULES = {
   },
 
   Cobra: {
-    evaluate: (angles) => {
+    evaluate: (keypoints) => {
+      if (
+        !legSideVisible(keypoints, "RIGHT") ||
+        !legSideVisible(keypoints, "LEFT")
+      ) {
+        return offFrame();
+      }
+      const arm = firstVisibleArm(keypoints);
+      if (!arm) return offFrame();
+      const angles = extractMediaPipeAngles(keypoints);
       let score = 0;
       let tips = [];
 
-      // Legs straight on ground
+      // Hips extended: both hip angles open past 150°
+      if (angles.rightHip >= 150 && angles.leftHip >= 150) {
+        score += 25;
+      } else {
+        tips.push("Press hips down and lengthen the front body");
+      }
+
+      // Legs straight on the ground
       if (angles.rightKnee >= 155 && angles.leftKnee >= 155) {
-        score += 35;
+        score += 20;
       } else {
         tips.push("Keep legs straight and pressed to mat");
       }
 
-      // Chest arched & elbows softly bent
-      if (angles.rightElbow >= 110 && angles.rightElbow <= 165) {
+      // Chest lifted with a soft bend in the supporting elbows
+      const elbow = angleAt(keypoints, `${arm}_SHOULDER`, `${arm}_ELBOW`, `${arm}_WRIST`);
+      if (elbow >= 100 && elbow <= 160) {
         score += 35;
       } else {
         tips.push("Soft bend in elbows, roll shoulders back");
       }
 
-      score += 28;
+      // Shoulders stacked over the hands, not shrugged or collapsed
+      const shoulder = angleAt(keypoints, `${arm}_ELBOW`, `${arm}_SHOULDER`, `${arm}_HIP`);
+      if (shoulder >= 25 && shoulder <= 80) {
+        score += 20;
+      } else {
+        tips.push("Draw shoulder blades down and open the chest");
+      }
 
       return {
-        accuracy: Math.min(98, score),
+        accuracy: score,
         isAligned: score >= 80,
         tip: tips[0] || "Great Cobra posture! Open through chest",
       };
@@ -226,7 +338,17 @@ export const POSE_TARGET_RULES = {
   },
 
   Dog: {
-    evaluate: (angles) => {
+    evaluate: (keypoints) => {
+      if (
+        !needAll(keypoints, ["RIGHT_SHOULDER", "RIGHT_HIP", "RIGHT_KNEE"]) ||
+        !legSideVisible(keypoints, "RIGHT") ||
+        !legSideVisible(keypoints, "LEFT") ||
+        !armSideVisible(keypoints, "RIGHT") ||
+        !armSideVisible(keypoints, "LEFT")
+      ) {
+        return offFrame();
+      }
+      const angles = extractMediaPipeAngles(keypoints);
       let score = 0;
       let tips = [];
 
@@ -252,7 +374,7 @@ export const POSE_TARGET_RULES = {
       }
 
       return {
-        accuracy: Math.min(98, score),
+        accuracy: score,
         isAligned: score >= 80,
         tip: tips[0] || "Solid Downward Dog! Lengthen spine",
       };
@@ -260,7 +382,16 @@ export const POSE_TARGET_RULES = {
   },
 
   Traingle: {
-    evaluate: (angles) => {
+    evaluate: (keypoints) => {
+      if (
+        !legSideVisible(keypoints, "RIGHT") ||
+        !legSideVisible(keypoints, "LEFT")
+      ) {
+        return offFrame();
+      }
+      const arm = firstVisibleArm(keypoints);
+      if (!arm) return offFrame();
+      const angles = extractMediaPipeAngles(keypoints);
       let score = 0;
       let tips = [];
 
@@ -271,17 +402,26 @@ export const POSE_TARGET_RULES = {
         tips.push("Keep both legs straight without locking knees");
       }
 
-      // Arms open in a line
-      if (angles.rightShoulder >= 70 && angles.leftShoulder >= 70) {
+      // One arm raised in line with the torso
+      const raised = Math.max(
+        angleAt(keypoints, "RIGHT_ELBOW", "RIGHT_SHOULDER", "RIGHT_HIP"),
+        angleAt(keypoints, "LEFT_ELBOW", "LEFT_SHOULDER", "LEFT_HIP")
+      );
+      if (raised >= 70) {
         score += 35;
       } else {
-        tips.push("Reach top arm toward ceiling in vertical line");
+        tips.push("Reach top arm toward the ceiling in a vertical line");
       }
 
-      score += 24;
+      // That arm points straight up
+      if (raised >= 150) {
+        score += 25;
+      } else {
+        tips.push("Stack the top arm directly over the shoulder");
+      }
 
       return {
-        accuracy: Math.min(99, score),
+        accuracy: score,
         isAligned: score >= 80,
         tip: tips[0] || "Beautiful Triangle pose! Expand chest",
       };
@@ -289,55 +429,68 @@ export const POSE_TARGET_RULES = {
   },
 
   Shoulderstand: {
-    evaluate: (angles) => {
+    evaluate: (keypoints) => {
+      if (
+        !legSideVisible(keypoints, "RIGHT") ||
+        !legSideVisible(keypoints, "LEFT")
+      ) {
+        return offFrame();
+      }
+      const arm = firstVisibleArm(keypoints);
+      if (!arm) return offFrame();
+      const angles = extractMediaPipeAngles(keypoints);
       let score = 0;
       let tips = [];
 
+      // Legs extended straight up
       if (angles.rightKnee >= 155 && angles.leftKnee >= 155) {
-        score += 45;
+        score += 25;
       } else {
         tips.push("Extend legs straight up toward sky");
       }
 
+      // Hips stacked over the shoulders
       if (angles.rightHip >= 150 && angles.leftHip >= 150) {
-        score += 40;
+        score += 20;
       } else {
         tips.push("Align hips directly over shoulders");
       }
 
-      score += 14;
+      // Elbows bent to support the back
+      const elbow = angleAt(keypoints, `${arm}_SHOULDER`, `${arm}_ELBOW`, `${arm}_WRIST`);
+      if (elbow >= 60 && elbow <= 120) {
+        score += 15;
+      } else {
+        tips.push("Bend elbows to shelf your hands under your back");
+      }
 
-      return {
-        accuracy: Math.min(99, score),
-        isAligned: score >= 80,
-        tip: tips[0] || "Steady Shoulderstand! Keep gaze upward",
-      };
-    },
-  },
+      // Torso vertical with open shoulders
+      const shoulder = angleAt(keypoints, `${arm}_ELBOW`, `${arm}_SHOULDER`, `${arm}_HIP`);
+      if (shoulder >= 25 && shoulder <= 80) {
+        score += 40;
+      } else {
+        tips.push("Walk hands higher and lift through the legs");
+      }
 
-  Pose: {
-    evaluate: (angles) => {
-      const avg = Math.round(
-        (angles.rightElbow + angles.leftElbow + angles.rightKnee + angles.leftKnee) / 4
-      );
-      const score = Math.min(95, Math.max(60, avg > 90 ? 88 : 75));
       return {
         accuracy: score,
         isAligned: score >= 80,
-        tip: score >= 80 ? "Good posture! Hold steady" : "Adjust alignment to match reference",
+        tip: tips[0] || "Steady Shoulderstand! Keep gaze upward",
       };
     },
   },
 };
 
 /**
- * Main evaluation function combining MediaPipe angle analysis
+ * Main evaluation function combining MediaPipe angle analysis.
+ * Returns accuracy null (never a made-up number) when the joints the
+ * chosen pose needs are not confidently visible.
  */
 export function evaluateMediaPipePose(keypoints, currentPose) {
-  const angles = extractMediaPipeAngles(keypoints);
   const rule = POSE_TARGET_RULES[currentPose] || POSE_TARGET_RULES.Tree;
+  const result = rule.evaluate(keypoints);
   return {
-    ...rule.evaluate(angles),
-    angles,
+    ...result,
+    angles: extractMediaPipeAngles(keypoints),
   };
 }

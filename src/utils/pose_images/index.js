@@ -5,7 +5,6 @@ import tree from './tree.jpg'
 import warrior from './warrior.jpg'
 import traingle from './traingle.jpg'
 import shoulderstand from './shoulderstand.jpg'
-import pose from './pose.jpg'
 
 // Next resolves an image import to a StaticImageData object rather than the
 // URL string Create React App produced, so `.src` is taken here once and every
@@ -17,6 +16,5 @@ export const poseImages = {
     Warrior: warrior.src,
     Chair: chair.src,
     Traingle: traingle.src,
-    Shoulderstand: shoulderstand.src,
-    Pose: pose.src
+    Shoulderstand: shoulderstand.src
 }
