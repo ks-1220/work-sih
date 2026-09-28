@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
@@ -13,8 +13,14 @@ import './navbar.css';
 
 // Base items (incl. Profile) render for everyone, including Guest Mode.
 // Logout is appended for signed-in users only. See src/config/navItems.js.
-export default function Navbar() {
+//
+// Mobile behaviour: on phones (max-width: 768px, see navbar.css) the sidebar
+// is an off-canvas drawer. When used with `mobileOpen`/`onClose` (e.g. from
+// WithNavbar + TopBar) it is controlled from outside; when rendered bare
+// (home, diet, profile, sustain views) it manages its own floating opener.
+export default function Navbar({ mobileOpen, onClose }) {
   const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const [internalOpen, setInternalOpen] = useState(false);
   const pathname = usePathname();
   const { t } = useTranslation();
   // Auth-aware: show a Logout entry only for signed-in users (no flash —
@@ -24,6 +30,39 @@ export default function Navbar() {
     isAuthReady && isLoggedIN
       ? [...ORIGINAL_NAV_ITEMS, { href: '/logout', icon: 'fa-solid fa-right-from-bracket', labelKey: 'nav.logout' }]
       : ORIGINAL_NAV_ITEMS;
+
+  const controlled = mobileOpen !== undefined;
+  const open = controlled ? mobileOpen : internalOpen;
+  const close = () => {
+    if (controlled) {
+      if (onClose) onClose();
+    } else {
+      setInternalOpen(false);
+    }
+  };
+  // Effects call close through a ref so they never depend on its identity.
+  const closeRef = useRef(close);
+  closeRef.current = close;
+
+  // Tapping any nav item navigates, so the drawer must shut on arrival.
+  useEffect(() => {
+    closeRef.current();
+  }, [pathname]);
+
+  // While the drawer is open: Escape shuts it and the page behind stays put.
+  useEffect(() => {
+    if (!open) return undefined;
+    const onKey = (e) => {
+      if (e.key === 'Escape') closeRef.current();
+    };
+    document.addEventListener('keydown', onKey);
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
   const toggleAudio = () => {
     const audioElement = document.getElementById('audioPlayer');
@@ -43,9 +82,46 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="main-menu" aria-label={t('nav.menu')}>
-        {/* Top Hamburger Icon */}
-        <div className="sidebar-hamburger" title={t('nav.menu')}>
+      {/* Floating opener for pages that render a bare <Navbar/> with no
+          top bar (home, diet, profile, sustain). Hidden on desktop and on
+          pages where a parent controls the drawer. */}
+      {!controlled && (
+        <button
+          type="button"
+          className="sidebar-fab"
+          onClick={() => setInternalOpen(true)}
+          aria-label={t('nav.menu')}
+          aria-expanded={open}
+        >
+          <i className="fa-solid fa-bars"></i>
+        </button>
+      )}
+      {/* Dimmed backdrop behind the open drawer (phones only, see CSS). */}
+      {open && (
+        <button
+          type="button"
+          className="sidebar-backdrop"
+          onClick={close}
+          aria-label="Close menu"
+          tabIndex={-1}
+        />
+      )}
+      <nav className={`main-menu${open ? ' mobile-open' : ''}`} aria-label={t('nav.menu')}>
+        {/* Top Hamburger Icon — on phones this closes the drawer. */}
+        <div
+          className="sidebar-hamburger"
+          title={t('nav.menu')}
+          onClick={close}
+          role="button"
+          tabIndex={0}
+          aria-label={t('nav.menu')}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+              e.preventDefault();
+              close();
+            }
+          }}
+        >
           <i className="fa-solid fa-bars"></i>
         </div>
 

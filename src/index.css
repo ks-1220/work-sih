@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* No sideways scroll on narrow phone screens. `clip` (where supported)
+   does not create a scroll container, so position: sticky keeps working;
+   older engines fall back to hidden. */
+body {
+  overflow-x: hidden;
+}
+
+@supports (overflow: clip) {
+  body {
+    overflow-x: clip;
+  }
+}
