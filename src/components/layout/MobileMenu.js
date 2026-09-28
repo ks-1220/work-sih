@@ -15,10 +15,11 @@ import './MobileMenu.css';
 // CSS, where each page's own sidebar rail is the navigation.
 // The chatbot/WhatsApp floats also live here so exactly one copy renders.
 export default function MobileMenu() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [open, setOpen] = useState(false);
   const openMenu = useCallback(() => setOpen(true), []);
   const closeMenu = useCallback(() => setOpen(false), []);
+  const isHindi = i18n?.language?.startsWith('hi');
 
   return (
     <>
@@ -35,6 +36,24 @@ export default function MobileMenu() {
         <Link href="/" className="mobile-brand">
           SaathiSync
         </Link>
+        <div className="mobile-lang" role="group" aria-label="Language / भाषा">
+          <button
+            type="button"
+            className={isHindi ? '' : 'on'}
+            onClick={() => i18n?.changeLanguage?.('en')}
+            aria-pressed={!isHindi}
+          >
+            EN
+          </button>
+          <button
+            type="button"
+            className={isHindi ? 'on' : ''}
+            onClick={() => i18n?.changeLanguage?.('hi')}
+            aria-pressed={!!isHindi}
+          >
+            हिं
+          </button>
+        </div>
       </div>
       {/* Off-canvas drawer on phones (see navbar.css); inert + hidden on
           desktop. The page-level sidebars stay untouched for desktop. */}

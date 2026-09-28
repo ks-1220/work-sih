@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import { AUTHORS, POSTS, TOPICS, latestPosts, readMinutes, relativeDate } from '../../data/communityFeed';
 import { DEVICES } from '../../data/devices';
 import { photo } from '../../data/fitnessPhotos';
@@ -19,6 +20,7 @@ export const FOLLOWS_KEY = 'swasth.followedAuthors.v1';
 const usedDevices = [...new Set(POSTS.flatMap((p) => p.devices))];
 
 export default function CommunityFeed() {
+  const { t } = useTranslation();
   const today = useToday();
   const claps = useStoredList(CLAPS_KEY);
   const bookmarks = useStoredList(BOOKMARKS_KEY);
@@ -44,31 +46,31 @@ export default function CommunityFeed() {
     .slice(0, 4);
 
   const tabs = [
-    ['for-you', 'For you'],
-    ['following', `Following${follows.list.length ? ` (${follows.list.length})` : ''}`],
-    ['saved', `Saved${bookmarks.list.length ? ` (${bookmarks.list.length})` : ''}`],
-    ...TOPICS.map((t) => [t, t]),
+    ['for-you', t('feed.forYou')],
+    ['following', `${t('feed.following')}${follows.list.length ? ` (${follows.list.length})` : ''}`],
+    ['saved', `${t('feed.saved')}${bookmarks.list.length ? ` (${bookmarks.list.length})` : ''}`],
+    ...TOPICS.map((topic) => [topic, topic]),
   ];
 
   return (
     <div className={styles.page}>
       <header className={styles.feedHeader}>
         <div>
-          <h1 className={styles.feedTitle}>Community</h1>
+          <h1 className={styles.feedTitle}>{t('feed.title')}</h1>
           <p className={styles.feedSub}>
-            Real workouts, honest lessons, and the watches, bands and apps people use to track them.{' '}
+            {t('feed.sub')}{' '}
             <SampleDataBadge label="Sample community posts" />
           </p>
         </div>
         <label className={styles.search}>
           <i className="fa-solid fa-magnifying-glass" aria-hidden="true" />
-          <input type="search" placeholder="Search stories" value={query} onChange={(e) => setQuery(e.target.value)} />
+          <input type="search" placeholder={t('feed.search')} value={query} onChange={(e) => setQuery(e.target.value)} aria-label={t('feed.search')} />
         </label>
       </header>
 
       <div className={styles.layout}>
         <main className={styles.main}>
-          <nav className={styles.topicBar} aria-label="Feed">
+          <nav className={styles.topicBar} aria-label={t('feed.feedLabel')}>
             {tabs.map(([id, label]) => (
               <button
                 key={id}
@@ -83,19 +85,19 @@ export default function CommunityFeed() {
 
           {deviceFilter && (
             <p className={styles.filterNote}>
-              Showing stories tracked with <DeviceChip id={deviceFilter} />
-              <button className={styles.linkBtn} onClick={() => setDeviceFilter(null)}>Clear</button>
+              {t('feed.showingWith')} <DeviceChip id={deviceFilter} />
+              <button className={styles.linkBtn} onClick={() => setDeviceFilter(null)}>{t('feed.clear')}</button>
             </p>
           )}
 
           {posts.length === 0 ? (
             <div className={styles.empty}>
               {tab === 'following' ? (
-                <p>You are not following anyone yet. Follow a few people from the list on the right.</p>
+                <p>{t('feed.emptyFollowing')}</p>
               ) : tab === 'saved' ? (
-                <p>Bookmark stories to read later and they will appear here.</p>
+                <p>{t('feed.emptySaved')}</p>
               ) : (
-                <p>No stories match. Try another topic or clear the device filter.</p>
+                <p>{t('feed.emptyNone')}</p>
               )}
             </div>
           ) : (
@@ -116,7 +118,7 @@ export default function CommunityFeed() {
 
         <aside className={styles.sidebar}>
           <section className={styles.sideBlock}>
-            <h2>Staff picks</h2>
+            <h2>{t('feed.staffPicks')}</h2>
             {staffPicks.map((p) => (
               <Link key={p.slug} href={`/blogs/${p.slug}`} className={styles.pick}>
                 <span className={styles.byline}>
@@ -128,7 +130,7 @@ export default function CommunityFeed() {
           </section>
 
           <section className={styles.sideBlock}>
-            <h2>Tracked with</h2>
+            <h2>{t('feed.trackedWith')}</h2>
             <div className={styles.deviceGrid}>
               {usedDevices.map((id) => (
                 <button
@@ -146,16 +148,16 @@ export default function CommunityFeed() {
           </section>
 
           <section className={styles.sideBlock}>
-            <h2>Recommended topics</h2>
+            <h2>{t('feed.topics')}</h2>
             <div className={styles.topicChips}>
-              {TOPICS.map((t) => (
-                <button key={t} className={styles.topicChip} onClick={() => setTab(t)}>{t}</button>
+              {TOPICS.map((topic) => (
+                <button key={topic} className={styles.topicChip} onClick={() => setTab(topic)}>{topic}</button>
               ))}
             </div>
           </section>
 
           <section className={styles.sideBlock}>
-            <h2>Who to follow</h2>
+            <h2>{t('feed.whoToFollow')}</h2>
             {whoToFollow.map(([id, a]) => (
               <div key={id} className={styles.follow}>
                 <Avatar seed={id} look={a.look} size={40} title={a.name} />
@@ -168,7 +170,7 @@ export default function CommunityFeed() {
                   onClick={() => follows.toggle(id)}
                   aria-pressed={follows.has(id)}
                 >
-                  {follows.has(id) ? 'Following' : 'Follow'}
+                  {follows.has(id) ? t('feed.following') : t('feed.follow')}
                 </button>
               </div>
             ))}
@@ -180,6 +182,7 @@ export default function CommunityFeed() {
 }
 
 function PostRow({ post, today, clapped, bookmarked, onClap, onBookmark, onDevice }) {
+  const { t } = useTranslation();
   const author = AUTHORS[post.author];
   const cover = photo(post.cover);
   const href = `/blogs/${post.slug}`;
@@ -189,7 +192,7 @@ function PostRow({ post, today, clapped, bookmarked, onClap, onBookmark, onDevic
     <article className={styles.row}>
       <div className={styles.byline}>
         <Avatar seed={post.author} look={AUTHORS[post.author].look} size={24} title={author.name} />
-        <span><strong>{author.name}</strong> in {author.city}</span>
+        <span><strong>{author.name}</strong> {t('feed.inCity')} {author.city}</span>
       </div>
 
       <div className={styles.rowGrid}>
@@ -209,7 +212,7 @@ function PostRow({ post, today, clapped, bookmarked, onClap, onBookmark, onDevic
         </span>
         <span className={styles.stripDevices}>
           {post.devices.map((d) => (
-            <button key={d} className={styles.deviceMini} onClick={() => onDevice(d)} title={`More stories tracked with ${DEVICES[d]?.label || d}`}>
+            <button key={d} className={styles.deviceMini} onClick={() => onDevice(d)} title={t('feed.deviceStories', { label: DEVICES[d]?.label || d })}>
               <DeviceChip id={d} />
             </button>
           ))}
@@ -219,14 +222,14 @@ function PostRow({ post, today, clapped, bookmarked, onClap, onBookmark, onDevic
       <div className={styles.rowFoot}>
         <span className={styles.topicPill}>{post.topic}</span>
         <span>{relativeDate(post.publishedAt, today)}</span>
-        <span>{readMinutes(post)} min read</span>
-        <button className={`${styles.iconBtn} ${clapped ? styles.clapped : ''}`} onClick={onClap} aria-pressed={clapped} aria-label="Clap">
+        <span>{t('feed.minRead', { n: readMinutes(post) })}</span>
+        <button className={`${styles.iconBtn} ${clapped ? styles.clapped : ''}`} onClick={onClap} aria-pressed={clapped} aria-label={t('feed.clap')}>
           <i className="fa-solid fa-hands-clapping" aria-hidden="true" /> {(post.claps + (clapped ? 1 : 0)).toLocaleString('en-IN')}
         </button>
-        <Link href={`${href}#responses`} className={styles.iconBtn} aria-label="Responses">
+        <Link href={`${href}#responses`} className={styles.iconBtn} aria-label={t('feed.responses')}>
           <i className="fa-regular fa-comment" aria-hidden="true" /> {post.responses.length}
         </Link>
-        <button className={`${styles.iconBtn} ${styles.push}`} onClick={onBookmark} aria-pressed={bookmarked} aria-label={bookmarked ? 'Remove bookmark' : 'Bookmark'}>
+        <button className={`${styles.iconBtn} ${styles.push}`} onClick={onBookmark} aria-pressed={bookmarked} aria-label={bookmarked ? t('feed.removeBookmark') : t('feed.bookmark')}>
           <i className={bookmarked ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'} aria-hidden="true" />
         </button>
       </div>

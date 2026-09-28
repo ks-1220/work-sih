@@ -53,6 +53,32 @@
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
   }
 
+  /* Compact EN/हिं toggle at the strip's right end. */
+  .mobile-lang {
+    margin-left: auto;
+    display: flex;
+    gap: 2px;
+    background: #f1f5f9;
+    border-radius: 999px;
+    padding: 2px;
+  }
+
+  .mobile-lang button {
+    border: none;
+    background: transparent;
+    border-radius: 999px;
+    padding: 6px 10px;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #64748b;
+    cursor: pointer;
+  }
+
+  .mobile-lang button.on {
+    background: #493971;
+    color: #ffffff;
+  }
+
   /* The drawer itself is fixed/off-canvas (see navbar.css); its wrapper
      takes no space and is gone on desktop. */
   .mobile-nav-holder {

@@ -24,3 +24,11 @@ body {
     overflow-x: clip;
   }
 }
+
+/* On phones the floating language pill would sit on top of the mobile menu
+   strip — the strip has its own EN/हिं toggle, so hide this one there. */
+@media (max-width: 768px) {
+  .global-lang-switcher {
+    display: none;
+  }
+}

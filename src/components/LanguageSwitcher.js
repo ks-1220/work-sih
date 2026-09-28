@@ -16,6 +16,7 @@ const LanguageSwitcher = () => {
 
   return (
     <div
+      className="global-lang-switcher"
       style={{
         position: 'fixed',
         top: 14,

@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import { useTranslation } from 'react-i18next';
 import { AUTHORS, POSTS, readMinutes, relativeDate } from '../../data/communityFeed';
 import { photo } from '../../data/fitnessPhotos';
 import useStoredList from '../../lib/useStoredList';
@@ -16,6 +17,7 @@ import styles from './Community.module.css';
 const ZONE_COLORS = ['#94a3b8', '#60a5fa', '#34d399', '#fbbf24', '#f87171'];
 
 export default function CommunityPost({ post }) {
+  const { t } = useTranslation();
   const today = useToday();
   const author = AUTHORS[post.author];
   const cover = photo(post.cover);
@@ -59,18 +61,18 @@ export default function CommunityPost({ post }) {
 
   const actionBar = (
     <div className={styles.actionBar}>
-      <button className={`${styles.iconBtn} ${clapped ? styles.clapped : ''}`} onClick={() => claps.toggle(post.slug)} aria-pressed={clapped}>
+      <button className={`${styles.iconBtn} ${clapped ? styles.clapped : ''}`} onClick={() => claps.toggle(post.slug)} aria-pressed={clapped} aria-label={t('feed.clap')}>
         <i className="fa-solid fa-hands-clapping" aria-hidden="true" /> {(post.claps + (clapped ? 1 : 0)).toLocaleString('en-IN')}
       </button>
-      <a href="#responses" className={styles.iconBtn}>
+      <a href="#responses" className={styles.iconBtn} aria-label={t('feed.responses')}>
         <i className="fa-regular fa-comment" aria-hidden="true" /> {post.responses.length + myResponses.list.length}
       </a>
       <span className={styles.push} />
-      <button className={styles.iconBtn} onClick={() => bookmarks.toggle(post.slug)} aria-pressed={bookmarked} aria-label={bookmarked ? 'Remove bookmark' : 'Bookmark'}>
+      <button className={styles.iconBtn} onClick={() => bookmarks.toggle(post.slug)} aria-pressed={bookmarked} aria-label={bookmarked ? t('feed.removeBookmark') : t('feed.bookmark')}>
         <i className={bookmarked ? 'fa-solid fa-bookmark' : 'fa-regular fa-bookmark'} aria-hidden="true" />
       </button>
-      <button className={styles.iconBtn} onClick={share} aria-label="Share">
-        <i className="fa-solid fa-share-nodes" aria-hidden="true" /> {copied ? 'Link copied' : ''}
+      <button className={styles.iconBtn} onClick={share} aria-label={t('feed.share')}>
+        <i className="fa-solid fa-share-nodes" aria-hidden="true" /> {copied ? t('feed.copied') : ''}
       </button>
     </div>
   );
@@ -79,7 +81,7 @@ export default function CommunityPost({ post }) {
     <div className={styles.page}>
       <article className={styles.article}>
         <Link href="/blogs" className={styles.backLink}>
-          <i className="fa-solid fa-arrow-left" aria-hidden="true" /> Community
+          <i className="fa-solid fa-arrow-left" aria-hidden="true" /> {t('feed.title')}
         </Link>
 
         <h1 className={styles.articleTitle}>{post.title}</h1>
@@ -91,11 +93,11 @@ export default function CommunityPost({ post }) {
             <p className={styles.authorLine}>
               <strong>{author.name}</strong> ·{' '}
               <button className={styles.linkBtn} onClick={() => follows.toggle(post.author)} aria-pressed={following}>
-                {following ? 'Following' : 'Follow'}
+                {following ? t('feed.following') : t('feed.follow')}
               </button>
             </p>
             <p className={styles.metaLine}>
-              {readMinutes(post)} min read · {relativeDate(post.publishedAt, today)} · {author.city}
+              {t('feed.minRead', { n: readMinutes(post) })} · {relativeDate(post.publishedAt, today)} · {author.city}
             </p>
           </div>
         </div>
@@ -107,9 +109,9 @@ export default function CommunityPost({ post }) {
           <figcaption><PhotoCredit photo={cover} /></figcaption>
         </figure>
 
-        <section className={styles.workoutCard} aria-label="Synced workout">
+        <section className={styles.workoutCard} aria-label={t('feed.attachedWorkout')}>
           <div className={styles.workoutHead}>
-            <span><i className="fa-solid fa-arrows-rotate" aria-hidden="true" /> Synced workout</span>
+            <span><i className="fa-solid fa-arrows-rotate" aria-hidden="true" /> {t('feed.attachedWorkout')}</span>
             <span className={styles.workoutDevices}>
               {post.devices.map((d) => <DeviceChip key={d} id={d} />)}
             </span>
@@ -158,33 +160,34 @@ export default function CommunityPost({ post }) {
         <section className={styles.authorCard}>
           <Avatar seed={post.author} look={AUTHORS[post.author].look} size={64} title={author.name} />
           <div>
-            <h2>Written by {author.name}</h2>
-            <p className={styles.metaLine}>{(author.followers + (following ? 1 : 0)).toLocaleString('en-IN')} followers · {author.city}</p>
+            <h2>{t('feed.writtenBy', { name: author.name })}</h2>
+            <p className={styles.metaLine}>{t('feed.followers', { n: (author.followers + (following ? 1 : 0)).toLocaleString('en-IN') })} · {author.city}</p>
             <p>{author.bio}</p>
           </div>
           <button className={following ? styles.followingBtn : styles.followBtn} onClick={() => follows.toggle(post.author)} aria-pressed={following}>
-            {following ? 'Following' : 'Follow'}
+            {following ? t('feed.following') : t('feed.follow')}
           </button>
         </section>
 
         <section id="responses" className={styles.responses}>
-          <h2>Responses ({post.responses.length + myResponses.list.length})</h2>
+          <h2>{t('feed.responsesTitle', { n: post.responses.length + myResponses.list.length })}</h2>
           <form onSubmit={respond} className={styles.respondForm}>
-            <Avatar seed="you" size={32} title="You" />
+            <Avatar seed="you" size={32} title={t('feed.you')} />
             <textarea
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              placeholder="What are your thoughts?"
+              placeholder={t('feed.respondPh')}
+              aria-label={t('feed.respondPh')}
               rows={2}
               maxLength={600}
             />
-            <button type="submit" className={styles.followBtn} disabled={!draft.trim()}>Respond</button>
+            <button type="submit" className={styles.followBtn} disabled={!draft.trim()}>{t('feed.respond')}</button>
           </form>
-          <p className={styles.metaLine}>Your responses are saved on this device only.</p>
+          <p className={styles.metaLine}>{t('feed.savedLocal')}</p>
           <ul className={styles.responseList}>
             {[...myResponses.list].reverse().map((r) => (
               <li key={r.id}>
-                <div className={styles.byline}><Avatar seed="you" size={28} title="You" /> <strong>You</strong> · just now</div>
+                <div className={styles.byline}><Avatar seed="you" size={28} title={t('feed.you')} /> <strong>{t('feed.you')}</strong> · {t('feed.justNow')}</div>
                 <p>{r.text}</p>
               </li>
             ))}
@@ -201,7 +204,7 @@ export default function CommunityPost({ post }) {
       </article>
 
       <section className={styles.moreSection}>
-        <h2>More from the community</h2>
+        <h2>{t('feed.moreFrom')}</h2>
         <div className={styles.moreGrid}>
           {more.map((p) => (
             <Link key={p.slug} href={`/blogs/${p.slug}`} className={styles.moreCard}>
@@ -210,7 +213,7 @@ export default function CommunityPost({ post }) {
                 <Avatar seed={p.author} look={AUTHORS[p.author].look} size={20} title={AUTHORS[p.author].name} /> {AUTHORS[p.author].name}
               </span>
               <strong>{p.title}</strong>
-              <small>{readMinutes(p)} min read · <i className="fa-solid fa-hands-clapping" aria-hidden="true" /> {p.claps.toLocaleString('en-IN')}</small>
+              <small>{t('feed.minRead', { n: readMinutes(p) })} · <i className="fa-solid fa-hands-clapping" aria-hidden="true" /> {p.claps.toLocaleString('en-IN')}</small>
             </Link>
           ))}
         </div>

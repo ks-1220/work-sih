@@ -264,11 +264,11 @@ const RecipeSection = () => {
   };
 
   const REGION_META = {
-    all: { icon: 'fa-solid fa-earth-asia', tint: 'Winter · Summer · Monsoon · Desert', desc: 'From Himalayan mustard fields to coastal coconut groves — 28 dishes, one India.', scene: ['fa-solid fa-leaf', 'fa-solid fa-wheat-awn', 'fa-solid fa-water', 'fa-solid fa-sun'] },
-    north: { icon: 'fa-solid fa-mountain-sun', tint: 'North · Winter hearty', desc: 'Mustard greens, ghee-kissed parathas and slow-simmered dals from the wheat belt.', scene: ['fa-solid fa-snowflake', 'fa-solid fa-mountain', 'fa-solid fa-wheat-awn', 'fa-solid fa-fire'] },
-    south: { icon: 'fa-solid fa-leaf', tint: 'South · Coastal light', desc: 'Coconut, curry leaves, millet and curd rice — cool, coastal and light.', scene: ['fa-solid fa-water', 'fa-solid fa-leaf', 'fa-solid fa-umbrella-beach', 'fa-solid fa-spa'] },
-    east: { icon: 'fa-solid fa-cloud-sun-rain', tint: 'East · Monsoon fresh', desc: 'Mustard oil, fermented sweets and river greens from Bengal to the Northeast.', scene: ['fa-solid fa-cloud-rain', 'fa-solid fa-seedling', 'fa-solid fa-fish', 'fa-solid fa-spa'] },
-    west: { icon: 'fa-solid fa-sun', tint: 'West · Sun & spice', desc: 'Millets, jaggery and Rajasthani sun fare — dry-heat nourishment.', scene: ['fa-solid fa-sun', 'fa-solid fa-pepper-hot', 'fa-solid fa-wind', 'fa-solid fa-mountain-sun'] },
+    all: { icon: 'fa-solid fa-earth-asia', tintKey: 'all', descKey: 'all', scene: ['fa-solid fa-leaf', 'fa-solid fa-wheat-awn', 'fa-solid fa-water', 'fa-solid fa-sun'] },
+    north: { icon: 'fa-solid fa-mountain-sun', tintKey: 'north', descKey: 'north', scene: ['fa-solid fa-snowflake', 'fa-solid fa-mountain', 'fa-solid fa-wheat-awn', 'fa-solid fa-fire'] },
+    south: { icon: 'fa-solid fa-leaf', tintKey: 'south', descKey: 'south', scene: ['fa-solid fa-water', 'fa-solid fa-leaf', 'fa-solid fa-umbrella-beach', 'fa-solid fa-spa'] },
+    east: { icon: 'fa-solid fa-cloud-sun-rain', tintKey: 'east', descKey: 'east', scene: ['fa-solid fa-cloud-rain', 'fa-solid fa-seedling', 'fa-solid fa-fish', 'fa-solid fa-spa'] },
+    west: { icon: 'fa-solid fa-sun', tintKey: 'west', descKey: 'west', scene: ['fa-solid fa-sun', 'fa-solid fa-pepper-hot', 'fa-solid fa-wind', 'fa-solid fa-mountain-sun'] },
   };
 
   // Filter videos based on selected region
@@ -298,10 +298,10 @@ const RecipeSection = () => {
       <div key={`${selectedRegion}-banner`} className="season-banner" aria-live="polite">
         <span className="season-banner-icon"><i className={meta.icon}></i></span>
         <div className="season-banner-text">
-          <strong>{meta.tint}</strong>
-          <span>{meta.desc}</span>
+          <strong>{t(`recipeSection.bannerTint.${meta.tintKey}`)}</strong>
+          <span>{t(`recipeSection.bannerDesc.${meta.descKey}`)}</span>
         </div>
-        <span className="season-banner-count">{filteredVideos.length} recipes</span>
+        <span className="season-banner-count">{t('recipeSection.recipesCount', { n: filteredVideos.length })}</span>
       </div>
       <div className="recipe-thumbnails">
           {filteredVideos.map((video, index) => (
@@ -320,7 +320,7 @@ const RecipeSection = () => {
               </div>
               <div className="recipe-foot" aria-hidden="true">
                 <i className="fa-brands fa-youtube"></i>
-                <span>Watch recipe</span>
+                <span>{t('recipeSection.watchRecipe')}</span>
               </div>
             </div>
           ))}
@@ -333,7 +333,7 @@ const RecipeSection = () => {
                   width="100%"
                   height="400px"
                   src={currentVideo}
-                  title="Recipe Video"
+                  title={t('recipeSection.videoTitle')}
                   frameBorder="0"
                   allowFullScreen
                 ></iframe>
@@ -344,7 +344,7 @@ const RecipeSection = () => {
                   controls
                   src={currentVideo}
                 >
-                  Your browser does not support the video tag.
+                  {t('recipeSection.videoFallback')}
                 </video>
               )}
   
