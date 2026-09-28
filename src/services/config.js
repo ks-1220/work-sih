@@ -1,4 +1,4 @@
-// Base URL for the Swasth Infinity backend.
+// Base URL for the SaathiSync backend.
 //
 // This used to be derived from `window.location.hostname` at module scope,
 // which throws during the Next.js server render because `window` does not
@@ -17,4 +17,4 @@ export const WHATSAPP_NUMBER = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "91000
 
 export const WHATSAPP_LINK =
   `https://wa.me/${WHATSAPP_NUMBER}` +
-  `?text=${encodeURIComponent("Hi Swasth Infinity! I need help with my wellness journey.")}`;
+  `?text=${encodeURIComponent("Hi SaathiSync! I need help with my wellness journey.")}`;

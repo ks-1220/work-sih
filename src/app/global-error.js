@@ -11,7 +11,7 @@ export default function GlobalError({ error, reset }) {
       <body style={{ fontFamily: 'system-ui, sans-serif', margin: 0 }}>
         <main style={{ maxWidth: '34rem', margin: '0 auto', padding: '80px 24px', textAlign: 'center' }}>
           <h1 style={{ fontSize: '1.6rem', marginBottom: '12px', color: '#493971' }}>
-            Swasth Infinity could not start
+            SaathiSync could not start
           </h1>
           <p style={{ color: '#5c5470', lineHeight: 1.6, marginBottom: '10px' }}>
             Something failed before the page could render.

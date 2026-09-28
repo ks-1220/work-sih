@@ -13,7 +13,7 @@ export async function generateMetadata({ params }) {
   const { eventId } = await params;
   const event = getEvent(eventId);
   return {
-    title: event ? `${event.title} | Swasth Infinity` : "Event | Swasth Infinity",
+    title: event ? `${event.title} | SaathiSync` : "Event | SaathiSync",
     description: event?.description,
   };
 }

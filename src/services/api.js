@@ -14,7 +14,7 @@ export const registerUser = async (userData, router, storetokenInLS) => {
     const res_data = await response.json();
     if (response.ok) {
       storetokenInLS(res_data.token);
-      alert("Welcome to Swasthnfinity");
+      alert("Welcome to SaathiSync");
       router.push("/login");
       return res_data;
     } else {

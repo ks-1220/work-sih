@@ -105,7 +105,7 @@ export const INBOX = [
   {
     id: 'm7',
     from: 'Swasth Sustain Team',
-    role: 'Swasth Infinity',
+    role: 'SaathiSync',
     tag: 'Community',
     subject: 'Your virtual forest grew 2 trees this week 🌳',
     time: 'Fri',

@@ -12,7 +12,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const activity = getActivity(slug);
-  return { title: activity ? `${activity.title} near you | Swasth Infinity` : "Activity | Swasth Infinity" };
+  return { title: activity ? `${activity.title} near you | SaathiSync` : "Activity | SaathiSync" };
 }
 
 export default async function ActivityPage({ params }) {

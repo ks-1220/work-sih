@@ -1,4 +1,4 @@
-# SWASTH INFINITY: A HOLISTIC WELLNESS APP
+# SaathiSync: A HOLISTIC WELLNESS APP
 Our main offerings include:
 ## 1. Virtual Forest with HTML A-Frames 
 Interactive Virtual Environment
@@ -109,7 +109,7 @@ npm install
 cp .env.example .env.local   # then point NEXT_PUBLIC_API_BASE_URL at your backend
 ```
 
-`NEXT_PUBLIC_API_BASE_URL` is the base URL of the Swasth Infinity backend. The
+`NEXT_PUBLIC_API_BASE_URL` is the base URL of the SaathiSync backend. The
 app appends `/api/auth` and `/api/admin` to it. For local backend development
 set it to `http://localhost:5000`.
 

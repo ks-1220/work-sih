@@ -1,6 +1,6 @@
 import Link from 'next/link';
 
-export const metadata = { title: 'Page not found | Swasth Infinity' };
+export const metadata = { title: 'Page not found | SaathiSync' };
 
 export default function NotFound() {
   return (

@@ -56,7 +56,7 @@ export default function TopBar({ onToggleSidebar, searchQuery = '', onSearchChan
             <i className="fa-solid fa-infinity"></i>
           </div>
           <span className="topbar-brand-title">
-            SWASTH<span>INFINITY</span>
+            Saathi<span>Sync</span>
           </span>
         </Link>
       </div>

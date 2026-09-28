@@ -70,7 +70,7 @@ const CustomLogin = () => {
         <span className={styles.brandMark}>
           <i className="fa-solid fa-spa"></i>
         </span>
-        Swasth Infinity
+        SaathiSync
       </div>
       <h2 className={styles.heading}>{t("login.heading")}</h2>
       <p className={styles.subheading}>{t("login.subheading")}</p>

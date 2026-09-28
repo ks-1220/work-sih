@@ -507,7 +507,7 @@
     "disclaimer": "Wellness content here is educational and informational only — it is not diagnosis, treatment or medical advice. For Ayurvedic care see a qualified BAMS practitioner; for mental-health concerns see a licensed professional."
   },
   "home": {
-    "welcomeTitle": "Welcome to Swasth Infinity",
+    "welcomeTitle": "Welcome to SaathiSync",
     "welcomeSub": "Track yoga, diet & mindfulness — login to sync your progress across devices.",
     "loadingSession": "Loading your session…",
     "emailBtn": "Continue with Email",
@@ -693,7 +693,7 @@
   },
   "gov": {
     "title": "🇮🇳 Government Fitness Missions",
-    "subtitle": "Swasth Infinity supports India's national health movement. Join official programs that match your journey.",
+    "subtitle": "SaathiSync supports India's national health movement. Join official programs that match your journey.",
     "fitIndia": "Fit India Movement",
     "fitIndiaD": "30 minutes of fitness daily — take the pledge and join events.",
     "kheloIndia": "Khelo India",
@@ -754,7 +754,7 @@
     "aHello": "Hello! How can I help your wellness journey today?"
   },
   "footer": {
-    "copyright": "© 2026 Swasth Infinity SEZC. Some rights reserved.",
+    "copyright": "© 2026 SaathiSync SEZC. Some rights reserved.",
     "terms": "Terms",
     "privacyPolicy": "Privacy Policy",
     "about": "About",

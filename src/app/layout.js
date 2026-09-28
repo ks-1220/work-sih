@@ -12,7 +12,7 @@ import "leaflet/dist/leaflet.css";
 import Providers from "./providers";
 
 export const metadata = {
-  title: "Swasth Infinity",
+  title: "SaathiSync",
   description: "A holistic wellness app for fitness, diet, yoga and sustainability.",
   manifest: "/manifest.json",
   icons: {

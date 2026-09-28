@@ -81,7 +81,7 @@ export default function Navbar() {
 
         {/* Bottom Legal Copyright */}
         <div className="sidebar-bottom-legal">
-          <div>&copy; 2026 Swasth</div>
+          <div>&copy; 2026 SaathiSync</div>
           <div>
             <Link href="/about">{t('nav.terms')}</Link> | <Link href="/about">{t('nav.privacy')}</Link>
           </div>

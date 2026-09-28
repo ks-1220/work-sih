@@ -30,7 +30,7 @@ function icsFor(event, city) {
   const lines = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Swasth Infinity//Events//EN',
+    'PRODID:-//SaathiSync//Events//EN',
     'BEGIN:VEVENT',
     `UID:${event.id}@swasth`,
     `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, '').split('.')[0]}Z`,

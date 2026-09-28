@@ -84,7 +84,7 @@ function About() {
       <header className={styles.hero}>
         <h1 className={styles.heroTitle}>Wellness that fits an Indian routine</h1>
         <p className={styles.heroLead}>
-          Swasth Infinity brings movement, food, mental wellbeing and sustainable
+          SaathiSync brings movement, food, mental wellbeing and sustainable
           habits into one place, built around the way people actually eat, move
           and live here rather than a template imported from somewhere else.
         </p>
@@ -148,7 +148,7 @@ function About() {
           Built with feedback from people who use it
         </h2>
         <p className={styles.ctaText}>
-          Swasth Infinity grew out of conversations with over 175 prospective
+          SaathiSync grew out of conversations with over 175 prospective
           users and discussions with fitness centres across New Delhi. It is
           still developing, and the parts that are not finished yet say so.
         </p>

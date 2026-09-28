@@ -12,7 +12,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = getPost(slug);
-  if (!post) return { title: "Story | Swasth Infinity" };
+  if (!post) return { title: "Story | SaathiSync" };
   return { title: `${post.title} | ${AUTHORS[post.author].name}`, description: post.subtitle };
 }
 

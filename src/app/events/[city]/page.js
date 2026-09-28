@@ -12,7 +12,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }) {
   const { city } = await params;
   const found = getCity(city);
-  return { title: found ? `Fitness events in ${found.name} | Swasth Infinity` : "Events | Swasth Infinity" };
+  return { title: found ? `Fitness events in ${found.name} | SaathiSync` : "Events | SaathiSync" };
 }
 
 export default async function CityEventsPage({ params }) {
